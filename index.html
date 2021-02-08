@@ -1,0 +1,279 @@
+<!-- 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+-->
+
+<!-- 
+    This code was written by a person with very little Web/JS knowledge, don't judge. 
+    Send bug reports to: mathgeneratorfeedback@qrck.org
+-->
+<html>
+    <head>
+        <title>Math's 6 class</title>
+
+        <style>
+            table, td {
+                /*border: 1px solid black;  */
+                border: 0px; 
+                border-collapse: collapse;
+            }
+            td.problem { 
+                padding: 15px; 
+                padding-top: 2px; 
+                padding-bottom: 18px; 
+            }
+            td.answer {
+                 padding: 2px;                  
+            }
+
+            td.sm_v {
+                padding: 20px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+                font-family: 'Courier New', Courier, monospace;
+            }
+            
+            .op_a {
+                padding: 5px; 
+                padding-top: 0px;
+                padding-bottom: 0px;
+                font-family: 'Courier New', Courier, monospace;
+            }
+            .op_b {
+                padding: 5px; 
+                padding-top: 0px;
+                padding-bottom: 0px; 
+                border-bottom: 1px solid black;
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+            .op_c {
+                padding: 0px; 
+                padding-bottom: 10px;
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+            td.div_left {
+                border: 0px;
+                padding: 5px; 
+                font-family: 'Courier New', Courier, monospace;
+            }
+            td.div_right {
+                border-left: 1px solid black;
+                border-bottom: 1px solid black;
+                padding: 5px; 
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div id="contentRoot"></div>
+
+        <div id="inputForm">
+            <input type="checkbox" id="debug" checked="true">Debug!</input>
+
+            <h3>Number of problems:</h3> 
+            <input type="number" id="num_problems" value="60"/>
+            <br/><br/>
+            <input type="button" id="generate" onclick="generate()" value="Generate!"/>
+            <p><b>Use the content of this page at your own risk, not warranty given</b></p>
+            <p>Generated math content - public domain</p>
+            <p>Generator source code - (c) 2021 Sergey Parshin. Distributed under GNU GPLv3 license</p>
+        </div>
+
+
+        <script language="JavaScript" src="util.js"></script>
+        <script language="JavaScript" src="data.js"></script>
+
+        <script language="JavaScript" src="problems.js"></script>
+
+        <script language="JavaScript">
+
+                    
+            function hideForm()
+            {
+                let form = document.getElementById('inputForm')
+                while (form.hasChildNodes())
+                {
+                    form.removeChild(form.childNodes[0])
+                }
+            }
+
+            // returns hash map, where key is the category name 
+            // and value is the list of problems in the category
+            function getGenerators()
+            {
+                let generators = {}
+
+                let names = Object.keys( window ).filter(x => x.startsWith("prob_"))
+                for (let name of names)
+                {
+                    let parts = name.split('_')
+                    if (parts.length != 3)
+                    {
+                        console.error("name " + name + " is not a valid function name for generator")
+                        continue
+                    }
+
+                    let cat = parts[1]
+                    let probName = parts[2] // don't really need that one!, but just for consistency
+
+                    if (!generators[cat])
+                    {
+                        generators[cat] = []
+                    }
+
+                    generators[cat].push({
+                        fun: eval("(root, ansRoot) => " + name + "(root, ansRoot)"), 
+                        name: name
+                    })
+                }
+
+                return generators
+            }
+
+            function generateContentSkel()
+            {
+                let root = document.getElementById("contentRoot")
+
+                let problems = document.createElement("table")
+                problems.setAttribute("width", "100%")
+                root.appendChild(problems)
+
+                let pageBreak = document.createElement("div")
+                pageBreak.setAttribute("style", "break-after:page")
+                root.appendChild(pageBreak)
+
+                let answersLabel = document.createElement('div')
+                answersLabel.innerHTML = '<h2>Answers<h2>'
+                root.appendChild(answersLabel)
+
+                let answers = document.createElement("table")
+                answers.setAttribute("width", "100%")
+                root.appendChild(answers)
+
+                return {
+                    problems: problems, 
+                    answers: answers,
+                }
+            }
+
+            function generateRow(table, n1, n2, prob)
+            {
+                let tr = document.createElement("tr")
+                tr.setAttribute('valign', 'top')
+                table.appendChild(tr)
+                let td1 = document.createElement("td")                
+                let td2 = document.createElement("td")
+
+                if (prob)
+                {
+                    td2.setAttribute('class', 'problem')
+                    td1.innerHTML =  "<b>" + n1 + ")</b><p/>&nbsp;"
+                }
+                else
+                {
+                    td2.setAttribute('class', 'answer')
+                    td1.innerHTML =  "<b>" + n1 + ")</b>"
+                }
+                tr.appendChild(td1)
+                tr.appendChild(td2)
+
+                let td3 = document.createElement("td")
+                let td4 = document.createElement("td")
+
+                if (prob)
+                {
+                    td4.setAttribute('class', 'problem')
+                    td3.innerHTML =  "<b>" + n2 + ")</b><p/>&nbsp;"
+                }
+                else
+                {
+                    td4.setAttribute('class', 'answer')
+                    td3.innerHTML =  "<b>" + n2 + ")</b>"
+                }
+
+                tr.appendChild(td3)
+                tr.appendChild(td4)
+
+                return {left: td2, right: td4}
+            }                    
+            
+            function generate()
+            {
+                let num_problems = parseInt(document.getElementById('num_problems').value)
+                let debug = document.getElementById('debug')
+                if (debug)
+                    debug = debug.checked
+
+                if (num_problems % 2)
+                    num_problems++
+                hideForm()
+
+                let cont = generateContentSkel()
+
+                let letftColumn = document.getElementById("viewRoot1")
+                let rightColumn = document.getElementById("viewRoot2")
+
+                let letftAnsColumn = document.getElementById("ansRoot1")
+                let rightAnsColumn = document.getElementById("ansRoot2")
+
+                let generators = getGenerators()
+                let catNames = Object.keys(generators)
+
+                let bigidx = 1
+                if (!debug)
+                {
+                    for (let idx = 0; idx < num_problems / 2; ++ idx)
+                    {
+                        let problemsRow = generateRow(cont.problems, bigidx, bigidx + 1, true)
+                        let answersRow = generateRow(cont.answers, bigidx, bigidx + 1, false)
+                        bigidx += 2
+
+                        let cat1 = generators[catNames[randInt(catNames.length)]]
+                        let cat2 = generators[catNames[randInt(catNames.length)]]
+                        cat1[randInt(cat1.length)].fun(problemsRow.left, answersRow.left)
+                        cat2[randInt(cat2.length)].fun(problemsRow.right, answersRow.right)
+                    }
+                }
+                else
+                {
+                    for (let catName of catNames)
+                    {
+                        let cat = generators[catName]
+
+                        for (let idx = 0; idx < cat.length; ++ idx)
+                        {
+                            let name_row = generateRow(cont.problems, bigidx, -1, false)
+                            name_row.left.innerHTML = '<b>' + cat[idx].name + '</b>'
+
+                            let problemsRow = generateRow(cont.problems, bigidx, bigidx + 1, true)
+                            let answersRow = generateRow(cont.answers, bigidx, bigidx + 1, false)
+                            bigidx += 2
+                            cat[idx].fun(problemsRow.left, answersRow.left)
+                            cat[idx].fun(problemsRow.right, answersRow.right)
+                        }
+                    }
+
+                }
+            }
+
+            if (document.getElementById('debug'))
+                generate()
+        </script>
+    </body>
+</html>

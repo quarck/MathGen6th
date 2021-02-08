@@ -1,0 +1,113 @@
+/* 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
+/* This code was written by a person with very little Web/JS knowledge, don't judge. 
+ * Send bug reports to: mathgeneratorfeedback@qrck.org */
+
+function max(a, b) 
+{
+     return a > b ? a : b 
+}
+
+function min(a, b) 
+{
+     return a > b ? b : a 
+}
+
+function formatDigits(s)
+{
+    let r = ""
+    let l = s.length
+
+    if (s.includes('e'))
+        return s
+
+    for (let i = 0; i < l/3; ++ i)
+    {
+        let start = l - i * 3 - 3
+        let end = l - i * 3        
+        start = start > 0 ? start : 0
+        if (i == 0)
+            r = s.substring(start)
+        else 
+            r = s.substring(start, end) + ',' + r
+    }
+
+    return r
+}
+
+function formatInt(v)
+{   
+    let s = "" + v
+    if (s.includes('.')) 
+        return s // failback, should be never used
+    return formatDigits(s)
+}
+
+function formatFloat(v, numDigits)
+{
+    let fs = v.toFixed(numDigits)
+    if (fs.includes('e'))
+        return fs
+    let s = fs.split('.')
+    if (s.length != 2)
+        return formatDigits(fs)
+    return formatDigits(s[0]) + '.' + s[1]
+}
+
+
+function randInt(max)
+{
+    return ((Math.random() * 1024 * 1024) | 0) % max;
+}
+
+function randIntRange(min, max)
+{
+    return randInt(max - min) + min;
+}
+
+function randFixFloat(min, max, numDigits)
+{
+    let v = Math.random()
+    let scaled = (max - min) * v + min
+    let p = Math.pow(10, numDigits)
+    return Math.round(v * p) / p
+}
+
+function randValue()
+{
+    return arguments[randInt(arguments.length)]
+}
+
+function randomName()
+{
+    return arguments[randInt(arguments.length)]
+}
+
+function getNumDigits(number)
+{
+    let num = number > 0 ? number : -number
+    let ret = []
+    while (num > 0)
+    {
+        ret.unshift(num % 10)
+        num = Math.floor(num/ 10)
+    }
+    if (ret.length == 0)
+        ret.push('0')
+    return ret
+}
