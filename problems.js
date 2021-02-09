@@ -335,6 +335,34 @@ function prob_fractions_divideInProportion(root, ansRoot)
     }
 }
 
+function prob_triangles_sumOfAngles(root, ansRoot) 
+{
+    for (;;)
+    {
+        let alpha = randIntRange(60, 90)
+        let beta = randIntRange(50, 60)
+        let answer = 180 - alpha - beta
+
+        let alphaStr = '' + alpha + '&deg;'
+        let betaStr = '' + beta + '&deg;'
+
+
+        
+        let problemHtml = 
+            "<table><tr><td valign='top'>" + 
+                "<table><tr><td>What is the value of unknown angle?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;</td></tr></table>" + 
+                "</td><td>" + 
+                svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, alphaStr, betaStr, '?') + 
+                "</td></tr></table>"
+
+        let answerHtml = '' + answer + '&deg;'
+        root.innerHTML = problemHtml
+        ansRoot.innerHTML = answerHtml
+        break;
+    }
+
+}
+
 //
 
 /*

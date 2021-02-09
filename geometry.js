@@ -232,10 +232,6 @@ function svgMarkAngle(x1, y1, x2, y2, x3, y3, label)
     return '<path d="M ' + psX + ' ' + psY + ' q ' + dpmX + ' ' + dpmY + ' ' + dpeX + ' ' + dpeY + '" ' + 
                 'stroke="black" stroke-width="1.5" stroke-dasharray="3,3" fill="none" />' + 
                 '<g font-size="15" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="' + textX + '" y="' + textY + '">' + label + '</text></g>'
-
-//    return '<circle cx="' + mx1 + '" cy="' + my1 + '" r="3" stroke="black" stroke-width="2" fill="red" />' + 
-//            '<circle cx="' + mx2 + '" cy="' + my2 + '" r="3" stroke="black" stroke-width="2" fill="red" />' + 
- //           '<circle cx="' + mx3 + '" cy="' + my3 + '" r="3" stroke="black" stroke-width="2" fill="red" />'
 }
 
 // 
@@ -284,8 +280,6 @@ function svgTriangleByAnglesWithAngleMarks(w, h, a, alpha, beta, malpha, mbeta, 
         svgMarkAngle(x1, y1, x2, y2, x3, y3, mgamma) + 
         svgMarkAngle(x2, y2, x1, y1, x3, y3, mbeta) + 
         svgMarkAngle(x3, y3, x1, y1, x2, y2, malpha) + 
-        //svgMarkSegment(x1, y1, x3, y3, mb) + 
-        //svgMarkSegment(x2, y2, x3, y3, mc) + 
         'Sorry, your browser does not support inline SVG.' + 
         '</svg>'
 
