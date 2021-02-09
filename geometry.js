@@ -70,7 +70,6 @@ function svgTriangle(w, h, a, b, c, fill, stroke)
 
     fill = fill ? fill : randFillColor()
     stroke = stroke ? stroke : "rgb(0,0,0)"
-    angle = angle ? angle : 0.0
 
     let x1 = 0
     let y1 = 0
@@ -79,7 +78,7 @@ function svgTriangle(w, h, a, b, c, fill, stroke)
     let x3 = (a*a + b*b - c*c) / 2.0 / a
     let y3 = Math.sqrt(b*b - x3*x3)
 
-    let dy =max(0, (h - y3)/2.0)
+    let dy = max(0, (h - y3)/2.0)
     let dx = max(0, (w - a) / 2.0)
 
     y1 = h - dy - y1
@@ -95,6 +94,100 @@ function svgTriangle(w, h, a, b, c, fill, stroke)
     
     return '<svg width="' + w + '" height="' + h + '">' + 
         '<polygon points="' + points + '" style="fill:' + fill + ';;stroke:' + stroke + ';stroke-width:2;fill-rule:nonzero;"/>' + 
+        'Sorry, your browser does not support inline SVG.' + 
+        '</svg>'
+}
+
+function markSegment(x1, y1, x2, y2, mark)
+{
+    let ma_x = (x1 + x2) / 2.0    
+    let ma_y = (y1 + y2) / 2.0
+    let r = 3
+    let len = 4
+
+    mark = mark.toLowerCase()
+    if (mark == 'x' || mark == 'ii' || mark == 'll')
+    {
+        r = 1.7
+    }
+
+    // locate the marks 
+    let divider = Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2))
+    let dx = (x1 - x2) / divider 
+    let dy = (y1 - y2) / divider
+
+    // our 3 calculated mark positions on the line. We won't always need all of these, but it makes 
+    // life easier to just always calculate here. This is not a high-performance code that runs in the hot path
+    let m1 = [r*dx + ma_x, r*dy + ma_y]
+    let m2 = [ma_x, ma_y]
+    let m3 = [-r*dx + ma_x, -r*dy + ma_y]
+    let norm = [len* dy, -len*dx, -len*dy, len*dx]
+
+    // just calculate all all the time, but we won't always need these. 
+    // this is not a HPC code, don't care about a bit of inefficiency
+    let mn1 = [norm[0] + m1[0], norm[1] + m1[1], norm[2] + m1[0], norm[3] + m1[1]]
+    let mn2 = [norm[0] + m2[0], norm[1] + m2[1], norm[2] + m2[0], norm[3] + m2[1]]
+    let mn3 = [norm[0] + m3[0], norm[1] + m3[1], norm[2] + m3[0], norm[3] + m3[1]]
+
+    if (mark == 'i' || mark == 'l') // single 
+    {
+        return '<line x1="' + mn2[0] + '" y1="' + mn2[1] + '" x2="' + mn2[2] + '" y2="' + mn2[3] + '" style="stroke:black;stroke-width:1.5" />' 
+    }
+    else if (mark == 'ii' || mark == 'll')
+    {
+        return '<line x1="' + mn1[0] + '" y1="' + mn1[1] + '" x2="' + mn1[2] + '" y2="' + mn1[3] + '" style="stroke:black;stroke-width:1.5" />' + 
+               '<line x1="' + mn3[0] + '" y1="' + mn3[1] + '" x2="' + mn3[2] + '" y2="' + mn3[3] + '" style="stroke:black;stroke-width:1.5" />'       
+    }
+    else if (mark == 'iii' || mark == 'lll')
+    {
+        return '<line x1="' + mn1[0] + '" y1="' + mn1[1] + '" x2="' + mn1[2] + '" y2="' + mn1[3] + '" style="stroke:black;stroke-width:1.5" />' + 
+               '<line x1="' + mn2[0] + '" y1="' + mn2[1] + '" x2="' + mn2[2] + '" y2="' + mn2[3] + '" style="stroke:black;stroke-width:1.5" />' +
+               '<line x1="' + mn3[0] + '" y1="' + mn3[1] + '" x2="' + mn3[2] + '" y2="' + mn3[3] + '" style="stroke:black;stroke-width:1.5" />'       
+    }
+    else if (mark == 'x')
+    {
+        return '<line x1="' + mn1[0] + '" y1="' + mn1[1] + '" x2="' + mn3[2] + '" y2="' + mn3[3] + '" style="stroke:black;stroke-width:1.5" />' + 
+               '<line x1="' + mn3[0] + '" y1="' + mn3[1] + '" x2="' + mn1[2] + '" y2="' + mn1[3] + '" style="stroke:black;stroke-width:1.5" />'       
+    }
+    return ''
+}
+
+function svgTriangleWithMarks(w, h, a, b, c, ma, mb, mc, fill, stroke)
+{
+    if (a == 0 || b == 0 || c == 0)
+        return null
+    if (a + b < c || a + c < b || b + c < a)
+        return null
+
+    fill = fill ? fill : randFillColor()
+    stroke = stroke ? stroke : "rgb(0,0,0)"
+
+    let x1 = 0
+    let y1 = 0
+    let x2 = a 
+    let y2 = 0
+    let x3 = (a*a + b*b - c*c) / 2.0 / a
+    let y3 = Math.sqrt(b*b - x3*x3)
+
+    let dy = max(0, (h - y3)/2.0)
+    let dx = max(0, (w - a) / 2.0)
+
+    y1 = h - dy - y1
+    y2 = h - dy - y2
+    y3 = h - dy - y3
+    x1 = x1 + dx
+    x2 = x2 + dx
+    x3 = x3 + dx
+
+    points = "" + x1 + "," + y1 + " " + 
+                  x2 + "," + y2 + " " + 
+                  x3 + "," + y3 
+    
+    return '<svg width="' + w + '" height="' + h + '">' + 
+        '<polygon points="' + points + '" style="fill:' + fill + ';;stroke:' + stroke + ';stroke-width:2;fill-rule:nonzero;"/>' + 
+        markSegment(x1, y1, x2, y2, ma) + 
+        markSegment(x1, y1, x3, y3, mb) + 
+        markSegment(x2, y2, x3, y3, mc) + 
         'Sorry, your browser does not support inline SVG.' + 
         '</svg>'
 }
