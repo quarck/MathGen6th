@@ -1,19 +1,35 @@
+/* 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
+/* This code was written by a person with very little Web/JS knowledge, don't judge. 
+ * Send bug reports to: mathgeneratorfeedback@qrck.org */
 
 function randFillColor()
 {
     return randValue(
-        'rgb(0,0,255)',
-        'rgb(0,255,0)',
-        'rgb(0,255,255)',
-        'rgb(255,0,0)',
-        'rgb(255,0,255)',
-        'rgb(255,255,0)',
-        'rgb(127,0,255)',
-        'rgb(0,127,255)',
-        'rgb(127,255,0)',
-        'rgb(0,255,127)',
-        'rgb(255,127,0)',
-        'rgb(255,0,127)'
+        'rgb(64,255,255)',
+        'rgb(255,64,255)',
+        'rgb(255,255,64)',
+        'rgb(127,64,255)',
+        'rgb(64,127,255)',
+        'rgb(127,255,64)',
+        'rgb(64,255,127)',
+        'rgb(255,127,64)',
+        'rgb(255,64,127)'
     )
 }
 
@@ -98,15 +114,14 @@ function svgTriangle(w, h, a, b, c, fill, stroke)
         '</svg>'
 }
 
-function markSegment(x1, y1, x2, y2, mark)
+function svgMarkSegment(x1, y1, x2, y2, mark)
 {
     let ma_x = (x1 + x2) / 2.0    
     let ma_y = (y1 + y2) / 2.0
     let r = 3
     let len = 4
 
-    mark = mark.toLowerCase()
-    if (mark == 'x' || mark == 'ii' || mark == 'll')
+    if (mark == 2 || mark == 4)
     {
         r = 1.7
     }
@@ -129,26 +144,22 @@ function markSegment(x1, y1, x2, y2, mark)
     let mn2 = [norm[0] + m2[0], norm[1] + m2[1], norm[2] + m2[0], norm[3] + m2[1]]
     let mn3 = [norm[0] + m3[0], norm[1] + m3[1], norm[2] + m3[0], norm[3] + m3[1]]
 
-    if (mark == 'i' || mark == 'l') // single 
+    switch (mark)
     {
+    case 1: 
         return '<line x1="' + mn2[0] + '" y1="' + mn2[1] + '" x2="' + mn2[2] + '" y2="' + mn2[3] + '" style="stroke:black;stroke-width:1.5" />' 
-    }
-    else if (mark == 'ii' || mark == 'll')
-    {
+    case 2:
         return '<line x1="' + mn1[0] + '" y1="' + mn1[1] + '" x2="' + mn1[2] + '" y2="' + mn1[3] + '" style="stroke:black;stroke-width:1.5" />' + 
                '<line x1="' + mn3[0] + '" y1="' + mn3[1] + '" x2="' + mn3[2] + '" y2="' + mn3[3] + '" style="stroke:black;stroke-width:1.5" />'       
-    }
-    else if (mark == 'iii' || mark == 'lll')
-    {
+    case 3: 
         return '<line x1="' + mn1[0] + '" y1="' + mn1[1] + '" x2="' + mn1[2] + '" y2="' + mn1[3] + '" style="stroke:black;stroke-width:1.5" />' + 
                '<line x1="' + mn2[0] + '" y1="' + mn2[1] + '" x2="' + mn2[2] + '" y2="' + mn2[3] + '" style="stroke:black;stroke-width:1.5" />' +
                '<line x1="' + mn3[0] + '" y1="' + mn3[1] + '" x2="' + mn3[2] + '" y2="' + mn3[3] + '" style="stroke:black;stroke-width:1.5" />'       
-    }
-    else if (mark == 'x')
-    {
+    case 4:   
         return '<line x1="' + mn1[0] + '" y1="' + mn1[1] + '" x2="' + mn3[2] + '" y2="' + mn3[3] + '" style="stroke:black;stroke-width:1.5" />' + 
-               '<line x1="' + mn3[0] + '" y1="' + mn3[1] + '" x2="' + mn1[2] + '" y2="' + mn1[3] + '" style="stroke:black;stroke-width:1.5" />'       
+               '<line x1="' + mn3[0] + '" y1="' + mn3[1] + '" x2="' + mn1[2] + '" y2="' + mn1[3] + '" style="stroke:black;stroke-width:1.5" />' 
     }
+
     return ''
 }
 
@@ -185,146 +196,114 @@ function svgTriangleWithMarks(w, h, a, b, c, ma, mb, mc, fill, stroke)
     
     return '<svg width="' + w + '" height="' + h + '">' + 
         '<polygon points="' + points + '" style="fill:' + fill + ';;stroke:' + stroke + ';stroke-width:2;fill-rule:nonzero;"/>' + 
-        markSegment(x1, y1, x2, y2, ma) + 
-        markSegment(x1, y1, x3, y3, mb) + 
-        markSegment(x2, y2, x3, y3, mc) + 
+        svgMarkSegment(x1, y1, x2, y2, ma) + 
+        svgMarkSegment(x1, y1, x3, y3, mb) + 
+        svgMarkSegment(x2, y2, x3, y3, mc) + 
         'Sorry, your browser does not support inline SVG.' + 
         '</svg>'
 }
 
-/**
- * https://www.w3schools.com/graphics/svg_examples.asp
- 
- // circle
- <svg height="100" width="100">
-  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-  Sorry, your browser does not support inline SVG.  
-</svg> 
- 
+function svgMarkAngle(x1, y1, x2, y2, x3, y3, label)
+{
+    let r = 45
 
-// ellipse 
-<svg height="140" width="500">
-  <ellipse cx="200" cy="80" rx="100" ry="50" style="fill:yellow;stroke:purple;stroke-width:2" />
-  Sorry, your browser does not support inline SVG.  
-</svg>
+    let divider1 = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2))
+    let dx1 = (x2 - x1) / divider1 
+    let dy1 = (y2 - y1) / divider1
 
-// three ellipses 
-<svg height="150" width="500">
-  <ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple" />
-  <ellipse cx="220" cy="70" rx="190" ry="20" style="fill:lime" />
-  <ellipse cx="210" cy="45" rx="170" ry="15" style="fill:yellow" />
-  Sorry, your browser does not support inline SVG. 
-</svg>
+    let divider2 = Math.sqrt(Math.pow(x3-x1, 2) + Math.pow(y3-y1, 2))
+    let dx2 = (x3 - x1) / divider2
+    let dy2 = (y3 - y1) / divider2
 
+    let divider3 = Math.sqrt(Math.pow((x2+x3)/2-x1, 2) + Math.pow((y2+y3)/2-y1, 2))
+    let dx3 = ((x2 + x3)/2 - x1) / divider3
+    let dy3 = ((y2 + y3)/2 - y1) / divider3
 
-// line 
-<svg height="210" width="500">
-  <line x1="0" y1="0" x2="200" y2="200" style="stroke:rgb(255,0,0);stroke-width:2" />
-  Sorry, your browser does not support inline SVG.
-</svg>
+    let psX = x1 + dx1*r
+    let psY = y1 + dy1*r
+    let dpmX = x1 + dx3*r - psX
+    let dpmY = y1 + dy3*r - psY
+    let dpeX = x1 + dx2*r - psX
+    let dpeY = y1 + dy2*r - psY
 
+    let textX = x1 + dx3*r/1.7
+    let textY = y1 + dy3*r/1.7 + 5
 
-// poligon (triangle)
-<svg height="210" width="500">
-  <polygon points="200,10 250,190 160,210" style="fill:lime;stroke:purple;stroke-width:1" />
-  Sorry, your browser does not support inline SVG.
-</svg>
+    return '<path d="M ' + psX + ' ' + psY + ' q ' + dpmX + ' ' + dpmY + ' ' + dpeX + ' ' + dpeY + '" ' + 
+                'stroke="black" stroke-width="1.5" stroke-dasharray="3,3" fill="none" />' + 
+                '<g font-size="15" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="' + textX + '" y="' + textY + '">' + label + '</text></g>'
 
-<svg height="250" width="500">
-  <polygon points="220,10 300,210 170,250 123,234" style="fill:lime;stroke:purple;stroke-width:1" />
-  Sorry, your browser does not support inline SVG.
-</svg>
+//    return '<circle cx="' + mx1 + '" cy="' + my1 + '" r="3" stroke="black" stroke-width="2" fill="red" />' + 
+//            '<circle cx="' + mx2 + '" cy="' + my2 + '" r="3" stroke="black" stroke-width="2" fill="red" />' + 
+ //           '<circle cx="' + mx3 + '" cy="' + my3 + '" r="3" stroke="black" stroke-width="2" fill="red" />'
+}
 
-// Star 
-<svg height="210" width="500">
-  <polygon points="100,10 40,198 190,78 10,78 160,198" style="fill:lime;stroke:purple;stroke-width:5;fill-rule:nonzero;"/>
-  Sorry, your browser does not support inline SVG.
-</svg>
+// 
+function svgTriangleByAnglesWithAngleMarks(w, h, a, alpha, beta, malpha, mbeta, mgamma, fill, stroke)
+{
+    fill = fill ? fill : randFillColor()
+    stroke = stroke ? stroke : "rgb(0,0,0)"
 
-// polyline
-<svg height="200" width="500">
-  <polyline points="20,20 40,25 60,40 80,120 120,140 200,180" style="fill:none;stroke:black;stroke-width:3" />
-  Sorry, your browser does not support inline SVG.
-</svg>
-<svg height="180" width="500">
-  <polyline points="0,40 40,40 40,80 80,80 80,120 120,120 120,160" style="fill:white;stroke:red;stroke-width:4" />
-  Sorry, your browser does not support inline SVG.
-</svg>
+    let gamma = 180 - alpha - beta 
 
+    alpha *= Math.PI/ 180
+    beta *= Math.PI/ 180
+    gamma *= Math.PI/ 180
 
-// path 
-<svg height="210" width="400">
-  <path d="M150 0 L75 200 L225 200 Z" />
-  Sorry, your browser does not support inline SVG.
-</svg>
+    // Law_of_sines: 
+    // a / sin(alpha) = b / sin(beta) = c / sin(gamma)
 
-// label examples 
-<svg height="400" width="450">
-<path id="lineAB" d="M 100 350 l 150 -300" stroke="red" stroke-width="3" fill="none" />
-  <path id="lineBC" d="M 250 50 l 150 300" stroke="red" stroke-width="3" fill="none" />
-  <path d="M 175 200 l 150 0" stroke="green" stroke-width="3" fill="none" />
-  <path d="M 100 350 q 150 -300 300 0" stroke="blue" stroke-width="5" fill="none" />
-  <!-- Mark relevant points -->
-  <g stroke="black" stroke-width="3" fill="black">
-    <circle id="pointA" cx="100" cy="350" r="3" />
-    <circle id="pointB" cx="250" cy="50" r="3" />
-    <circle id="pointC" cx="400" cy="350" r="3" />
-  </g>
-  <!-- Label the points -->
-  <g font-size="30" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle">
+    let b = a * Math.sin(beta) / Math.sin(alpha)
+    let c = a * Math.sin(gamma) / Math.sin(alpha)
+    
+    let x1 = 0
+    let y1 = 0
+    let x2 = a 
+    let y2 = 0
+    let x3 = (a*a + b*b - c*c) / 2.0 / a
+    let y3 = Math.sqrt(b*b - x3*x3)
+
+    let dy = max(0, (h - y3)/2.0)
+    let dx = max(0, (w - a) / 2.0)
+
+    y1 = h - dy - y1
+    y2 = h - dy - y2
+    y3 = h - dy - y3
+    x1 = x1 + dx
+    x2 = x2 + dx
+    x3 = x3 + dx
+
+    points = "" + x1 + "," + y1 + " " + 
+                  x2 + "," + y2 + " " + 
+                  x3 + "," + y3 
+
+    
+    
+    return '<svg width="' + w + '" height="' + h + '">' + 
+        '<polygon points="' + points + '" style="fill:' + fill + ';;stroke:' + stroke + ';stroke-width:2;fill-rule:nonzero;"/>' +         
+        svgMarkAngle(x1, y1, x2, y2, x3, y3, mgamma) + 
+        svgMarkAngle(x2, y2, x1, y1, x3, y3, mbeta) + 
+        svgMarkAngle(x3, y3, x1, y1, x2, y2, malpha) + 
+        //svgMarkSegment(x1, y1, x3, y3, mb) + 
+        //svgMarkSegment(x2, y2, x3, y3, mc) + 
+        'Sorry, your browser does not support inline SVG.' + 
+        '</svg>'
+
+  /* <svg height="400" width="450">
+
+  <path d="M 100 350 q 150 -100 300 0" stroke="black" stroke-width="5" stroke-dasharray="5,5"
+  fill="none" />
+
+<g font-size="30" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle">
     <text x="100" y="350" dx="-30">A</text>
     <text x="250" y="50" dy="-10">B</text>
     <text x="400" y="350" dx="30">C</text>
   </g>
   Sorry, your browser does not support inline SVG.
-</svg>
+</svg> */
 
+}
 
-<svg height="30" width="200">
-  <text x="0" y="15" fill="red">I love SVG!</text>
-  Sorry, your browser does not support inline SVG.
-</svg>
- 
-<svg height="60" width="200">
-  <text x="0" y="15" fill="red" transform="rotate(30 20,40)">I love SVG</text>
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-<svg height="90" width="200">
-  <text x="10" y="20" style="fill:red;">Several lines:
-    <tspan x="10" y="45">First line.</tspan>
-    <tspan x="10" y="70">Second line.</tspan>
-  </text>
-  Sorry, your browser does not support inline SVG.
-</svg>
- 
-// strokes 
-<svg height="80" width="300">
-  <g fill="none" stroke="black" stroke-width="4">
-    <path stroke-dasharray="5,5" d="M5 20 l215 0" />
-    <path stroke-dasharray="10,10" d="M5 40 l215 0" />
-    <path stroke-dasharray="20,10,5,5,5,10" d="M5 60 l215 0" />
-  </g>
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-<svg height="80" width="300">
-  <g fill="none" stroke="black" stroke-width="6">
-    <path stroke-linecap="butt" d="M5 20 l215 0" />
-    <path stroke-linecap="round" d="M5 40 l215 0" />
-    <path stroke-linecap="square" d="M5 60 l215 0" />
-  </g>
-  Sorry, your browser does not support inline SVG.
-</svg>
- 
-<svg height="80" width="300">
-  <g fill="none" stroke="black">
-    <path stroke-width="2" d="M5 20 l215 0" />
-    <path stroke-width="4" d="M5 40 l215 0" />
-    <path stroke-width="6" d="M5 60 l215 0" />
-  </g>
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-
- */
+/**
+  * https://www.w3schools.com/graphics/svg_examples.asp
+  */
