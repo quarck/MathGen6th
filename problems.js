@@ -570,3 +570,8 @@ function getGenerators()
 
     return generators
 }
+
+function getMaxProbEntries()
+{
+    return {'prob_triangles_sumOfAngles': 2 }
+}

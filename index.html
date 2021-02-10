@@ -29,7 +29,7 @@
         <div id="contentRoot"></div>
 
         <div id="inputForm">
-            <input type="checkbox" id="debug" checked="true">Debug!</input>
+            <input type="checkbox" id="debug1" checked="true">Debug!</input>
 
             <h3>Number of problems:</h3> 
             <input type="number" id="num_problems" value="60"/>
@@ -145,6 +145,7 @@
                 // let rightAnsColumn = document.getElementById("ansRoot2")
 
                 let generators = getGenerators()
+                let maxCounts = getMaxProbEntries()
                 let catNames = Object.keys(generators)
 
                 if (!debug)
@@ -156,8 +157,20 @@
                         let problemsRow = generateEntry(even ? cont.problems.left : cont.problems.right, idx + 1, true)
                         let answersRow = generateEntry(even ? cont.answers.left : cont.answers.right, idx + 1, false)
 
-                        let cat = generators[catNames[randInt(catNames.length)]]                        
-                        cat[randInt(cat.length)].fun(problemsRow, answersRow)
+                        for (;;)
+                        {
+                            let cat = generators[catNames[randInt(catNames.length)]]                        
+                            let prob = cat[randInt(cat.length)]
+                            let name = prob.name
+                            if (Object.keys(maxCounts).includes(name))
+                            {
+                                if (maxCounts[name] <= 0)
+                                    continue
+                                maxCounts[name] -= 1
+                            }
+                            prob.fun(problemsRow, answersRow)
+                            break
+                        }
                         
                     }
                 }
