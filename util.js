@@ -52,6 +52,8 @@ function formatDigits(s)
 
 function formatInt(v)
 {   
+    if (v < 0)
+        return "-" + formatInt(-v)
     let s = "" + v
     if (s.includes('.')) 
         return s // failback, should be never used
@@ -60,12 +62,30 @@ function formatInt(v)
 
 function formatFloat(v, numDigits)
 {
+    if (v < 0)
+        return "-" + formatFloat(-v, numDigits)
     let fs = v.toFixed(numDigits)
     if (fs.includes('e'))
         return fs
     let s = fs.split('.')
     if (s.length != 2)
         return formatDigits(fs)
+    return formatDigits(s[0]) + '.' + s[1]
+}
+
+function formatFloatUnlessInt(v, numDigits)
+{
+    if (v < 0)
+        return "-" + formatFloatUnlessInt(-v, numDigits)
+
+    let fs = v.toFixed(numDigits)
+    if (fs.includes('e'))
+        return fs
+    let s = fs.split('.')
+    if (s.length != 2)
+        return formatDigits(fs)
+    if (parseInt(s[1]) == 0)
+        return formatDigits(s[0])
     return formatDigits(s[0]) + '.' + s[1]
 }
 
@@ -85,7 +105,7 @@ function randFixFloat(min, max, numDigits)
     let v = Math.random()
     let scaled = (max - min) * v + min
     let p = Math.pow(10, numDigits)
-    return Math.round(v * p) / p
+    return Math.round(scaled * p) / p
 }
 
 function randValue()

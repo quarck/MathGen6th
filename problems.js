@@ -363,6 +363,144 @@ function prob_triangles_sumOfAngles(root, ansRoot)
 
 }
 
+
+// Num + x = Num - Num
+function prob_eqs_prob1a(root, ansRoot)
+{
+    for (;;)
+    {
+        let name = randomName('x', 'y')
+        let a = randInt(100)
+        if (a == 0)
+            continue;
+        let b = randInt(200)
+        let c = randInt(50)
+
+        if (b-c-a <= 0)
+            continue
+        if (b < c)
+            continue
+        if (b == c)
+            continue
+
+        if (randValue(true, false))
+            root.innerHTML = a + " + " + name + " = " + b + " - " + c + ". &nbsp;&nbsp; What is " + name + "?"
+        else
+            root.innerHTML =  name + " + " + a + " = " + b + " - " + c + ". &nbsp;&nbsp; What is " + name + "?"
+        ansRoot.innerHTML = name +" = " + (b-c-a)
+        break;
+    }
+}
+
+// Num - x = Num + Num
+function prob_eqs_prob1b(root, ansRoot)
+{
+    for (;;)
+    {
+        let name = randomName('x', 'y')
+        let a = randInt(100)
+        if (a == 0)
+            continue;
+        let b = randInt(200)
+        let c = randInt(50)
+        if (a -b -c <= 0)
+            continue
+        if (b == c)
+            continue
+
+        root.innerHTML = a + " - " + name + " = " + b + " + " + c + ". &nbsp;&nbsp; What is " + name + "?"
+        ansRoot.innerHTML = name +" = " + (a-b-c)
+        break;
+    }
+}
+
+// Float + x = Float
+function prob_eqs_prob2(root, ansRoot)
+{
+    for (;;)
+    {
+        let name = randomName('x', 'y')
+        let a = randFixFloat(1, 20, 2)
+        if (Math.abs(a) < 0.0001)
+            continue
+        let b = randFixFloat(1, 20, 2)
+
+        if (b - a <= 1.0)
+            continue
+
+        if (randValue(true, false))
+            root.innerHTML = formatFloatUnlessInt(a, 2) + " + " + name + " = " + formatFloatUnlessInt(b, 2) + ". &nbsp;&nbsp; What is " + name + "?"
+        else
+            root.innerHTML = name + " + " + formatFloatUnlessInt(a, 2) + " = " + formatFloatUnlessInt(b, 2) + ". &nbsp;&nbsp; What is " + name + "?"
+
+        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b - a, 2)
+        break;
+    }
+}
+
+// Fl* x = Fl
+function prob_eqs_prob3(root, ansRoot)
+{
+    for (;;)
+    {
+        let name = randomName('x', 'y')
+        let a = randFixFloat(1, 10, 1)
+        let b = (randInt(50)) * a
+        if (Math.abs(a) < 0.1)
+            continue;
+        if (Math.abs(a) == 1)
+            continue;
+        root.innerHTML = formatFloatUnlessInt(a, 1) + name + " = " + formatFloatUnlessInt(b, 1) + ". &nbsp;&nbsp; What is " + name + "?"
+        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
+        break;
+    }
+}
+
+// Fl* x + Fl= Fl
+function prob_eqs_prob4(root, ansRoot)
+{
+    for (;;)
+    {
+        let name = randomName('x', 'y')
+        let a = randFixFloat(1, 10, 1)
+        let b = (randInt(50)) * a
+        let c = randFixFloat(1, 30, 1)
+        if (Math.abs(a) < 0.1)
+            continue;
+        if (Math.abs(a) == 1)
+            continue;
+        root.innerHTML = formatFloatUnlessInt(a, 1) + name + " + " + c + " = " + formatFloatUnlessInt(b + c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
+        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
+        break;
+    }
+}
+
+// Fl* x - Fl= Fl
+function prob_eqs_prob5(root, ansRoot)
+{
+    for (;;)
+    {
+        let name = randomName('x', 'y')
+        let a = randFixFloat(1, 10, 1)
+        let b = (randInt(50)) * a
+        let c = randFixFloat(1, 30, 1)
+        if (Math.abs(a) < 0.1)
+            continue;
+        if (Math.abs(a) == 1)
+            continue;
+        if (b - c < 1)
+            continue
+        root.innerHTML = formatFloatUnlessInt(a, 1) + name + " - " + c + " = " + formatFloatUnlessInt(b - c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
+        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
+        break;
+    }
+}
+
+
+
+
+
+
 //
 
 /*
@@ -397,173 +535,38 @@ function prob_xxx_yyy2(root, ansRoot)
     }
 }
 
-function prob_xxx_yyy3(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
 
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_xxx_yyy4(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_xxx_yyy5(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_xxx_yyy6(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_xxx_yyy7(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_xxx_yyy8(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_xxx_yyy9(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_xxx_yyy10(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-
-
-
-function prob_cat1_prob1(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randInt(300)-150
-        if (a == 0)
-            continue;
-        let b = randInt(300)-150                    
-        root.innerHTML = a + " + " + name + " = " + b + "<p> SOmething"
-        ansRoot.innerHTML = name +" = " + (b-a)
-        break;
-    }
-}
-
-function prob_cat1_prob2(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randFixFloat(-20, 20, 2)
-        if (Math.abs(a) < 0.0001)
-            continue
-        let b = randFixFloat(-20, 20, 2)
-        root.innerHTML = a.toFixed(2) + " + " + name + " = " + b.toFixed(2)
-        ansRoot.innerHTML = name + " = " + (b - a).toFixed(2)
-        break;
-    }
-}
-
-function prob_cat2_prob1(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randFixFloat(-20, 20, 1)
-        let b = (randInt(300)-150) * a
-        if (Math.abs(a) < 0.1)
-            continue;
-        if (Math.abs(a) == 1)
-            continue;
-        root.innerHTML = a.toFixed(1) + name + " = " + b.toFixed(1)
-        ansRoot.innerHTML = name + " = " + (b / a).toFixed(0)
-        break;
-    }
-}
 */
+
+// returns hash map, where key is the category name 
+// and value is the list of problems in the category
+function getGenerators()
+{
+    let generators = {}
+
+    let names = Object.keys( window ).filter(x => x.startsWith("prob_"))
+    for (let name of names)
+    {
+        let parts = name.split('_')
+        if (parts.length != 3)
+        {
+            console.error("name " + name + " is not a valid function name for generator")
+            continue
+        }
+
+        let cat = parts[1]
+        let probName = parts[2] // don't really need that one!, but just for consistency
+
+        if (!generators[cat])
+        {
+            generators[cat] = []
+        }
+
+        generators[cat].push({
+            fun: eval("(root, ansRoot) => " + name + "(root, ansRoot)"), 
+            name: name
+        })
+    }
+
+    return generators
+}

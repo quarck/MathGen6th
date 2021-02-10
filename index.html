@@ -22,62 +22,7 @@
 <html>
     <head>
         <title>Math's 6 class</title>
-
-        <style>
-            table, td {
-                /*border: 1px solid black;  */
-                border: 0px; 
-                border-collapse: collapse;
-            }
-            td.problem { 
-                padding: 15px; 
-                padding-top: 2px; 
-                padding-bottom: 18px; 
-            }
-            td.answer {
-                 padding: 2px;                  
-            }
-
-            td.sm_v {
-                padding: 20px;
-                padding-top: 0px;
-                padding-bottom: 0px;
-                font-family: 'Courier New', Courier, monospace;
-            }
-            
-            .op_a {
-                padding: 5px; 
-                padding-top: 0px;
-                padding-bottom: 0px;
-                font-family: 'Courier New', Courier, monospace;
-            }
-            .op_b {
-                padding: 5px; 
-                padding-top: 0px;
-                padding-bottom: 0px; 
-                border-bottom: 1px solid black;
-                font-family: 'Courier New', Courier, monospace;
-            }
-
-            .op_c {
-                padding: 0px; 
-                padding-bottom: 10px;
-                font-family: 'Courier New', Courier, monospace;
-            }
-
-            td.div_left {
-                border: 0px;
-                padding: 5px; 
-                font-family: 'Courier New', Courier, monospace;
-            }
-            td.div_right {
-                border-left: 1px solid black;
-                border-bottom: 1px solid black;
-                padding: 5px; 
-                font-family: 'Courier New', Courier, monospace;
-            }
-
-        </style>
+        <link rel="stylesheet" type="text/css" href="main.css">
     </head>
     <body>
 
@@ -91,18 +36,18 @@
             <br/><br/>
             <input type="button" id="generate" onclick="generate()" value="Generate!"/>
             <p><b>Use the content of this page at your own risk, not warranty given</b></p>
-            <p>Generated math content - public domain</p>
-            <p>Generator source code - (c) 2021 Sergey Parshin. Distributed under GNU GPLv3 license</p>
+            <br><br>
+            <p>License information:</p>
+            <p>Generated content: <a href="https://wiki.creativecommons.org/wiki/public_domain">Public domain</a></p>
+            <p>Source code: <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPLv3 license</a></p>
         </div>
-
 
         <script language="JavaScript" src="util.js"></script>
         <script language="JavaScript" src="geometry.js"></script>
         <script language="JavaScript" src="data.js"></script>
         <script language="JavaScript" src="problems.js"></script>
-        <script language="JavaScript">
 
-                    
+        <script language="JavaScript">                    
             function hideForm()
             {
                 let form = document.getElementById('inputForm')
@@ -112,104 +57,74 @@
                 }
             }
 
-            // returns hash map, where key is the category name 
-            // and value is the list of problems in the category
-            function getGenerators()
+            function newChild(parent, type, attr)
             {
-                let generators = {}
-
-                let names = Object.keys( window ).filter(x => x.startsWith("prob_"))
-                for (let name of names)
+                let newElement = document.createElement(type)
+                parent.appendChild(newElement)
+                if (attr) 
                 {
-                    let parts = name.split('_')
-                    if (parts.length != 3)
+                    for (let name of Object.keys(attr))
                     {
-                        console.error("name " + name + " is not a valid function name for generator")
-                        continue
+                        if (name == 'innerHTML')
+                        {
+                            newElement.innerHTML = attr[name]
+                        }
+                        else
+                        {
+                            newElement.setAttribute(name, attr[name])
+                        }
                     }
-
-                    let cat = parts[1]
-                    let probName = parts[2] // don't really need that one!, but just for consistency
-
-                    if (!generators[cat])
-                    {
-                        generators[cat] = []
-                    }
-
-                    generators[cat].push({
-                        fun: eval("(root, ansRoot) => " + name + "(root, ansRoot)"), 
-                        name: name
-                    })
                 }
-
-                return generators
+                return newElement
             }
 
-            function generateContentSkel()
+            function generateMainLayout()
             {
                 let root = document.getElementById("contentRoot")
 
-                let problems = document.createElement("table")
-                problems.setAttribute("width", "100%")
-                root.appendChild(problems)
+                // main table with the problems 
+                let problems = newChild(root, "table", {width: "100%"})
+                let tr = newChild(problems, "tr", {valign: 'top'})
+                let leftTd = newChild(tr, "td", {width: "50%"})
+                let rightTd = newChild(tr, "td", {width: "50%"})
+                let leftSubTable = newChild(leftTd, "table")
+                let rightSubTable = newChild(rightTd, "table")
 
-                let pageBreak = document.createElement("div")
-                pageBreak.setAttribute("style", "break-after:page")
-                root.appendChild(pageBreak)
+                let pageBreak = newChild(root, "div", {style: "break-after:page"})
 
-                let answersLabel = document.createElement('div')
-                answersLabel.innerHTML = '<h2>Answers<h2>'
-                root.appendChild(answersLabel)
+                let answersLabel = newChild(root, 'div', {innerHTML: '<h2>Answers<h2>'})
 
-                let answers = document.createElement("table")
-                answers.setAttribute("width", "100%")
-                root.appendChild(answers)
+                let answers = newChild(root, "table",  {width: "100%"})
+                let ansTr = newChild(answers, "tr", {valign: 'top'})
+                let ansLeftTd = newChild(ansTr, "td", {width: "50%"})
+                let ansRightTd = newChild(ansTr, "td", {width: "50%"})
+                let ansLeftSubTable = newChild(ansLeftTd, "table")
+                let ansRightSubTable = newChild(ansRightTd, "table")
 
                 return {
-                    problems: problems, 
-                    answers: answers,
+                    problems: {
+                        left: leftSubTable, 
+                        right: rightSubTable 
+                    }, 
+                    answers: {
+                        left: ansLeftSubTable, 
+                        right: ansRightSubTable 
+                    },
                 }
             }
 
-            function generateRow(table, n1, n2, prob)
+            function generateEntry(table, n, isProblemEntry)
             {
-                let tr = document.createElement("tr")
-                tr.setAttribute('valign', 'top')
+                let tr = newChild(table, "tr", {valign: 'top'})
                 table.appendChild(tr)
-                let td1 = document.createElement("td")                
-                let td2 = document.createElement("td")
 
-                if (prob)
-                {
-                    td2.setAttribute('class', 'problem')
-                    td1.innerHTML =  "<b>" + n1 + ")</b><p/>&nbsp;"
-                }
-                else
-                {
-                    td2.setAttribute('class', 'answer')
-                    td1.innerHTML =  "<b>" + n1 + ")</b>"
-                }
-                tr.appendChild(td1)
-                tr.appendChild(td2)
+                let numMark = isProblemEntry ? ("<b>" + n + ")</b><p/>&nbsp;") : ("<b>" + n + ")</b>")
+                let tdClass = (isProblemEntry ? 'problem' : 'answer')
 
-                let td3 = document.createElement("td")
-                let td4 = document.createElement("td")
+                let td1 = newChild(tr, "td", {innerHTML: numMark})
+                let td2 = newChild(tr, "td", {class: tdClass})
 
-                if (prob)
-                {
-                    td4.setAttribute('class', 'problem')
-                    td3.innerHTML =  "<b>" + n2 + ")</b><p/>&nbsp;"
-                }
-                else
-                {
-                    td4.setAttribute('class', 'answer')
-                    td3.innerHTML =  "<b>" + n2 + ")</b>"
-                }
-
-                tr.appendChild(td3)
-                tr.appendChild(td4)
-
-                return {left: td2, right: td4}
+                return td2
             }                    
             
             function generate()
@@ -219,52 +134,56 @@
                 if (debug)
                     debug = debug.checked
 
-                if (num_problems % 2)
-                    num_problems++
                 hideForm()
 
-                let cont = generateContentSkel()
+                let cont = generateMainLayout()
 
-                let letftColumn = document.getElementById("viewRoot1")
-                let rightColumn = document.getElementById("viewRoot2")
+                // let letftColumn = document.getElementById("viewRoot1")
+                // let rightColumn = document.getElementById("viewRoot2")
 
-                let letftAnsColumn = document.getElementById("ansRoot1")
-                let rightAnsColumn = document.getElementById("ansRoot2")
+                // let letftAnsColumn = document.getElementById("ansRoot1")
+                // let rightAnsColumn = document.getElementById("ansRoot2")
 
                 let generators = getGenerators()
                 let catNames = Object.keys(generators)
 
-                let bigidx = 1
                 if (!debug)
                 {
-                    for (let idx = 0; idx < num_problems / 2; ++ idx)
+                    for (let idx = 0; idx < num_problems; ++ idx)
                     {
-                        let problemsRow = generateRow(cont.problems, bigidx, bigidx + 1, true)
-                        let answersRow = generateRow(cont.answers, bigidx, bigidx + 1, false)
-                        bigidx += 2
+                        let even = idx % 2 == 0
 
-                        let cat1 = generators[catNames[randInt(catNames.length)]]
-                        let cat2 = generators[catNames[randInt(catNames.length)]]
-                        cat1[randInt(cat1.length)].fun(problemsRow.left, answersRow.left)
-                        cat2[randInt(cat2.length)].fun(problemsRow.right, answersRow.right)
+                        let problemsRow = generateEntry(even ? cont.problems.left : cont.problems.right, idx + 1, true)
+                        let answersRow = generateEntry(even ? cont.answers.left : cont.answers.right, idx + 1, false)
+
+                        let cat = generators[catNames[randInt(catNames.length)]]                        
+                        cat[randInt(cat.length)].fun(problemsRow, answersRow)
+                        
                     }
                 }
                 else
                 {
+                    let bigidx = 1
                     for (let catName of catNames)
                     {
                         let cat = generators[catName]
 
                         for (let idx = 0; idx < cat.length; ++ idx)
                         {
-                            let name_row = generateRow(cont.problems, bigidx, -1, false)
-                            name_row.left.innerHTML = '<b>' + cat[idx].name + '</b>'
+                            let nameRowLeft = generateEntry(cont.problems.left, bigidx, false)
+                            let nameRowRight = generateEntry(cont.problems.right, bigidx+1, false)
+                            nameRowLeft.innerHTML = '<b>L ' + cat[idx].name + '</b>'
+                            nameRowRight.innerHTML = '<b>R ' + cat[idx].name + '</b>'
 
-                            let problemsRow = generateRow(cont.problems, bigidx, bigidx + 1, true)
-                            let answersRow = generateRow(cont.answers, bigidx, bigidx + 1, false)
+                            let problemsRowLeft = generateEntry(cont.problems.left, bigidx, true)
+                            let answersRowLeft = generateEntry(cont.answers.left, bigidx, false)
+                            let problemsRowRight = generateEntry(cont.problems.right, bigidx+1, true)
+                            let answersRowRight = generateEntry(cont.answers.right, bigidx+1, false)
+                            
+                            cat[idx].fun(problemsRowLeft, answersRowLeft)
+                            cat[idx].fun(problemsRowRight, answersRowRight)
+
                             bigidx += 2
-                            cat[idx].fun(problemsRow.left, answersRow.left)
-                            cat[idx].fun(problemsRow.right, answersRow.right)
                         }
                     }
 
