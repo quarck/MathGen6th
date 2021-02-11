@@ -226,8 +226,8 @@ function svgMarkAngle(x1, y1, x2, y2, x3, y3, label)
     let dpeX = x1 + dx2*r - psX
     let dpeY = y1 + dy2*r - psY
 
-    let textX = x1 + dx3*r/1.7
-    let textY = y1 + dy3*r/1.7 + 5
+    let textX = x1 + dx3*r/1.65 + 2
+    let textY = y1 + dy3*r/1.65 + 5
 
     return '<path d="M ' + psX + ' ' + psY + ' q ' + dpmX + ' ' + dpmY + ' ' + dpeX + ' ' + dpeY + '" ' + 
                 'stroke="black" stroke-width="1.5" stroke-dasharray="3,3" fill="none" />' + 

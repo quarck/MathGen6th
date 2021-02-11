@@ -340,24 +340,43 @@ function prob_triangles_sumOfAngles(root, ansRoot)
     for (;;)
     {
         let alpha = randIntRange(60, 90)
-        let beta = randIntRange(50, 60)
-        let answer = 180 - alpha - beta
+        let beta = randIntRange(50, 90)
+        let gamma = 180 - alpha - beta
+
+        if (gamma < 40)
+            continue
 
         let alphaStr = '' + alpha + '&deg;'
         let betaStr = '' + beta + '&deg;'
+        let gammaStr = '' + gamma + '&deg;'
 
+        let probSvg = ""
+        let answer = -1
 
+        switch (randValue(1, 2, 3))
+        {
+        case 1: 
+            probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, alphaStr, betaStr, '?')
+            answer = gamma 
+            break;
+        case 2: 
+            probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, alphaStr, '?', gammaStr)
+            answer = beta
+            break;
+        default: 
+            probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, '?', betaStr, gammaStr)
+            answer = alpha 
+            break;
+        }
         
-        let problemHtml = 
+        root.innerHTML = 
             "<table><tr><td valign='top'>" + 
                 "<table><tr><td>What is the value of unknown angle?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;</td></tr></table>" + 
                 "</td><td>" + 
-                svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, alphaStr, betaStr, '?') + 
+                probSvg + 
                 "</td></tr></table>"
 
-        let answerHtml = '' + answer + '&deg;'
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
+        ansRoot.innerHTML = '' + answer + '&deg;'
         break;
     }
 
