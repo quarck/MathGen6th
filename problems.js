@@ -379,7 +379,42 @@ function prob_triangles_sumOfAngles(root, ansRoot)
         ansRoot.innerHTML = '' + answer + '&deg;'
         break;
     }
+}
 
+let used_shape_names = []
+function prob_shapes_shapeName(root, ansRoot)
+{
+    for (;;)
+    {
+        let shape = ngoneshapes[randInt(ngoneshapes.length)]
+        if (used_shape_names.includes(shape.name))
+        {
+            continue
+        }
+        used_shape_names.push(shape.name)
+       
+        root.innerHTML = 
+            "<table>"+ 
+                "<tr>" + 
+                    "<td valign='top'>" + 
+                        "<table><tr><td>Name this shape</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>" + 
+                        "<table><tr><td>How many axes of symmetry it has?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>" + 
+                    "</td>" + 
+                    "<td colspan='2'>" + 
+                        shape.svg(150, 150) + 
+                    "</td>" + 
+                "</tr>" + 
+                "<tr>" + 
+                    "<td valign='top'>" + 
+                        
+                    "</td>" + 
+                "</tr>" + 
+                "</table>"
+
+        ansRoot.innerHTML = shape.name + "; " + shape.symmetry_axes
+        break;
+    }
+    // svgNGone
 }
 
 
@@ -592,5 +627,8 @@ function getGenerators()
 
 function getMaxProbEntries()
 {
-    return {'prob_triangles_sumOfAngles': 2 }
+    return {
+        prob_triangles_sumOfAngles: 1, 
+        prob_shapes_shapeName: 2
+     }
 }
