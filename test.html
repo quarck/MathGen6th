@@ -55,7 +55,12 @@
 
 <script language="javascript">
     
-    document.getElementById("root").innerHTML = svgTriangleByAnglesWithAngleMarks(200, 200, 195, 120, 30, '120°', '30°', '?')
+    let svgs = ""
+
+    for (let i = 3; i < 20; ++ i)
+        svgs += svgNGone(100, 100, i)
+
+    document.getElementById("root").innerHTML = svgs
 
 </script>
 

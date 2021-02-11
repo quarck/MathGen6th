@@ -55,8 +55,8 @@ function svgNGone(w, h, n, fill, stroke)
     let angle_step = 2.0 * Math.PI / n    
     let points = ""
     let start_angle = (n % 2 == 0) ? 0 : -Math.PI/2.0
-    if (n == 4)
-        start_angle = -Math.PI / 4
+    if (n == 4 || n == 8)
+        start_angle = -Math.PI / n
 
     let y_offs = (n == 3) ? 0.2 : 0.01
 
