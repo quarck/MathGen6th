@@ -193,6 +193,27 @@ function prob_advEval_OpAPlusBClDivC(root, ansRoot)
     }            
 }
 
+function prob_advEval_Pow2MinusPow2(root, ansRoot)
+{
+
+    for (;;)
+    {
+        let a = randIntRange(4, 20)
+        let b = randIntRange(4, 20)
+        if (a <= b)
+            continue
+
+        let problemHtml = "" + a + "&#178; - " + b + "&#178;" + " = "
+        let answerHtml = Math.pow(a, 2) - Math.pow(b, 2)
+
+        root.innerHTML = problemHtml
+        ansRoot.innerHTML = answerHtml
+        break;
+    }
+
+}
+
+
 function prob_advEval_OpATimesBClMinusC(root, ansRoot)
 {
     for (;;)
@@ -382,7 +403,7 @@ function prob_triangles_sumOfAngles(root, ansRoot)
 }
 
 let used_shape_names = []
-function prob_shapes_shapeName(root, ansRoot)
+function prob_shapes_shapeProps(root, ansRoot)
 {
     for (;;)
     {
@@ -393,25 +414,35 @@ function prob_shapes_shapeName(root, ansRoot)
         }
         used_shape_names.push(shape.name)
        
+        let line1 = ""
+        let line2 = ""
+        let ans = ""
+
+        if (shape.guess_name)
+        {
+            line1 = "<table><tr><td>Name this shape</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
+            line2 = "<table><tr><td>How many axes of symmetry it has?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
+            ans = shape.name + "; " + shape.symmetry_axes
+        }
+        else 
+        {
+            line1 = "<table><tr><td>How many axes of symmetry " + shape.name + " has?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
+            ans = "" + shape.symmetry_axes
+        }        
+
         root.innerHTML = 
             "<table>"+ 
                 "<tr>" + 
                     "<td valign='top'>" + 
-                        "<table><tr><td>Name this shape</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>" + 
-                        "<table><tr><td>How many axes of symmetry it has?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>" + 
+                        line1 + line2 +                         
                     "</td>" + 
-                    "<td colspan='2'>" + 
+                    "<td>" + 
                         shape.svg(150, 150) + 
-                    "</td>" + 
-                "</tr>" + 
-                "<tr>" + 
-                    "<td valign='top'>" + 
-                        
                     "</td>" + 
                 "</tr>" + 
                 "</table>"
 
-        ansRoot.innerHTML = shape.name + "; " + shape.symmetry_axes
+        ansRoot.innerHTML = ans
         break;
     }
     // svgNGone
@@ -498,14 +529,18 @@ function prob_eqs_prob3(root, ansRoot)
     for (;;)
     {
         let name = randomName('x', 'y')
-        let a = randFixFloat(1, 10, 1)
-        let b = (randInt(50)) * a
+        let a = randFixFloat(1, 10, 0)
+        let b = (randInt(50)) * a        
+        let c = (randInt(20))                
+        b -= c
+        if (b <= 2)
+            continue
         if (Math.abs(a) < 0.1)
             continue;
         if (Math.abs(a) == 1)
             continue;
-        root.innerHTML = formatFloatUnlessInt(a, 1) + name + " = " + formatFloatUnlessInt(b, 1) + ". &nbsp;&nbsp; What is " + name + "?"
-        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
+        root.innerHTML = formatFloatUnlessInt(a, 1) + name + " = " + formatFloatUnlessInt(b, 1) + " + " +  formatFloatUnlessInt(c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
+        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt((b + c) / a, 0)
         break;
     }
 }
@@ -516,7 +551,7 @@ function prob_eqs_prob4(root, ansRoot)
     for (;;)
     {
         let name = randomName('x', 'y')
-        let a = randFixFloat(1, 10, 1)
+        let a = randFixFloat(1, 10, 0)
         let b = (randInt(50)) * a
         let c = randFixFloat(1, 30, 1)
         if (Math.abs(a) < 0.1)
@@ -535,7 +570,7 @@ function prob_eqs_prob5(root, ansRoot)
     for (;;)
     {
         let name = randomName('x', 'y')
-        let a = randFixFloat(1, 10, 1)
+        let a = randFixFloat(1, 10, 0)
         let b = (randInt(50)) * a
         let c = randFixFloat(1, 30, 1)
         if (Math.abs(a) < 0.1)
@@ -629,6 +664,6 @@ function getMaxProbEntries()
 {
     return {
         prob_triangles_sumOfAngles: 1, 
-        prob_shapes_shapeName: 2
+        prob_shapes_shapeProps: 3
      }
 }
