@@ -15,19 +15,11 @@
 
 */
 
-/* This code was written by a person with very little Web/JS knowledge, don't judge. 
- * Send bug reports to: mathgeneratorfeedback@qrck.org */
-
 /*
- * IMPORTANT: 
- * Every problem name should be of the following format: 
- * prob_categoryName_problemName
- * there should be only two underscores in the whole name
- * 
- * Each problem generator accepts three argument: 
- * root - div element where the problem text should be inserted into
- * ansRoot - div element where the answer text should be inserted into
- */
+   This code was written by a person with very little Web/JS knowledge, don't judge. 
+   https://github.com/quarck/MathGen6th/issues for reporting any issues 
+*/
+
 
 function generateTableOperationHTML(a, b, op)
 {
@@ -67,603 +59,669 @@ function generateMultiplicationHtml(a, b)
 }
 
 
-
-/*
-function prob_xxx_yyy(root, ansRoot)
-{
-    for (;;)
+var category_rounding = 
+[
     {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-} */
-
-function prob_rounding_one(root, ansRoot)
-{
-    for (;;)
-    {
-        let nd = randValue(10, 100, 1000)
-        let number = nd * (randInt(200) + 1) + randInt(nd)
-
-        if (number % nd == 0)
-            continue
-
-        let problemHtml = "Round " + formatInt(number) + " to the nearest " + formatInt(nd)
-        let answerHtml = formatInt(Math.round(number / nd) * nd)
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_addsub_int(root, ansRoot)
-{
-    for (;;)
-    {
-        let a1 = randIntRange(1000, 10000)
-        let b1 = randIntRange(100, 1000)
-        let a2 = randIntRange(1000, 10000)
-        let b2 = randIntRange(100, 1000)
-
-        if (a1 == b1 || a2 == b2 || a1 == a2 || b1 == b2) 
-            continue
-
-        let ab1 = [max(a1, b1), min(a1, b1)]
-        let ab2 = [max(a2, b2), min(a2, b2)]
-
-        let op1 = randValue('+', '-')
-        let op2 = randValue('+', '-')
-
-        let inner1 = generateTableOperationHTML(formatInt(ab1[0]), formatInt(ab1[1]), op1) 
-        let inner2 = generateTableOperationHTML(formatInt(ab2[0]), formatInt(ab2[1]), op2) 
-        let ans1 = formatInt(op1 == '+' ? ab1[0] + ab1[1] : ab1[0] - ab1[1])
-        let ans2 = formatInt(op2 == '+' ? ab2[0] + ab2[1] : ab2[0] - ab2[1])
-
-        let problemHtml = "<table><tr> <td valign='top'><i>a.</i></td><td class='sm_v'>" + inner1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + inner2 + "</td> </tr></table>"
-        let answerHtml = "<table><tr> <td valign='top'><i>a.</i></td> <td class='sm_v'>" + ans1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + ans2 + "</td> </tr></table>"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_addsub_fract(root, ansRoot)
-{
-    for (;;)
-    {
-        let a1 = randIntRange(1000, 10000)
-        let b1 = randIntRange(100, 1000)
-        let a2 = randIntRange(1000, 10000)
-        let b2 = randIntRange(100, 1000)
-
-        if (a1 == b1 || a2 == b2 || a1 == a2 || b1 == b2) 
-            continue
-
-        if (a1 % 10 == 0 || a2 % 10 == 0 || b1 % 10 == 0 || b2 % 10 == 0)
-            continue
-
-        a1 /= 10.0
-        a2 /= 10.0
-        b1 /= 10.0
-        b2 /= 10.0
-
-        let ab1 = [max(a1, b1), min(a1, b1)]
-        let ab2 = [max(a2, b2), min(a2, b2)]
-
-        let op1 = randValue('+', '-')
-        let op2 = randValue('+', '-')
-
-        let inner1 = generateTableOperationHTML(formatFloat(ab1[0], 1), formatFloat(ab1[1], 1), op1) 
-        let inner2 = generateTableOperationHTML(formatFloat(ab2[0], 1), formatFloat(ab2[1], 1), op2) 
-        let ans1 = formatFloat(op1 == '+' ? ab1[0] + ab1[1] : ab1[0] - ab1[1], 1)
-        let ans2 = formatFloat(op2 == '+' ? ab2[0] + ab2[1] : ab2[0] - ab2[1], 1)
-
-        let problemHtml = "<table><tr> <td valign='top'><i>a.</i></td><td class='sm_v'>" + inner1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + inner2 + "</td> </tr></table>"
-        let answerHtml = "<table><tr> <td valign='top'><i>a.</i></td> <td class='sm_v'>" + ans1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + ans2 + "</td> </tr></table>"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_advEval_OpAPlusBClDivC(root, ansRoot)
-{
-    for (;;)
-    {
-        let c = randIntRange(5, 30)
-        let aPlusB = c * randIntRange(5, 10)
-        let a = randIntRange(1, aPlusB)
-        let b = aPlusB - a                    
-
-        let problemHtml = "(" + a + " + " + b + ") &#247; " + c + " = "
-        let answerHtml = Math.round((a + b ) / c)
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }            
-}
-
-function prob_advEval_Pow2MinusPow2(root, ansRoot)
-{
-
-    for (;;)
-    {
-        let a = randIntRange(4, 20)
-        let b = randIntRange(4, 20)
-        if (a <= b)
-            continue
-
-        let problemHtml = "" + a + "&#178; - " + b + "&#178;" + " = "
-        let answerHtml = Math.pow(a, 2) - Math.pow(b, 2)
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-
-}
-
-
-function prob_advEval_OpATimesBClMinusC(root, ansRoot)
-{
-    for (;;)
-    {
-        let a = randIntRange(10, 30)
-        let b = randIntRange(2, 10)
-        let c = randIntRange(5, 30)
-        
-        if (a * b <= c)
-            continue
-
-        let problemHtml = "(" + a + " &#215; " + b + ") - " + c + " = "
-        let answerHtml = Math.round(a * b - c)
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }            
-}
-
-function prob_divmul_div(root, ansRoot)
-{
-    for (;;)
-    {
-        let a = randIntRange(5, 10)
-        let b = randIntRange(100, 300)
-        let c = a * b                
-        let problemHtml = '<table><tr><td class="div_left">' + formatInt(a) + '</td><td class="div_right">' + formatInt(c) + '</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>'
-        let answerHtml = formatInt(b)
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_divmul_divMultOfTen(root, ansRoot)
-{
-    for (;;)
-    {
-        let b = randIntRange(1000, 10000)
-        let numDgts = randInt(4) // 1, 2 or 3
-        let a = Math.pow(10, numDgts)
-
-        if (a >= b)
-            continue
-        if (b % a == 0)
-            continue
-
-        let c = a * b
-        let problemHtml = formatInt(b) + " &#247; " + formatInt(a) + " = "
-        let answerHtml = formatFloat(b / a, numDgts)
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_divmul_mulNoFractions(root, ansRoot)
-{
-    for (;;)
-    {
-        let a = randIntRange(100, 300)
-        let b = randIntRange(2, 10)
-        let problemHtml = generateMultiplicationHtml("" + a, "" + b)
-        let answerHtml = a * b
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_divmul_mulWithFractions(root, ansRoot)
-{
-    for (;;)
-    {
-        let a = randIntRange(100, 300)
-        let b = randIntRange(3, 10)
-
-        if (a % 10 == 0)
-            continue
-        a /= 10.0
-
-        let problemHtml = generateMultiplicationHtml("" + a, "" + b)
-        let answerHtml = formatFloat(a * b, 1)
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_fractions_divideInProportion(root, ansRoot)
-{
-    for (;;)
-    {
-        let unit = randIntRange(5, 15)
-        let num = randValue(2, 3)
-        let parts = []
-
-        for (let i = 0; i < num; ++ i)
+        name: "prob_rounding_one", 
+        fun: function (root, ansRoot)
         {
-            parts.push(randIntRange(1, 5))                    
-        }
-        parts.sort()
-
-        let sp_str = ""
-        let parts_str = ""
-        let asn_str = ""
-        let all_eq = true
-        let sum = 0
-        for (let i = 0; i < num; ++ i) 
-        {
-            all_eq = all_eq && (parts[i] == parts[0])
-            sum += parts[i]
-            if (i == 0)
+            for (;;)
             {
-                parts_str = "" + parts[i]
-                ans_str = "" + (unit * parts[i])
-                sp_str = "<td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;</td>"
-            }
-            else 
-            {
-                parts_str = parts_str + ":" + parts[i]
-                ans_str = ans_str + ":" + (unit * parts[i])
-                sp_str = sp_str + "<td>:</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;</td>"
-            }
-        }
-
-        if (all_eq) 
-            continue 
-    
-        let problemHtml = 
-            "<table><tr>" + 
-                "<td>Divide " + (sum * unit) + " in the ratio " + parts_str + ".&nbsp;&nbsp;</td>" + 
-                sp_str +
-                "</tr></table>"
-        let answerHtml = ans_str
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_triangles_sumOfAngles(root, ansRoot) 
-{
-    for (;;)
-    {
-        let alpha = randIntRange(60, 90)
-        let beta = randIntRange(50, 90)
-        let gamma = 180 - alpha - beta
-
-        if (gamma < 40)
-            continue
-
-        let alphaStr = '' + alpha + '&deg;'
-        let betaStr = '' + beta + '&deg;'
-        let gammaStr = '' + gamma + '&deg;'
-
-        let probSvg = ""
-        let answer = -1
-
-        switch (randValue(1, 2, 3))
-        {
-        case 1: 
-            probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, alphaStr, betaStr, '?')
-            answer = gamma 
-            break;
-        case 2: 
-            probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, alphaStr, '?', gammaStr)
-            answer = beta
-            break;
-        default: 
-            probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, '?', betaStr, gammaStr)
-            answer = alpha 
-            break;
-        }
+                let nd = randValue(10, 100, 1000)
+                let number = nd * (randInt(200) + 1) + randInt(nd)
         
-        root.innerHTML = 
-            "<table><tr><td valign='top'>" + 
-                "<table><tr><td>What is the value of unknown angle?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;</td></tr></table>" + 
-                "</td><td>" + 
-                probSvg + 
-                "</td></tr></table>"
+                if (number % nd == 0)
+                    continue
+        
+                let problemHtml = "Round " + formatInt(number) + " to the nearest " + formatInt(nd)
+                let answerHtml = formatInt(Math.round(number / nd) * nd)
+        
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+]
 
-        ansRoot.innerHTML = '' + answer + '&deg;'
-        break;
-    }
-}
+var category_addsub = 
+[
+    {
+        name: "prob_addsub_int", 
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let a1 = randIntRange(1000, 10000)
+                let b1 = randIntRange(100, 1000)
+                let a2 = randIntRange(1000, 10000)
+                let b2 = randIntRange(100, 1000)
+
+                if (a1 == b1 || a2 == b2 || a1 == a2 || b1 == b2) 
+                    continue
+
+                let ab1 = [max(a1, b1), min(a1, b1)]
+                let ab2 = [max(a2, b2), min(a2, b2)]
+
+                let op1 = randValue('+', '-')
+                let op2 = randValue('+', '-')
+
+                let inner1 = generateTableOperationHTML(formatInt(ab1[0]), formatInt(ab1[1]), op1) 
+                let inner2 = generateTableOperationHTML(formatInt(ab2[0]), formatInt(ab2[1]), op2) 
+                let ans1 = formatInt(op1 == '+' ? ab1[0] + ab1[1] : ab1[0] - ab1[1])
+                let ans2 = formatInt(op2 == '+' ? ab2[0] + ab2[1] : ab2[0] - ab2[1])
+
+                let problemHtml = "<table><tr> <td valign='top'><i>a.</i></td><td class='sm_v'>" + inner1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + inner2 + "</td> </tr></table>"
+                let answerHtml = "<table><tr> <td valign='top'><i>a.</i></td> <td class='sm_v'>" + ans1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + ans2 + "</td> </tr></table>"
+
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_addsub_fract",
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let a1 = randIntRange(1000, 10000)
+                let b1 = randIntRange(100, 1000)
+                let a2 = randIntRange(1000, 10000)
+                let b2 = randIntRange(100, 1000)
+        
+                if (a1 == b1 || a2 == b2 || a1 == a2 || b1 == b2) 
+                    continue
+        
+                if (a1 % 10 == 0 || a2 % 10 == 0 || b1 % 10 == 0 || b2 % 10 == 0)
+                    continue
+        
+                a1 /= 10.0
+                a2 /= 10.0
+                b1 /= 10.0
+                b2 /= 10.0
+        
+                let ab1 = [max(a1, b1), min(a1, b1)]
+                let ab2 = [max(a2, b2), min(a2, b2)]
+        
+                let op1 = randValue('+', '-')
+                let op2 = randValue('+', '-')
+        
+                let inner1 = generateTableOperationHTML(formatFloat(ab1[0], 1), formatFloat(ab1[1], 1), op1) 
+                let inner2 = generateTableOperationHTML(formatFloat(ab2[0], 1), formatFloat(ab2[1], 1), op2) 
+                let ans1 = formatFloat(op1 == '+' ? ab1[0] + ab1[1] : ab1[0] - ab1[1], 1)
+                let ans2 = formatFloat(op2 == '+' ? ab2[0] + ab2[1] : ab2[0] - ab2[1], 1)
+        
+                let problemHtml = "<table><tr> <td valign='top'><i>a.</i></td><td class='sm_v'>" + inner1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + inner2 + "</td> </tr></table>"
+                let answerHtml = "<table><tr> <td valign='top'><i>a.</i></td> <td class='sm_v'>" + ans1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + ans2 + "</td> </tr></table>"
+        
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+]
+
+
+var category_advEval = 
+[
+    {
+        name: "prob_advEval_OpAPlusBClDivC", 
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let c = randIntRange(5, 30)
+                let aPlusB = c * randIntRange(5, 10)
+                let a = randIntRange(1, aPlusB)
+                let b = aPlusB - a                    
+        
+                let problemHtml = "(" + a + " + " + b + ") &#247; " + c + " = "
+                let answerHtml = Math.round((a + b ) / c)
+        
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }            
+        },         
+    },
+    {
+        name: "prob_advEval_Pow2MinusPow2", 
+        fun: function (root, ansRoot)
+        {
+        
+            for (;;)
+            {
+                let a = randIntRange(4, 20)
+                let b = randIntRange(4, 20)
+                if (a <= b)
+                    continue
+        
+                let problemHtml = "" + a + "&#178; - " + b + "&#178;" + " = "
+                let answerHtml = Math.pow(a, 2) - Math.pow(b, 2)
+        
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        
+        },         
+    },
+    {
+        name: "prob_advEval_OpATimesBClMinusC",
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let a = randIntRange(10, 30)
+                let b = randIntRange(2, 10)
+                let c = randIntRange(5, 30)
+                
+                if (a * b <= c)
+                    continue
+        
+                let problemHtml = "(" + a + " &#215; " + b + ") - " + c + " = "
+                let answerHtml = Math.round(a * b - c)
+        
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }            
+        },         
+    },
+]
+
+
+
+var category_divmul = 
+[
+    {
+        name: "prob_divmul_div", 
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let a = randIntRange(5, 10)
+                let b = randIntRange(100, 300)
+                let c = a * b                
+                let problemHtml = '<table><tr><td class="div_left">' + formatInt(a) + '</td><td class="div_right">' + formatInt(c) + '</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>'
+                let answerHtml = formatInt(b)
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_divmul_divMultOfTen", 
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let b = randIntRange(1000, 10000)
+                let numDgts = randInt(4) // 1, 2 or 3
+                let a = Math.pow(10, numDgts)
+        
+                if (a >= b)
+                    continue
+                if (b % a == 0)
+                    continue
+        
+                let c = a * b
+                let problemHtml = formatInt(b) + " &#247; " + formatInt(a) + " = "
+                let answerHtml = formatFloat(b / a, numDgts)
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_divmul_mulNoFractions", 
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let a = randIntRange(100, 300)
+                let b = randIntRange(2, 10)
+                let problemHtml = generateMultiplicationHtml("" + a, "" + b)
+                let answerHtml = a * b
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_divmul_mulWithFractions", 
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let a = randIntRange(100, 300)
+                let b = randIntRange(3, 10)
+        
+                if (a % 10 == 0)
+                    continue
+                a /= 10.0
+        
+                let problemHtml = generateMultiplicationHtml("" + a, "" + b)
+                let answerHtml = formatFloat(a * b, 1)
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+]
+
+var category_fractions = 
+[
+    {
+        name: "prob_fractions_divideInProportion", 
+        fun: function (root, ansRoot)
+        {
+            for (;;)
+            {
+                let unit = randIntRange(5, 15)
+                let num = randValue(2, 3)
+                let parts = []
+        
+                for (let i = 0; i < num; ++ i)
+                {
+                    parts.push(randIntRange(1, 5))                    
+                }
+                parts.sort()
+        
+                let sp_str = ""
+                let parts_str = ""
+                let asn_str = ""
+                let all_eq = true
+                let sum = 0
+                for (let i = 0; i < num; ++ i) 
+                {
+                    all_eq = all_eq && (parts[i] == parts[0])
+                    sum += parts[i]
+                    if (i == 0)
+                    {
+                        parts_str = "" + parts[i]
+                        ans_str = "" + (unit * parts[i])
+                        sp_str = "<td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;</td>"
+                    }
+                    else 
+                    {
+                        parts_str = parts_str + ":" + parts[i]
+                        ans_str = ans_str + ":" + (unit * parts[i])
+                        sp_str = sp_str + "<td>:</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;</td>"
+                    }
+                }
+        
+                if (all_eq) 
+                    continue 
+            
+                let problemHtml = 
+                    "<table><tr>" + 
+                        "<td>Divide " + (sum * unit) + " in the ratio " + parts_str + ".&nbsp;&nbsp;</td>" + 
+                        sp_str +
+                        "</tr></table>"
+                let answerHtml = ans_str
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+]
+
+
+
+var category_triangles = 
+[
+    {
+        name: "prob_triangles_sumOfAngles", 
+        max_count: 1, // nore more than 1 occurance of this problem type ever!
+        fun: function (root, ansRoot) 
+        {
+            for (;;)
+            {
+                let alpha = randIntRange(60, 90)
+                let beta = randIntRange(50, 90)
+                let gamma = 180 - alpha - beta
+        
+                if (gamma < 40)
+                    continue
+        
+                let alphaStr = '' + alpha + '&deg;'
+                let betaStr = '' + beta + '&deg;'
+                let gammaStr = '' + gamma + '&deg;'
+        
+                let probSvg = ""
+                let answer = -1
+        
+                switch (randValue(1, 2, 3))
+                {
+                case 1: 
+                    probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, alphaStr, betaStr, '?')
+                    answer = gamma 
+                    break;
+                case 2: 
+                    probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, alphaStr, '?', gammaStr)
+                    answer = beta
+                    break;
+                default: 
+                    probSvg = svgTriangleByAnglesWithAngleMarks(200, 200, 195, alpha, beta, '?', betaStr, gammaStr)
+                    answer = alpha 
+                    break;
+                }
+                
+                root.innerHTML = 
+                    "<table><tr><td valign='top'>" + 
+                        "<table><tr><td>What is the value of unknown angle?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;</td></tr></table>" + 
+                        "</td><td>" + 
+                        probSvg + 
+                        "</td></tr></table>"
+        
+                ansRoot.innerHTML = '' + answer + '&deg;'
+                break;
+            }
+        },         
+    },
+
+    {
+        name: "prob_triangles_triangle_type", 
+        max_count: 1, // nore more than 1 occurance of this problem type ever!
+        fun: function (root, ansRoot) 
+        {
+            for (;;)
+            {
+                let probSvg = ""
+                let answer = ""
+        
+                switch (randValue(1, 2, 3))
+                {
+                case 1: 
+                    probSvg = svgTriangleWithMarks(200, 200, 160, 160, 160, 2, 2, 2)
+                    answer = 'equilateral triangle'
+                    break;
+                case 2:                
+                    probSvg = svgTriangleWithMarks(200, 200, 140, 170, 170, 0, 2, 2)
+                    answer = 'isosceles triangle'
+                    break;
+                default:
+                    probSvg = svgTriangleWithMarks(200, 200, 160, 120, 170, 1, 2, 3)
+                    answer = 'scalene triangle'
+                    break;
+                }
+                
+                root.innerHTML = 
+                    "<table><tr><td valign='top'>" + 
+                        "<table><tr><td>Name this triangle type</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>" + 
+                        "</td><td>" + 
+                        probSvg + 
+                        "</td></tr></table>"
+        
+                ansRoot.innerHTML = answer
+                break;
+            }
+        },         
+    },
+]
+
+
 
 let used_shape_names = []
-function prob_shapes_shapeProps(root, ansRoot)
-{
-    for (;;)
+var category_shapes = 
+[
     {
-        let shape = ngoneshapes[randInt(ngoneshapes.length)]
-        if (used_shape_names.includes(shape.name))
+        name: "prob_shapes_shapeProps", 
+        max_count: 2,
+        fun: function (root, ansRoot)
         {
-            continue
+            for (;;)
+            {
+                let shape = ngoneshapes[randInt(ngoneshapes.length)]
+                if (used_shape_names.includes(shape.name))
+                {
+                    continue
+                }
+                used_shape_names.push(shape.name)
+               
+                let line1 = ""
+                let line2 = ""
+                let ans = ""
+        
+                if (shape.guess_name)
+                {
+                    line1 = "<table><tr><td>Name this shape</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
+                    line2 = "<table><tr><td>How many axes of symmetry it has?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
+                    ans = shape.name + "; " + shape.symmetry_axes
+                }
+                else 
+                {
+                    line1 = "<table><tr><td>How many axes of symmetry " + shape.name + " has?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
+                    ans = "" + shape.symmetry_axes
+                }        
+        
+                root.innerHTML = 
+                    "<table>"+ 
+                        "<tr>" + 
+                            "<td valign='top'>" + 
+                                line1 + line2 +                         
+                            "</td>" + 
+                            "<td>" + 
+                                shape.svg(150, 150) + 
+                            "</td>" + 
+                        "</tr>" + 
+                        "</table>"
+        
+                ansRoot.innerHTML = ans
+                break;
+            }
+            // svgNGone
+        },         
+    },
+]
+
+
+
+
+
+var category_eqs = 
+[
+    {
+        name: "prob_eqs_prob1a",         
+        fun: function (root, ansRoot) // Num + x = Num - Num
+        {
+            for (;;)
+            {
+                let name = randomName('x', 'y')
+                let a = randInt(100)
+                if (a == 0)
+                    continue;
+                let b = randInt(200)
+                let c = randInt(50)
+        
+                if (b-c-a <= 0)
+                    continue
+                if (b < c)
+                    continue
+                if (b == c)
+                    continue
+        
+                if (randValue(true, false))
+                    root.innerHTML = a + " + " + name + " = " + b + " - " + c + ". &nbsp;&nbsp; What is " + name + "?"
+                else
+                    root.innerHTML =  name + " + " + a + " = " + b + " - " + c + ". &nbsp;&nbsp; What is " + name + "?"
+                ansRoot.innerHTML = name +" = " + (b-c-a)
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_eqs_prob1b", 
+        fun: function (root, ansRoot) // Num - x = Num + Num
+        {
+            for (;;)
+            {
+                let name = randomName('x', 'y')
+                let a = randInt(100)
+                if (a == 0)
+                    continue;
+                let b = randInt(200)
+                let c = randInt(50)
+                if (a -b -c <= 0)
+                    continue
+                if (b == c)
+                    continue
+        
+                root.innerHTML = a + " - " + name + " = " + b + " + " + c + ". &nbsp;&nbsp; What is " + name + "?"
+                ansRoot.innerHTML = name +" = " + (a-b-c)
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_eqs_prob2", 
+        fun: function (root, ansRoot) // Float + x = Float
+        {
+            for (;;)
+            {
+                let name = randomName('x', 'y')
+                let a = randFixFloat(1, 20, 2)
+                if (Math.abs(a) < 0.0001)
+                    continue
+                let b = randFixFloat(1, 20, 2)
+        
+                if (b - a <= 1.0)
+                    continue
+        
+                if (randValue(true, false))
+                    root.innerHTML = formatFloatUnlessInt(a, 2) + " + " + name + " = " + formatFloatUnlessInt(b, 2) + ". &nbsp;&nbsp; What is " + name + "?"
+                else
+                    root.innerHTML = name + " + " + formatFloatUnlessInt(a, 2) + " = " + formatFloatUnlessInt(b, 2) + ". &nbsp;&nbsp; What is " + name + "?"
+        
+                ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b - a, 2)
+                break;
+            }
         }
-        used_shape_names.push(shape.name)
-       
-        let line1 = ""
-        let line2 = ""
-        let ans = ""
-
-        if (shape.guess_name)
+        ,         
+    },
+    {
+        name: "prob_eqs_prob3", 
+        fun: function (root, ansRoot) // Fl* x = Fl
         {
-            line1 = "<table><tr><td>Name this shape</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
-            line2 = "<table><tr><td>How many axes of symmetry it has?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
-            ans = shape.name + "; " + shape.symmetry_axes
+            for (;;)
+            {
+                let name = randomName('x', 'y')
+                let a = randFixFloat(1, 10, 0)
+                let b = (randInt(50)) * a        
+                let c = (randInt(20))                
+                b -= c
+                if (b <= 2)
+                    continue
+                if (Math.abs(a) < 0.1)
+                    continue;
+                if (Math.abs(a) == 1)
+                    continue;
+                root.innerHTML = formatFloatUnlessInt(a, 1) + name + " = " + formatFloatUnlessInt(b, 1) + " + " +  formatFloatUnlessInt(c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
+                ansRoot.innerHTML = name + " = " + formatFloatUnlessInt((b + c) / a, 0)
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_eqs_prob4", 
+        fun: function (root, ansRoot) // Fl* x + Fl= Fl
+        {
+            for (;;)
+            {
+                let name = randomName('x', 'y')
+                let a = randFixFloat(1, 10, 0)
+                let b = (randInt(50)) * a
+                let c = randFixFloat(1, 30, 1)
+                if (Math.abs(a) < 0.1)
+                    continue;
+                if (Math.abs(a) == 1)
+                    continue;
+                root.innerHTML = formatFloatUnlessInt(a, 1) + name + " + " + c + " = " + formatFloatUnlessInt(b + c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
+                ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_eqs_prob5", 
+        fun: function (root, ansRoot) // Fl* x - Fl= Fl
+        {
+            for (;;)
+            {
+                let name = randomName('x', 'y')
+                let a = randFixFloat(1, 10, 0)
+                let b = (randInt(50)) * a
+                let c = randFixFloat(1, 30, 1)
+                if (Math.abs(a) < 0.1)
+                    continue;
+                if (Math.abs(a) == 1)
+                    continue;
+                if (b - c < 1)
+                    continue
+                root.innerHTML = formatFloatUnlessInt(a, 1) + name + " - " + c + " = " + formatFloatUnlessInt(b - c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
+                ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
+                break;
+            }
         }
-        else 
-        {
-            line1 = "<table><tr><td>How many axes of symmetry " + shape.name + " has?</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
-            ans = "" + shape.symmetry_axes
-        }        
+        ,         
+    },
 
-        root.innerHTML = 
-            "<table>"+ 
-                "<tr>" + 
-                    "<td valign='top'>" + 
-                        line1 + line2 +                         
-                    "</td>" + 
-                    "<td>" + 
-                        shape.svg(150, 150) + 
-                    "</td>" + 
-                "</tr>" + 
-                "</table>"
+]
 
-        ansRoot.innerHTML = ans
-        break;
-    }
-    // svgNGone
-}
-
-
-// Num + x = Num - Num
-function prob_eqs_prob1a(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randInt(100)
-        if (a == 0)
-            continue;
-        let b = randInt(200)
-        let c = randInt(50)
-
-        if (b-c-a <= 0)
-            continue
-        if (b < c)
-            continue
-        if (b == c)
-            continue
-
-        if (randValue(true, false))
-            root.innerHTML = a + " + " + name + " = " + b + " - " + c + ". &nbsp;&nbsp; What is " + name + "?"
-        else
-            root.innerHTML =  name + " + " + a + " = " + b + " - " + c + ". &nbsp;&nbsp; What is " + name + "?"
-        ansRoot.innerHTML = name +" = " + (b-c-a)
-        break;
-    }
-}
-
-// Num - x = Num + Num
-function prob_eqs_prob1b(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randInt(100)
-        if (a == 0)
-            continue;
-        let b = randInt(200)
-        let c = randInt(50)
-        if (a -b -c <= 0)
-            continue
-        if (b == c)
-            continue
-
-        root.innerHTML = a + " - " + name + " = " + b + " + " + c + ". &nbsp;&nbsp; What is " + name + "?"
-        ansRoot.innerHTML = name +" = " + (a-b-c)
-        break;
-    }
-}
-
-// Float + x = Float
-function prob_eqs_prob2(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randFixFloat(1, 20, 2)
-        if (Math.abs(a) < 0.0001)
-            continue
-        let b = randFixFloat(1, 20, 2)
-
-        if (b - a <= 1.0)
-            continue
-
-        if (randValue(true, false))
-            root.innerHTML = formatFloatUnlessInt(a, 2) + " + " + name + " = " + formatFloatUnlessInt(b, 2) + ". &nbsp;&nbsp; What is " + name + "?"
-        else
-            root.innerHTML = name + " + " + formatFloatUnlessInt(a, 2) + " = " + formatFloatUnlessInt(b, 2) + ". &nbsp;&nbsp; What is " + name + "?"
-
-        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b - a, 2)
-        break;
-    }
-}
-
-// Fl* x = Fl
-function prob_eqs_prob3(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randFixFloat(1, 10, 0)
-        let b = (randInt(50)) * a        
-        let c = (randInt(20))                
-        b -= c
-        if (b <= 2)
-            continue
-        if (Math.abs(a) < 0.1)
-            continue;
-        if (Math.abs(a) == 1)
-            continue;
-        root.innerHTML = formatFloatUnlessInt(a, 1) + name + " = " + formatFloatUnlessInt(b, 1) + " + " +  formatFloatUnlessInt(c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
-        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt((b + c) / a, 0)
-        break;
-    }
-}
-
-// Fl* x + Fl= Fl
-function prob_eqs_prob4(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randFixFloat(1, 10, 0)
-        let b = (randInt(50)) * a
-        let c = randFixFloat(1, 30, 1)
-        if (Math.abs(a) < 0.1)
-            continue;
-        if (Math.abs(a) == 1)
-            continue;
-        root.innerHTML = formatFloatUnlessInt(a, 1) + name + " + " + c + " = " + formatFloatUnlessInt(b + c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
-        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
-        break;
-    }
-}
-
-// Fl* x - Fl= Fl
-function prob_eqs_prob5(root, ansRoot)
-{
-    for (;;)
-    {
-        let name = randomName('x', 'y')
-        let a = randFixFloat(1, 10, 0)
-        let b = (randInt(50)) * a
-        let c = randFixFloat(1, 30, 1)
-        if (Math.abs(a) < 0.1)
-            continue;
-        if (Math.abs(a) == 1)
-            continue;
-        if (b - c < 1)
-            continue
-        root.innerHTML = formatFloatUnlessInt(a, 1) + name + " - " + c + " = " + formatFloatUnlessInt(b - c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
-        ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
-        break;
-    }
-}
-
-
-
-
-
-
-//
-
-/*
-
-function prob_xxx_yyy1(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-function prob_xxx_yyy2(root, ansRoot)
-{
-    for (;;)
-    {
-        // generate here
-
-        let problemHtml = "This is a template problem"
-        let answerHtml = "This is an answer for a template problem"
-
-        root.innerHTML = problemHtml
-        ansRoot.innerHTML = answerHtml
-        break;
-    }
-}
-
-
-*/
 
 // returns hash map, where key is the category name 
 // and value is the list of problems in the category
-function getGenerators()
+function getGeneratorsRaw()
 {
-    let generators = {}
+    let generators = []
 
-    let names = Object.keys( window ).filter(x => x.startsWith("prob_"))
+    let names = Object.keys( window ).filter(x => x.startsWith("category_"))
+
     for (let name of names)
     {
-        let parts = name.split('_')
-        if (parts.length != 3)
-        {
-            console.error("name " + name + " is not a valid function name for generator")
-            continue
-        }
+        let category = { name: name, data: eval(name) }
+        assignCdfFlatWeights(category.data)
 
-        let cat = parts[1]
-        let probName = parts[2] // don't really need that one!, but just for consistency
-
-        if (!generators[cat])
-        {
-            generators[cat] = []
-        }
-
-        generators[cat].push({
-            fun: eval("(root, ansRoot) => " + name + "(root, ansRoot)"), 
-            name: name
-        })
+        generators.push(category)
     }
+    assignCdfFlatWeights(generators)
 
     return generators
 }
 
-function getMaxProbEntries()
+function createProbGenerator ()
 {
-    return {
-        prob_triangles_sumOfAngles: 1, 
-        prob_shapes_shapeProps: 3
-     }
+    let generators = getGeneratorsRaw()
+
+    return function() 
+    {
+        for (;;)
+        {
+            let category = weightedRandomValue(generators)
+            let problem = weightedRandomValue(category.data)
+
+            if (Object.keys(problem).includes("max_count"))
+            {
+                if (problem.max_count <= 0)
+                    continue
+                problem.max_count -= 1
+            }
+
+            // reduce probability of this category showing up again untill all others are used too
+            scaleCdfWeight(category, 0.3333, generators)
+            // same for this particular problem type
+            scaleCdfWeight(problem, 0.3333, category.data)
+
+            return problem 
+        }
+    }
 }

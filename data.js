@@ -1,3 +1,25 @@
+/* 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
+/*
+   This code was written by a person with very little Web/JS knowledge, don't judge. 
+   https://github.com/quarck/MathGen6th/issues for reporting any issues 
+*/
+
 
 let personNames = [
     "Elon", 
@@ -16,7 +38,6 @@ let shapes = [
 ]
 
 let ngoneshapes = [
-    { name: 'equilateral triangle', svg: (w, h)=> svgNGone(w, h, 3), symmetry_axes: 6, guess_name: false},
     { name: 'square', svg: (w, h)=> svgNGone(w, h, 4), symmetry_axes: 8, guess_name: false},
 
     { name: 'pentagon', svg: (w, h)=> svgNGone(w, h, 5), symmetry_axes: 10, guess_name: true},

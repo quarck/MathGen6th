@@ -17,7 +17,7 @@
 
 <!-- 
     This code was written by a person with very little Web/JS knowledge, don't judge. 
-    Send bug reports to: mathgeneratorfeedback@qrck.org
+    https://github.com/quarck/MathGen6th/issues for reporting any issues 
 -->
 <html>
     <head>
@@ -29,19 +29,54 @@
         <div id="contentRoot"></div>
 
         <div id="inputForm">
+            <h3>Math problems generator for 6th class of Junior school</h3>
             <input type="hidden" id="debug1" checked="true"></input>
+            <table>
+                <tr>
+                    <td class="form"><b>Number of problems:</b></td>
+                    <td class="form"><input type="number" id="num_problems" value="60"/></td>
+                </tr>
+                <tr>
+                    <td class="form"></td>
+                    <td class="form"><input type="button" id="generate" onclick="generate()" value="Generate!"/></td>
+                </tr>
+                
+                <tr>
+                    <td class="form"></td>
+                    <td class="form">
+                    Generated problem set is (relatively) printer friendly. <br>
+                    When you need a new problem set - just refresh the page to see this form again.</td>
+                </tr>
+                <tr><td class="form"></td><td class="form"></td></tr>
+                <tr>
+                    <td class="form" valign="top"><b>License information:</b></td>
+                    <td class="form">
+                        <p><b>Use this generator at your own risk, not warranty given</b></p>
+                        <p>Feel free to use this generator for yourself and recommend to others if you find it is useful!</p>
 
-            <h3>Number of problems:</h3> 
-            <input type="number" id="num_problems" value="60"/>
-            <br/><br/>
-            <input type="button" id="generate" onclick="generate()" value="Generate!"/>
-            <p><b>Use the content of this page at your own risk, not warranty given</b></p>
-            <br><br>
-            <p>License information:</p>
-            <p>Generated content: <a href="https://wiki.creativecommons.org/wiki/public_domain">Public domain</a></p>
-            <p>Source code: <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPLv3 license</a></p>
+                        <p><i>Generated math problems</i> are in a <a href="https://wiki.creativecommons.org/wiki/public_domain">Public domain</a></p>
+                        <p><i>Source code of the generator</i> is licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPLv3 license</a> </p>
+                    </td>
+                </tr>
+                <tr><td class="form"></td><td class="form"></td></tr>
+                <tr>
+                    <td class="form" valign="top"><b>Feedback &amp; Issues report:</b></td>
+                    <td class="form">
+                        <p><a href="https://github.com/quarck/MathGen6th/issues">github.com/quarck/MathGen6th/issues</a></p>   
+                    </td>
+                </tr>
+
+                <tr><td class="form"></td><td class="form"></td></tr>
+                <tr>
+                    <td class="form" valign="top">Created by:</td>
+                    <td class="form">
+                        Sergey Parshin
+                    </td>
+                </tr>
+            </table>        
         </div>
 
+        <script language="JavaScript" src="cdf.js"></script>
         <script language="JavaScript" src="util.js"></script>
         <script language="JavaScript" src="geometry.js"></script>
         <script language="JavaScript" src="data.js"></script>
@@ -136,18 +171,12 @@
 
                 let cont = generateMainLayout()
 
-                // let letftColumn = document.getElementById("viewRoot1")
-                // let rightColumn = document.getElementById("viewRoot2")
-
-                // let letftAnsColumn = document.getElementById("ansRoot1")
-                // let rightAnsColumn = document.getElementById("ansRoot2")
-
-                let generators = getGenerators()
-                let maxCounts = getMaxProbEntries()
-                let catNames = Object.keys(generators)
+                
 
                 if (!debug)
                 {
+                    let nextProbGenerator = createProbGenerator()
+
                     for (let idx = 0; idx < num_problems; ++ idx)
                     {
                         let even = idx % 2 == 0
@@ -155,44 +184,30 @@
                         let problemsRow = generateEntry(even ? cont.problems.left : cont.problems.right, idx + 1, true)
                         let answersRow = generateEntry(even ? cont.answers.left : cont.answers.right, idx + 1, false)
 
-                        for (;;)
-                        {
-                            let cat = generators[catNames[randInt(catNames.length)]]                        
-                            let prob = cat[randInt(cat.length)]
-                            let name = prob.name
-                            if (Object.keys(maxCounts).includes(name))
-                            {
-                                if (maxCounts[name] <= 0)
-                                    continue
-                                maxCounts[name] -= 1
-                            }
-                            prob.fun(problemsRow, answersRow)
-                            break
-                        }
-                        
+                        nextProbGenerator().fun(problemsRow, answersRow)                        
                     }
                 }
                 else
                 {
+                    // in debug we iterate over all possible combinations 
+                    let generators = getGeneratorsRaw()
                     let bigidx = 1
-                    for (let catName of catNames)
+                    for (let cat of generators)
                     {
-                        let cat = generators[catName]
-
-                        for (let idx = 0; idx < cat.length; ++ idx)
+                        for (let idx = 0; idx < cat.data.length; ++ idx)
                         {
                             let nameRowLeft = generateEntry(cont.problems.left, bigidx, false)
                             let nameRowRight = generateEntry(cont.problems.right, bigidx+1, false)
-                            nameRowLeft.innerHTML = '<b>L ' + cat[idx].name + '</b>'
-                            nameRowRight.innerHTML = '<b>R ' + cat[idx].name + '</b>'
+                            nameRowLeft.innerHTML = '<b>L ' + cat.data[idx].name + '</b>'
+                            nameRowRight.innerHTML = '<b>R ' + cat.data[idx].name + '</b>'
 
                             let problemsRowLeft = generateEntry(cont.problems.left, bigidx, true)
                             let answersRowLeft = generateEntry(cont.answers.left, bigidx, false)
                             let problemsRowRight = generateEntry(cont.problems.right, bigidx+1, true)
                             let answersRowRight = generateEntry(cont.answers.right, bigidx+1, false)
                             
-                            cat[idx].fun(problemsRowLeft, answersRowLeft)
-                            cat[idx].fun(problemsRowRight, answersRowRight)
+                            cat.data[idx].fun(problemsRowLeft, answersRowLeft)
+                            cat.data[idx].fun(problemsRowRight, answersRowRight)
 
                             bigidx += 2
                         }

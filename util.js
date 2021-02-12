@@ -15,54 +15,17 @@
 
 */
 
-/* This code was written by a person with very little Web/JS knowledge, don't judge. 
- * Send bug reports to: mathgeneratorfeedback@qrck.org */
-
-
-
-
-
-
-function xoshiro128ss(a, b, c, d) 
-{
-    return function() 
-    {
-        let t = b << 9, r = a * 5
-        r = (r << 7 | r >>> 25) * 9
-        c ^= a
-        d ^= b
-        b ^= c
-        a ^= d
-        c ^= t
-        d = d << 11 | d >>> 21
-        return (r >>> 0)
-    }
-}
-
-let _rng = null 
-function rng()
-{
-    if (_rng == null)
-    {
-        let now = Date.now()
-        let upper = now >>> 16
-        let lower = now & 0xffff
-        upper = (upper << 12) ^ upper 
-        lower = (lower << 13) ^ lower 
-
-        _rng = xoshiro128ss(lower, upper, ~lower ^ upper, lower ^ upper)
-    }
-    return _rng
-}
+/*
+   This code was written by a person with very little Web/JS knowledge, don't judge. 
+   https://github.com/quarck/MathGen6th/issues for reporting any issues 
+*/
 
 function random()
 {
-    //return rng()() / 4294967296
     return Math.random()
 }
 function randomRaw()
 {
-    //return rng()() 
     return (Math.random() * 1024 * 1024) | 0
 }
 
