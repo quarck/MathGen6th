@@ -203,6 +203,41 @@ function svgTriangleWithMarks(w, h, a, b, c, ma, mb, mc, fill, stroke)
         '</svg>'
 }
 
+function svgRightTriangleWithMark(w, h, a, b, fill, stroke)
+{
+    fill = fill ? fill : randFillColor()
+    stroke = stroke ? stroke : "rgb(0,0,0)"
+
+    let x1 = 0
+    let y1 = 0
+    let x2 = a     
+    let y2 = 0
+    let x3 = 0
+    let y3 = b
+
+    let dy = max(0, (h - y3)/2.0)
+    let dx = max(0, (w - a) / 2.0)
+
+    y1 = h - dy - y1
+    y2 = h - dy - y2
+    y3 = h - dy - y3
+    x1 = x1 + dx
+    x2 = x2 + dx
+    x3 = x3 + dx
+
+    points = "" + x1 + "," + y1 + " " + 
+                  x2 + "," + y2 + " " + 
+                  x3 + "," + y3 
+    
+    return '<svg width="' + w + '" height="' + h + '">' + 
+        '<polygon points="' + points + '" style="fill:' + fill + ';;stroke:' + stroke + ';stroke-width:2;fill-rule:nonzero;"/>' + 
+        '<line x1="' + x1 + '" y1="' + (y1-h*0.1) + '" x2="' + (x1+w*0.1) + '" y2="' + (y1-h*0.1) + '" style="stroke:black;stroke-width:1.5" />' + 
+        '<line x1="' + (x1+w*0.1) + '" y1="' + y1 + '" x2="' + (x1+w*0.1) + '" y2="' + (y1-h*0.1) + '" style="stroke:black;stroke-width:1.5" />' + 
+        'Sorry, your browser does not support inline SVG.' + 
+        '</svg>'
+}
+
+
 function svgMarkAngle(x1, y1, x2, y2, x3, y3, label)
 {
     let r = 45

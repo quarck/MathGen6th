@@ -377,6 +377,7 @@ var category_fractions =
 
 
 
+let used_triangle_types = []
 var category_triangles = 
 [
     {
@@ -431,15 +432,20 @@ var category_triangles =
 
     {
         name: "prob_triangles_triangle_type", 
-        max_count: 1, // nore more than 1 occurance of this problem type ever!
+        max_count: 2, // nore more than 1 occurance of this problem type ever!
         fun: function (root, ansRoot) 
         {
             for (;;)
             {
                 let probSvg = ""
                 let answer = ""
-        
-                switch (randValue(1, 2, 3))
+
+                let type = randValue(1, 2, 3, 4)
+                if (used_triangle_types.includes(type))
+                    continue
+                used_triangle_types.push(type)
+
+                switch (type)
                 {
                 case 1: 
                     probSvg = svgTriangleWithMarks(200, 200, 160, 160, 160, 2, 2, 2)
@@ -449,9 +455,13 @@ var category_triangles =
                     probSvg = svgTriangleWithMarks(200, 200, 140, 170, 170, 0, 2, 2)
                     answer = 'isosceles triangle'
                     break;
-                default:
+                case 3:
                     probSvg = svgTriangleWithMarks(200, 200, 160, 120, 170, 1, 2, 3)
                     answer = 'scalene triangle'
+                    break;
+                default:
+                    probSvg = svgRightTriangleWithMark(200, 200, 160, 110)
+                    answer = 'right triangle'
                     break;
                 }
                 
