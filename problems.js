@@ -767,7 +767,7 @@ var category_eqs =
 
 ]
 
-var category_eqs = 
+var category_primes = 
 [
     {
         name: "prob_primes_prob1a",         
