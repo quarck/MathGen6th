@@ -3,6 +3,7 @@ import re
 
 css_re = re.compile(r'^.*<link\s+rel="stylesheet"\s+type="text/css"\s+href="(.+\.css)">')
 js_re = re.compile(r'^.*<script\s+language="JavaScript"\s+src="(.+)"></script>')
+debug_re = re.compile(r'^.*<input type="hidden" id="debug" checked="true"></input>')
 
 
 def inline_file(fout, fname, op, cl):
@@ -28,11 +29,13 @@ with open('index.out.html', 'w') as f_out:
             l = l.rstrip()
             css_m = css_re.match(l)
             js_m = js_re.match(l)
+            debug_m = debug_re.match(l)
             if css_m: 
                 inline_file (f_out, css_m.group(1), "<style>", "</style>")
             elif js_m: 
                 inline_file(f_out, js_m.group(1), "<script language=\"JavaScript\">", "</script>")
-                pass
+            elif debug_m: 
+                pass 
             else: 
                 print(l, file=f_out)
 
