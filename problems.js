@@ -770,7 +770,7 @@ var category_eqs =
 var category_primes = 
 [
     {
-        name: "prob_primes_prob1a",         
+        name: "Primes in range",         
         max_count: 1,
         fun: function (root, ansRoot, difficulty)
         {
@@ -779,7 +779,49 @@ var category_primes =
                 let from = randIntRange(1, 10) * 10 + randValue(0, 5)
                 let to = from + 10 + difficulty
                 root.innerHTML = "Make a list of prime numbers between " + from + " and " + to
-                ansRoot.innerHTML = primes_in_range(from, to).map(x => '' + x).reduce((a, x) => a + ' ' + x)
+                ansRoot.innerHTML = primesInRange(from, to).map(x => '' + x).reduce((a, x) => a + ' ' + x)
+                break;
+            }
+        },         
+    },
+]
+
+var category_lcmgcd = 
+[
+    {
+        name: "LCM",         
+        max_count: 1,
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let numPrimes = difficulty >= 7 ? 4 : 3
+                let commonPrimes = randomSelection(primesInRange(1, difficulty >= 7 ? 15 : 10), numPrimes)
+
+                let numNumbers = randValue(2, 3)
+                let numbers = []
+
+                let non_uniq = false
+                for (let i = 0; i < numNumbers; ++ i)
+                {
+                    let num = randomSelection(commonPrimes, numPrimes-1).reduce((a, b) => a * b, 1)
+                    if (numbers.includes(num))
+                    {
+                        non_uniq = true
+                        break
+                    }
+                    numbers.push(num)
+                }
+                if (non_uniq)
+                {
+                    continue
+                }
+
+                numbers.sort((a, b) => (a|0) - (b|0))
+                let lcm = commonPrimes.reduce((a, b) => a * b, 1)                
+
+                root.innerHTML = "Find LCM of " + numbers.map(x => '' + x).reduce((a, b) => a + ' ' + b)
+                ansRoot.innerHTML = lcm
                 break;
             }
         },         

@@ -30,7 +30,7 @@
 
         <div id="inputForm">
             <h3>Math problems generator for 6th class of Junior school</h3>
-            <input type="hidden" id="debudg" checked="true"></input>
+            <input type="hidden" id="debug" checked="true"></input>
             <table>
                 <tr>
                     <td class="form"><b>Number of problems:</b></td>
@@ -201,11 +201,11 @@
                     {
                         for (let idx = 0; idx < cat.data.length; ++ idx)
                         {
-                            generateEntry(cont.problems.left, bigidx, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty' + difficulty_l + '</b>'
+                            generateEntry(cont.problems.left, bigidx, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty ' + difficulty_l + '</b>'
                             cat.data[idx].fun(generateEntry(cont.problems.left, bigidx, true), generateEntry(cont.answers.left, bigidx, false), difficulty_l)
                             bigidx ++
 
-                            generateEntry(cont.problems.right, bigidx+1, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty' + difficulty_r + '</b>'
+                            generateEntry(cont.problems.right, bigidx+1, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty ' + difficulty_r + '</b>'
                             cat.data[idx].fun(generateEntry(cont.problems.right, bigidx, true), generateEntry(cont.answers.right, bigidx, false), difficulty_r)
                             bigidx ++
                         }

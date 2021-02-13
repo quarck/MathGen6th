@@ -20,14 +20,6 @@
 //   https://github.com/quarck/MathGen6th/issues for reporting any issues 
 //
 
-function random()
-{
-    return Math.random()
-}
-function randomRaw()
-{
-    return (Math.random() * 1024 * 1024) | 0
-}
 
 function max(a, b) 
 {
@@ -38,6 +30,93 @@ function min(a, b)
 {
      return a > b ? b : a 
 }
+
+/*
+ * Various random helpers 
+ */
+
+function random()
+{
+    return Math.random()
+}
+function randomRaw()
+{
+    return (Math.random() * 1024 * 1024) | 0
+}
+
+function randInt(max)
+{
+    return randomRaw() % max;
+}
+
+function randIntRange(min, max)
+{
+    return randInt(max - min) + min;
+}
+
+function randFixFloat(min, max, numDigits)
+{
+    let v = random()
+    let scaled = (max - min) * v + min
+    let p = Math.pow(10, numDigits)
+    return Math.round(scaled * p) / p
+}
+
+function randValue()
+{
+    return arguments[randInt(arguments.length)]
+}
+
+function randomName()
+{
+    return arguments[randInt(arguments.length)]
+}
+
+function randomSelection(collection, numItems)
+{
+    if (collection.length <= numItems) 
+        return null    
+    let ret = []
+    let collectionCopy = [...collection]
+
+    for (let i = 0; i < numItems; ++ i)
+    {
+        let item = collectionCopy[randInt(collectionCopy.length)]
+        collectionCopy = collectionCopy.filter(x => x != item)
+        ret.push(item)
+    }
+    return ret
+}
+
+/*
+ * Primes
+ */
+
+function isPrime(x)
+{
+    for (let i = 2; i < x; ++ i)
+    {
+        if (x % i == 0)
+            return false
+    }
+    return true
+}
+
+function primesInRange(from, to)
+{
+    let ret = []
+    for (let i = max(2, from); i<= to; ++ i)
+    {
+        if (isPrime(i))
+            ret.push(i)
+    }
+    return ret
+}
+
+
+/*
+ * formatting functions 
+ */
 
 function formatDigits(s)
 {
@@ -60,6 +139,7 @@ function formatDigits(s)
 
     return r
 }
+
 
 function formatInt(v)
 {   
@@ -98,54 +178,4 @@ function formatFloatUnlessInt(v, numDigits)
     if (parseInt(s[1]) == 0)
         return formatDigits(s[0])
     return formatDigits(s[0]) + '.' + s[1]
-}
-
-
-function randInt(max)
-{
-    return randomRaw() % max;
-}
-
-function randIntRange(min, max)
-{
-    return randInt(max - min) + min;
-}
-
-function randFixFloat(min, max, numDigits)
-{
-    let v = random()
-    let scaled = (max - min) * v + min
-    let p = Math.pow(10, numDigits)
-    return Math.round(scaled * p) / p
-}
-
-function randValue()
-{
-    return arguments[randInt(arguments.length)]
-}
-
-function randomName()
-{
-    return arguments[randInt(arguments.length)]
-}
-
-function is_prime(x)
-{
-    for (let i = 2; i < x; ++ i)
-    {
-        if (x % i == 0)
-            return false
-    }
-    return true
-}
-
-function primes_in_range(from, to)
-{
-    let ret = []
-    for (let i = from; i<= to; ++ i)
-    {
-        if (is_prime(i))
-            ret.push(i)
-    }
-    return ret
 }

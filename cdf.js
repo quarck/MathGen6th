@@ -34,28 +34,16 @@ function calculateCdfRanges(objs)
 
 function normalizeWeights(objs)
 {
-	let total_weight = 0.0
-	
-	for (let obj of objs)
-	{
-		total_weight += obj.weight
-	}
-
-	for (let obj of objs)
-	{
-		obj.weight /= total_weight
-	}
+	let total_weight = objs.reduce( (acc, obj) => acc + obj.weight, 0.0)
+	objs.forEach(obj => obj.weight /= total_weight)
+	return objs
 }
 
-function assignCdfFlatWeights(collection)
+function assignCdfFlatWeights(objs)
 {
-    for (let obj of collection)
-    {
-        obj['weight'] = 1.0
-    }
-
-    normalizeWeights(collection)
-    calculateCdfRanges(collection)
+	objs.forEach(obj => { obj['weight'] = 1.0 })
+    normalizeWeights(objs)
+    calculateCdfRanges(objs)
 }
 
 function weightedRandomValue(objs)
