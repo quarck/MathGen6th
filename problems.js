@@ -771,6 +771,7 @@ var category_primes =
 [
     {
         name: "prob_primes_prob1a",         
+        max_count: 1,
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -820,7 +821,21 @@ function createProbGenerator ()
             if (Object.keys(problem).includes("max_count"))
             {
                 if (problem.max_count <= 0)
+                {
+                    category.data = category.data.filter(x => x != problem)
+                    if (category.data.length > 0)
+                    {
+                        normalizeWeights(category.data)
+	                    calculateCdfRanges(category.data)
+                    }
+                    else 
+                    {
+                        generators = generators.filter(x => x != category)
+                        normalizeWeights(generators)
+	                    calculateCdfRanges(generators)
+                    }
                     continue
+                }
                 problem.max_count -= 1
             }
 
