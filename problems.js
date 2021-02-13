@@ -58,7 +58,6 @@ function splitDigitsForMul(a)
 
     return ret
 }
-
 function genMulTdRow(digits, delta)
 {
     let ret = ""
@@ -111,7 +110,7 @@ function generateMultiplicationHtml(a, b)
 var category_rounding = 
 [
     {
-        name: "prob_rounding_one", 
+        name: "Rounding", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -136,7 +135,7 @@ var category_rounding =
 var category_addsub = 
 [
     {
-        name: "prob_addsub_int", 
+        name: "Add/Substract", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -170,7 +169,7 @@ var category_addsub =
         },         
     },
     {
-        name: "prob_addsub_fract",
+        name: "Add/Substract with fractions",
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -217,7 +216,7 @@ var category_addsub =
 var category_advEval = 
 [
     {
-        name: "prob_advEval_OpAPlusBClDivC", 
+        name: "Evaluate (a + b) / c", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -237,7 +236,7 @@ var category_advEval =
         },         
     },
     {
-        name: "prob_advEval_Pow2MinusPow2", 
+        name: "Evaluate a^2 - b^2", 
         fun: function (root, ansRoot, difficulty)
         {
         
@@ -259,7 +258,7 @@ var category_advEval =
         },         
     },
     {
-        name: "prob_advEval_OpATimesBClMinusC",
+        name: "Evaluate (a * b) - c",
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -287,7 +286,7 @@ var category_advEval =
 var category_divmul = 
 [
     {
-        name: "prob_divmul_div", 
+        name: "Division", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -308,7 +307,7 @@ var category_divmul =
         },         
     },
     {
-        name: "prob_divmul_divMultOfTen", 
+        name: "Division by multiples of 10", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -332,7 +331,7 @@ var category_divmul =
         },         
     },
     {
-        name: "prob_divmul_mulNoFractions", 
+        name: "Multiplication", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -349,7 +348,7 @@ var category_divmul =
         },         
     },
     {
-        name: "prob_divmul_mulWithFractions", 
+        name: "Multiplication with fractions", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -370,7 +369,7 @@ var category_divmul =
         },         
     },
     {
-        name: "prob_divmul_mulWithFractions2", 
+        name: "Multiplication with fractions (bigger bottom part)", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -395,7 +394,7 @@ var category_divmul =
 var category_fractions = 
 [
     {
-        name: "prob_fractions_divideInProportion", 
+        name: "Divide in proportions", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -461,7 +460,7 @@ let used_triangle_types = []
 var category_triangles = 
 [
     {
-        name: "prob_triangles_sumOfAngles", 
+        name: "Triangle - find unknown angle", 
         max_count: 1, // nore more than 1 occurance of this problem type ever!
         fun: function (root, ansRoot, difficulty) 
         {
@@ -511,7 +510,7 @@ var category_triangles =
     },
 
     {
-        name: "prob_triangles_triangle_type", 
+        name: "Type of triangle", 
         max_count: 2, // nore more than 1 occurance of this problem type ever!
         fun: function (root, ansRoot, difficulty) 
         {
@@ -565,7 +564,7 @@ let used_shape_names = []
 var category_shapes = 
 [
     {
-        name: "prob_shapes_shapeProps", 
+        name: "Name the shape and num of axes of symmetry", 
         max_count: 2,
         fun: function (root, ansRoot, difficulty)
         {
@@ -621,7 +620,7 @@ var category_shapes =
 var category_eqs = 
 [
     {
-        name: "prob_eqs_prob1a",         
+        name: "Equation: Num + x = Num - Num",         
         fun: function (root, ansRoot, difficulty) // Num + x = Num - Num
         {
             for (;;)
@@ -650,7 +649,7 @@ var category_eqs =
         },         
     },
     {
-        name: "prob_eqs_prob1b", 
+        name: "Equation: Num - x = Num + Num", 
         fun: function (root, ansRoot, difficulty) // Num - x = Num + Num
         {
             for (;;)
@@ -673,7 +672,7 @@ var category_eqs =
         },         
     },
     {
-        name: "prob_eqs_prob2", 
+        name: "Equation: Float + x = Float", 
         fun: function (root, ansRoot, difficulty) // Float + x = Float
         {
             for (;;)
@@ -699,7 +698,7 @@ var category_eqs =
         ,         
     },
     {
-        name: "prob_eqs_prob3", 
+        name: "Equation: Float* x = Float", 
         fun: function (root, ansRoot, difficulty) // Float* x = Float
         {
             for (;;)
@@ -722,7 +721,7 @@ var category_eqs =
         },         
     },
     {
-        name: "prob_eqs_prob4", 
+        name: "Equation: Int* x + Float = Float", 
         fun: function (root, ansRoot, difficulty) // Int* x + Float = Float
         {
             for (;;)
@@ -742,7 +741,7 @@ var category_eqs =
         },         
     },
     {
-        name: "prob_eqs_prob5", 
+        name: "Equation: Int* x - Float = Float", 
         fun: function (root, ansRoot, difficulty) // Int* x - Float = Float
         {
             for (;;)
@@ -820,7 +819,7 @@ var category_lcmgcd =
                 numbers.sort((a, b) => (a|0) - (b|0))
                 let lcm = commonPrimes.reduce((a, b) => a * b, 1)                
 
-                root.innerHTML = "Find LCM of " + numbers.map(x => '' + x).reduce((a, b) => a + ' ' + b)
+                root.innerHTML = "Find LCM of " + numbers.map(x => '' + x).reduce((a, b) => a + ',&nbsp; ' + b)
                 ansRoot.innerHTML = lcm
                 break;
             }
