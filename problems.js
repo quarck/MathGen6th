@@ -38,20 +38,69 @@ function generateTableOperationHTML(a, b, op)
     return html
 }
 
+function splitDigitsForMul(a)
+{
+    if (a < 0)
+    {
+        let tmp = splitDigitsForMul(-a)
+        tmp.unshift('-')
+        return tmp
+    }
+
+    let ret = []
+    for (let c of ('' + a))
+    {
+        if (c == '.')
+            ret.push(ret.pop() + '.')
+        else 
+            ret.push(c)
+    }
+
+    return ret
+}
+
+function genMulTdRow(digits, delta)
+{
+    let ret = ""
+
+    if (delta > 0)
+        ret += "<td colspan=\"" + delta + "\"></td>"
+    
+    for (let d of digits)
+    {
+        ret += "<td class='op_m'>" + d + "</td>"
+    }
+
+    return ret
+}
+
 /*Note: a and b must be strings, so we don't have to worry about
  caring how many fraction digits to keep*/
 function generateMultiplicationHtml(a, b)
 {
+    let dg_a = splitDigitsForMul(a)
+    let dg_b = splitDigitsForMul(b)
+
+    if (dg_a.length < dg_b.length)
+        return generateMultiplicationHtml(b, a)
+
+    let delta_len = dg_a.length - dg_b.length
+    
     let html = 
-        '<table class="op_a">' + 
+        '<table border=1>' + 
             '<tr>' + 
-                '<td class="op_a">&nbsp;</td><td class="op_a" align="end">' + a + '</td>' +
+                '<td class="op_a">&nbsp;' + '</td>' + genMulTdRow(dg_a, 0) +
             '</tr>' + 
             '<tr>' + 
-                '<td class="op_a" align="end">&#215;</td><td class="op_b" align="end">' + b + '</td>' + 
+                '<td class="op_a" align="end">&#215;</td>' + genMulTdRow(dg_b, delta_len) + 
             '</tr>'
-    for (let i = 0; i < b.length; ++ i)
-        html += '<tr><td class="op_a">&nbsp;</td></tr>'
+    for (let i = 0; i < dg_b.length; ++ i)
+    {
+        if (i == 0)
+            html += '<tr><td class="op_mb" colspan=' + (dg_a.length +1)+ '>&nbsp;</td></tr>'
+        else 
+            html += '<tr><td class="op_a">&nbsp;</td></tr>'
+    }
     
     html += '</table>'
 
@@ -63,7 +112,7 @@ var category_rounding =
 [
     {
         name: "prob_rounding_one", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
@@ -88,7 +137,7 @@ var category_addsub =
 [
     {
         name: "prob_addsub_int", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
@@ -122,7 +171,7 @@ var category_addsub =
     },
     {
         name: "prob_addsub_fract",
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
@@ -169,7 +218,7 @@ var category_advEval =
 [
     {
         name: "prob_advEval_OpAPlusBClDivC", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
@@ -189,7 +238,7 @@ var category_advEval =
     },
     {
         name: "prob_advEval_Pow2MinusPow2", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
         
             for (;;)
@@ -211,7 +260,7 @@ var category_advEval =
     },
     {
         name: "prob_advEval_OpATimesBClMinusC",
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
@@ -239,14 +288,18 @@ var category_divmul =
 [
     {
         name: "prob_divmul_div", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
-                let a = randIntRange(5, 10)
-                let b = randIntRange(100, 300)
+                let a = randIntRange(3, 4*difficulty)
+                let b = randIntRange(10*difficulty, 35*difficulty)
                 let c = a * b                
                 let problemHtml = '<table><tr><td class="div_left">' + formatInt(a) + '</td><td class="div_right">' + formatInt(c) + '</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>'
+
+                for (let i = 0; i < ('' + b).length; ++ i)
+                    problemHtml += '<br>'
+
                 let answerHtml = formatInt(b)
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
@@ -256,7 +309,7 @@ var category_divmul =
     },
     {
         name: "prob_divmul_divMultOfTen", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
@@ -280,12 +333,13 @@ var category_divmul =
     },
     {
         name: "prob_divmul_mulNoFractions", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
-                let a = randIntRange(100, 300)
-                let b = randIntRange(2, 10)
+                let a = randIntRange(20 * difficulty, 100 * difficulty)
+                let b = randIntRange(3, 10 * difficulty)
+
                 let problemHtml = generateMultiplicationHtml("" + a, "" + b)
                 let answerHtml = a * b
                 root.innerHTML = problemHtml
@@ -296,16 +350,37 @@ var category_divmul =
     },
     {
         name: "prob_divmul_mulWithFractions", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
-                let a = randIntRange(100, 300)
-                let b = randIntRange(3, 10)
+                let a = randIntRange(20 * difficulty, 100 * difficulty)
+                let b = randIntRange(3, 10 * difficulty)
         
                 if (a % 10 == 0)
                     continue
                 a /= 10.0
+        
+                let problemHtml = generateMultiplicationHtml("" + a, "" + b)
+                let answerHtml = formatFloat(a * b, 1)
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+    {
+        name: "prob_divmul_mulWithFractions2", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let a = randIntRange(10 * difficulty, 400 * difficulty)
+                let b = randIntRange(11, 40 * difficulty)
+        
+                if (b % 10 == 0)
+                    continue
+                b /= 10.0
         
                 let problemHtml = generateMultiplicationHtml("" + a, "" + b)
                 let answerHtml = formatFloat(a * b, 1)
@@ -321,19 +396,24 @@ var category_fractions =
 [
     {
         name: "prob_fractions_divideInProportion", 
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
-                let unit = randIntRange(5, 15)
+                let unit = randIntRange(5, 15*difficulty)
                 let num = randValue(2, 3)
                 let parts = []
         
                 for (let i = 0; i < num; ++ i)
                 {
-                    parts.push(randIntRange(1, 5))                    
+                    if (difficulty > 7)
+                        parts.push(randIntRange(1, 15)) 
+                    else if (difficulty >= 5)
+                        parts.push(randIntRange(1, 10)) 
+                    else 
+                        parts.push(randIntRange(1, 5)) 
                 }
-                parts.sort()
+                parts.sort((a, b) => (a|0) - (b|0))
         
                 let sp_str = ""
                 let parts_str = ""
@@ -383,7 +463,7 @@ var category_triangles =
     {
         name: "prob_triangles_sumOfAngles", 
         max_count: 1, // nore more than 1 occurance of this problem type ever!
-        fun: function (root, ansRoot) 
+        fun: function (root, ansRoot, difficulty) 
         {
             for (;;)
             {
@@ -433,7 +513,7 @@ var category_triangles =
     {
         name: "prob_triangles_triangle_type", 
         max_count: 2, // nore more than 1 occurance of this problem type ever!
-        fun: function (root, ansRoot) 
+        fun: function (root, ansRoot, difficulty) 
         {
             for (;;)
             {
@@ -487,7 +567,7 @@ var category_shapes =
     {
         name: "prob_shapes_shapeProps", 
         max_count: 2,
-        fun: function (root, ansRoot)
+        fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
@@ -542,16 +622,16 @@ var category_eqs =
 [
     {
         name: "prob_eqs_prob1a",         
-        fun: function (root, ansRoot) // Num + x = Num - Num
+        fun: function (root, ansRoot, difficulty) // Num + x = Num - Num
         {
             for (;;)
             {
                 let name = randomName('x', 'y')
-                let a = randInt(100)
+                let a = randIntRange(10, 100)
                 if (a == 0)
                     continue;
-                let b = randInt(200)
-                let c = randInt(50)
+                let b = randIntRange(10, 200)
+                let c = randIntRange(10, 50)
         
                 if (b-c-a <= 0)
                     continue
@@ -571,21 +651,21 @@ var category_eqs =
     },
     {
         name: "prob_eqs_prob1b", 
-        fun: function (root, ansRoot) // Num - x = Num + Num
+        fun: function (root, ansRoot, difficulty) // Num - x = Num + Num
         {
             for (;;)
             {
                 let name = randomName('x', 'y')
-                let a = randInt(100)
+                let a = randIntRange(10, 100)
                 if (a == 0)
                     continue;
-                let b = randInt(200)
-                let c = randInt(50)
+                let b = randIntRange(10, 200)
+                let c = randIntRange(10, 50)
                 if (a -b -c <= 0)
                     continue
                 if (b == c)
                     continue
-        
+
                 root.innerHTML = a + " - " + name + " = " + b + " + " + c + ". &nbsp;&nbsp; What is " + name + "?"
                 ansRoot.innerHTML = name +" = " + (a-b-c)
                 break;
@@ -594,12 +674,12 @@ var category_eqs =
     },
     {
         name: "prob_eqs_prob2", 
-        fun: function (root, ansRoot) // Float + x = Float
+        fun: function (root, ansRoot, difficulty) // Float + x = Float
         {
             for (;;)
             {
                 let name = randomName('x', 'y')
-                let a = randFixFloat(1, 20, 2)
+                let a = randFixFloat(4, 20, 2)
                 if (Math.abs(a) < 0.0001)
                     continue
                 let b = randFixFloat(1, 20, 2)
@@ -620,7 +700,7 @@ var category_eqs =
     },
     {
         name: "prob_eqs_prob3", 
-        fun: function (root, ansRoot) // Fl* x = Fl
+        fun: function (root, ansRoot, difficulty) // Float* x = Float
         {
             for (;;)
             {
@@ -643,7 +723,7 @@ var category_eqs =
     },
     {
         name: "prob_eqs_prob4", 
-        fun: function (root, ansRoot) // Fl* x + Fl= Fl
+        fun: function (root, ansRoot, difficulty) // Int* x + Float = Float
         {
             for (;;)
             {
@@ -663,7 +743,7 @@ var category_eqs =
     },
     {
         name: "prob_eqs_prob5", 
-        fun: function (root, ansRoot) // Fl* x - Fl= Fl
+        fun: function (root, ansRoot, difficulty) // Int* x - Float = Float
         {
             for (;;)
             {
@@ -685,6 +765,24 @@ var category_eqs =
         ,         
     },
 
+]
+
+var category_eqs = 
+[
+    {
+        name: "prob_primes_prob1a",         
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let from = randIntRange(1, 10) * 10 + randValue(0, 5)
+                let to = from + 10 + difficulty
+                root.innerHTML = "Make a list of prime numbers between " + from + " and " + to
+                ansRoot.innerHTML = primes_in_range(from, to).map(x => '' + x).reduce((a, x) => a + ' ' + x)
+                break;
+            }
+        },         
+    },
 ]
 
 
@@ -727,9 +825,9 @@ function createProbGenerator ()
             }
 
             // reduce probability of this category showing up again untill all others are used too
-            scaleCdfWeight(category, 0.3333, generators)
+            scaleCdfWeight(category, 0.1, generators)
             // same for this particular problem type
-            scaleCdfWeight(problem, 0.3333, category.data)
+            scaleCdfWeight(problem, 0.1, category.data)
 
             return problem 
         }

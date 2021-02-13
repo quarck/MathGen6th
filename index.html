@@ -30,11 +30,15 @@
 
         <div id="inputForm">
             <h3>Math problems generator for 6th class of Junior school</h3>
-            <input type="hidden" id="debug1" checked="true"></input>
+            <input type="hidden" id="debug" checked="true"></input>
             <table>
                 <tr>
                     <td class="form"><b>Number of problems:</b></td>
                     <td class="form"><input type="number" id="num_problems" value="60"/></td>
+                </tr>
+                <tr>
+                    <td class="form"><b>Difficulty level (1-10):</b></td>
+                    <td class="form"><input type="number" id="difficulty" value="5"/><br>(Beta! This param is currently mostly ignored)</td>
                 </tr>
                 <tr>
                     <td class="form"></td>
@@ -165,13 +169,12 @@
             function generate()
             {
                 let num_problems = parseInt(document.getElementById('num_problems').value)
+                let difficulty = parseInt(document.getElementById('difficulty').value)
                 let debug = document.getElementById('debug')
 
                 hideForm()
 
-                let cont = generateMainLayout()
-
-                
+                let cont = generateMainLayout()            
 
                 if (!debug)
                 {
@@ -180,11 +183,11 @@
                     for (let idx = 0; idx < num_problems; ++ idx)
                     {
                         let even = idx % 2 == 0
-
-                        let problemsRow = generateEntry(even ? cont.problems.left : cont.problems.right, idx + 1, true)
-                        let answersRow = generateEntry(even ? cont.answers.left : cont.answers.right, idx + 1, false)
-
-                        nextProbGenerator().fun(problemsRow, answersRow)                        
+                        nextProbGenerator().fun(
+                            generateEntry(even ? cont.problems.left : cont.problems.right, idx + 1, true), 
+                            generateEntry(even ? cont.answers.left : cont.answers.right, idx + 1, false), 
+                            difficulty 
+                            )
                     }
                 }
                 else
@@ -192,24 +195,19 @@
                     // in debug we iterate over all possible combinations 
                     let generators = getGeneratorsRaw()
                     let bigidx = 1
+                    let difficulty_l = 1
+                    let difficulty_r = 10
                     for (let cat of generators)
                     {
                         for (let idx = 0; idx < cat.data.length; ++ idx)
                         {
-                            let nameRowLeft = generateEntry(cont.problems.left, bigidx, false)
-                            let nameRowRight = generateEntry(cont.problems.right, bigidx+1, false)
-                            nameRowLeft.innerHTML = '<b>L ' + cat.data[idx].name + '</b>'
-                            nameRowRight.innerHTML = '<b>R ' + cat.data[idx].name + '</b>'
+                            generateEntry(cont.problems.left, bigidx, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty' + difficulty_l + '</b>'
+                            cat.data[idx].fun(generateEntry(cont.problems.left, bigidx, true), generateEntry(cont.answers.left, bigidx, false), difficulty_l)
+                            bigidx ++
 
-                            let problemsRowLeft = generateEntry(cont.problems.left, bigidx, true)
-                            let answersRowLeft = generateEntry(cont.answers.left, bigidx, false)
-                            let problemsRowRight = generateEntry(cont.problems.right, bigidx+1, true)
-                            let answersRowRight = generateEntry(cont.answers.right, bigidx+1, false)
-                            
-                            cat.data[idx].fun(problemsRowLeft, answersRowLeft)
-                            cat.data[idx].fun(problemsRowRight, answersRowRight)
-
-                            bigidx += 2
+                            generateEntry(cont.problems.right, bigidx+1, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty' + difficulty_r + '</b>'
+                            cat.data[idx].fun(generateEntry(cont.problems.right, bigidx, true), generateEntry(cont.answers.right, bigidx, false), difficulty_r)
+                            bigidx ++
                         }
                     }
 

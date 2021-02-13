@@ -129,16 +129,23 @@ function randomName()
     return arguments[randInt(arguments.length)]
 }
 
-function getNumDigits(number)
+function is_prime(x)
 {
-    let num = number > 0 ? number : -number
-    let ret = []
-    while (num > 0)
+    for (let i = 2; i < x; ++ i)
     {
-        ret.unshift(num % 10)
-        num = Math.floor(num/ 10)
+        if (x % i == 0)
+            return false
     }
-    if (ret.length == 0)
-        ret.push('0')
+    return true
+}
+
+function primes_in_range(from, to)
+{
+    let ret = []
+    for (let i = from; i<= to; ++ i)
+    {
+        if (is_prime(i))
+            ret.push(i)
+    }
     return ret
 }
