@@ -247,11 +247,45 @@ var category_advEval =
                 if (a <= b)
                     continue
         
-                let problemHtml = "" + a + "&#178; - " + b + "&#178;" + " = "
+                let problemHtml = "" + a + "<sup>2</sup> - " + b + "<sup>2</sup>" + " = "
                 let answerHtml = Math.pow(a, 2) - Math.pow(b, 2)
         
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
+                break;
+            }
+        
+        },         
+    },
+    {
+        name: "Evaluate a^b where b in [3,5]", 
+        fun: function (root, ansRoot, difficulty)
+        {
+        
+            for (;;)
+            {
+                let a = randIntRange(2, 7)
+                let b = randIntRange(3, 8)
+                let ans = Math.pow(a, b)
+                if (difficulty < 5)
+                {
+                    if (ans > 150)
+                        continue
+                }
+                else if (difficulty < 7)
+                {
+                    if (ans > 400)
+                        continue
+                }
+                else 
+                {
+                    if (ans < 150)
+                        continue
+                    if (ans > 900)
+                        continue
+                }
+                root.innerHTML = "" + a + "<sup>" + b + "</sup>" + " = "
+                ansRoot.innerHTML = ans
                 break;
             }
         
@@ -457,7 +491,7 @@ var category_fractions =
 
 
 let used_triangle_types = []
-var category_triangles = 
+var category_trianglesAndAngles = 
 [
     {
         name: "Triangle - find unknown angle", 
@@ -556,6 +590,67 @@ var category_triangles =
             }
         },         
     },
+
+    {
+        name: "Find unknown angle in the 360 deg sweep", 
+        max_count: 1, 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let a1 = randIntRange(40, 140)
+                let a2 = randIntRange(40, 140)
+                let a3 = 360 - a1 - a2
+
+                if (a3 > 160)
+                    continue
+                
+                let p1 = polarToDecart(100, 100, 95, 0)
+                let p2 = polarToDecart(100, 100, 95, a1)
+                let p3 = polarToDecart(100, 100, 95, a1+a2)
+
+
+                let svg = '<svg width="' + 200 + '" height="' + 200 + '">' + 
+                    '<line x1="100" y1="100" x2="' + p1.x + '" y2="' + p1.y + '" style="stroke:black;stroke-width:1.5" />'  + 
+                    svgArcPath(100, 100, 25, 0, a1) + 
+                    '<line x1="100" y1="100" x2="' + p2.x + '" y2="' + p2.y + '" style="stroke:black;stroke-width:1.5" />'  + 
+                    svgArcPath(100, 100, 30, a1, a1+a2) + 
+                    '<line x1="100" y1="100" x2="' + p3.x + '" y2="' + p3.y + '" style="stroke:black;stroke-width:1.5" />'  + 
+                    svgArcPath(100, 100, 35, a1+a2, a1+a2+a3) + 
+                'Sorry, your browser does not support inline SVG.' + 
+                '</svg>'
+
+                root.innerHTML = svg
+                ansRoot.innerHTML = "Not ready yet"
+                break;
+            }
+
+
+            /*function svgArcPath(x, y, r, startAngle, endAngle)
+{  
+    var start = polarToDecart(x, y, r, endAngle)
+    var end = polarToDecart(x, y, r, startAngle)
+  
+    var arcSweep = endAngle - startAngle <= 180 ? "0" : "1"
+    var backSweep = arcSweep == '0' ? "1" : "0"
+    
+    var d = [
+        "M", start.x, start.y, 
+        "A", r, r, 0, arcSweep, 0, end.x, end.y, 
+    ].join(" ")
+
+    return '<path d="'+ d + '" fill="transparent" stroke="black" stroke-width="1.5"/>'
+}
+
+function svgArc(w, h, x, y, r, startAngle, endAngle)
+{  
+    return '<svg width="' + w + '" height="' + h + '">' + 
+            svgArcPath(x, y, r, startAngle, endAngle) + 
+            'Sorry, your browser does not support inline SVG.' + 
+            '</svg>'    
+} */
+        }
+    }
 ]
 
 
@@ -794,39 +889,128 @@ var category_lcmgcd =
         {
             for (;;)
             {
-                let numPrimes = difficulty >= 7 ? 4 : 3
-                let commonPrimes = randomSelection(primesInRange(1, difficulty >= 7 ? 15 : 10), numPrimes)
+                let numPrimes = difficulty >= 7 ? 5 : 4
+                let commonPrimes = randomNonUniqSelection(primesInRange(1, difficulty >= 7 ? 20 : 10), numPrimes)
 
                 let numNumbers = randValue(2, 3)
                 let numbers = []
 
-                let non_uniq = false
-                for (let i = 0; i < numNumbers; ++ i)
+                console.log("\t\tLCM, common primes: ", commonPrimes)
+
+                for (let iter = 0; numbers.length < numNumbers && iter < 10; ++ iter)
                 {
-                    let num = randomSelection(commonPrimes, numPrimes-1).reduce((a, b) => a * b, 1)
-                    if (numbers.includes(num))
+                    let iterPrimes = randomUniqSelection(commonPrimes, randIntRange(1, numPrimes-1))
+                    let num = iterPrimes.reduce((a, b) => a * b, 1)
+                    if (!numbers.includes(num))
                     {
-                        non_uniq = true
-                        break
-                    }
-                    numbers.push(num)
+                        console.log("\t\tLCM, iter primes: ", iterPrimes)
+                        numbers.push(num)
+                    } 
                 }
-                if (non_uniq)
-                {
+                if (numbers.length != numNumbers)
                     continue
-                }
+
+                let ans = numNumbers == 2 ? lcm(numbers[0], numbers[1]) : lcm3(numbers[0], numbers[1], numbers[2]) 
+                if (ans > 1500)
+                    continue 
+                
+                // check that LCM is not equal to any of the numbers
+                if (numbers.map(x => x == ans).reduce((acc, b) => (acc || b), false))
+                    continue
 
                 numbers.sort((a, b) => (a|0) - (b|0))
-                let lcm = commonPrimes.reduce((a, b) => a * b, 1)                
+    
+                if (numbers[0] == 2)
+                    continue
+
+                let common = numNumbers == 2 ? gcd(numbers[0], numbers[1]) : gcd3(numbers[0], numbers[1], numbers[2]) 
+                if (common == 1)
+                    continue
+
 
                 root.innerHTML = "Find LCM of " + numbers.map(x => '' + x).reduce((a, b) => a + ',&nbsp; ' + b)
-                ansRoot.innerHTML = lcm
+                ansRoot.innerHTML = ans
+                break;
+            }
+        },         
+    },
+    {
+        name: "GCD",         
+        max_count: 1,
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let numPrimes = difficulty >= 7 ? 5 : 4
+                let commonPrimes = randomNonUniqSelection(primesInRange(1, difficulty >= 7 ? 20 : 15), numPrimes)
+
+                let numNumbers = randValue(2, 3)
+                let numbers = []
+
+                console.log("\t\tGCD, common primes: ", commonPrimes)
+
+                for (let iter = 0; numbers.length < numNumbers && iter < 10; ++ iter)
+                {
+                    let iterPrimes = randomUniqSelection(commonPrimes, numPrimes-2)
+                    let num = iterPrimes.reduce((a, b) => a * b, 1)
+                    if (!numbers.includes(num))
+                    {
+                        console.log("\t\tGCD, iter primes: ", iterPrimes)
+                        numbers.push(num)
+                    } 
+                }
+                if (numbers.length != numNumbers)
+                    continue
+
+                let common = numNumbers == 2 ? gcd(numbers[0], numbers[1]) : gcd3(numbers[0], numbers[1], numbers[2]) 
+                if (common == 1 || common == 2)
+                    continue
+                if (numbers.includes(common))
+                    continue
+    
+                numbers.sort((a, b) => (a|0) - (b|0))
+
+                root.innerHTML = "Find HCF of " + numbers.map(x => '' + x).reduce((a, b) => a + ',&nbsp; ' + b)  + "<br><small style='color:#666'>(HCF is also known as GCD)</small>"
+                ansRoot.innerHTML = common
                 break;
             }
         },         
     },
 ]
 
+var category_percents = 
+[
+    {
+        name: "Increase Money PCT", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let pct = difficulty >= 7 ? randIntRange(5, 41) : randIntRange(1, 9) * 5
+                let amount = randIntRange(5, 15) * 100
+
+                root.innerHTML = "Increase &#8364;" + amount + " by " + pct + "&#37;"
+                ansRoot.innerHTML = "&#8364;" + (amount + amount*pct/100)
+                break;
+            }
+        },
+    },
+    {
+        name: "Decrease Money PCT",
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let pct = difficulty >= 7 ? randIntRange(5, 41) : randIntRange(1, 9) * 5
+                let amount = randIntRange(5, 15) * 100
+
+                root.innerHTML = "Decrease &#8364;" + amount + " by " + pct + "&#37;"
+                ansRoot.innerHTML = "&#8364;" + (amount - amount*pct/100)
+                break;
+            }
+        },         
+    },
+]
 
 // returns hash map, where key is the category name 
 // and value is the list of problems in the category
@@ -859,6 +1043,8 @@ function createProbGenerator ()
             let category = weightedRandomValue(generators)
             let problem = weightedRandomValue(category.data)
 
+            console.log("CAT: " + category.name + ", PROB: " + problem.name)
+
             if (Object.keys(problem).includes("max_count"))
             {
                 if (problem.max_count <= 0)
@@ -875,6 +1061,7 @@ function createProbGenerator ()
                         normalizeWeights(generators)
 	                    calculateCdfRanges(generators)
                     }
+                    console.log("Max use count reached on " + category.name + ", problem " + problem.name + " - retrying")
                     continue
                 }
                 problem.max_count -= 1
@@ -884,7 +1071,7 @@ function createProbGenerator ()
             scaleCdfWeight(category, 0.1, generators)
             // same for this particular problem type
             scaleCdfWeight(problem, 0.1, category.data)
-
+            
             return problem 
         }
     }

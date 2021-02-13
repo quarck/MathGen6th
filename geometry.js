@@ -319,21 +319,43 @@ function svgTriangleByAnglesWithAngleMarks(w, h, a, alpha, beta, malpha, mbeta, 
         svgMarkAngle(x3, y3, x1, y1, x2, y2, malpha) + 
         'Sorry, your browser does not support inline SVG.' + 
         '</svg>'
-
-  /* <svg height="400" width="450">
-
-  <path d="M 100 350 q 150 -100 300 0" stroke="black" stroke-width="5" stroke-dasharray="5,5"
-  fill="none" />
-
-<g font-size="30" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle">
-    <text x="100" y="350" dx="-30">A</text>
-    <text x="250" y="50" dy="-10">B</text>
-    <text x="400" y="350" dx="30">C</text>
-  </g>
-  Sorry, your browser does not support inline SVG.
-</svg> */
-
 }
+
+function polarToDecart(cx, cy, r, angleDeg) 
+{
+    var angle = angleDeg * Math.PI / 180.0
+    return {
+        x: cx + (r * Math.cos(angle)), 
+        y: cy + (r * Math.sin(angle))
+    }
+}
+  
+function svgArcPath(x, y, r, startAngle, endAngle)
+{  
+    var start = polarToDecart(x, y, r, endAngle)
+    var end = polarToDecart(x, y, r, startAngle)
+  
+    var arcSweep = endAngle - startAngle <= 180 ? "0" : "1"
+    var backSweep = arcSweep == '0' ? "1" : "0"
+    
+    var d = [
+        "M", start.x, start.y, 
+        "A", r, r, 0, arcSweep, 0, end.x, end.y, 
+    ].join(" ")
+
+    return '<path d="'+ d + '" fill="transparent" stroke="black" stroke-width="1.5"/>'
+}
+
+function svgArc(w, h, x, y, r, startAngle, endAngle)
+{  
+    return '<svg width="' + w + '" height="' + h + '">' + 
+            svgArcPath(x, y, r, startAngle, endAngle) + 
+            'Sorry, your browser does not support inline SVG.' + 
+            '</svg>'    
+}
+
+
+//  document.getElementById("arc1").setAttribute("d", describeArc(200, 400, 100, 0, 220));
 
 /**
   * https://www.w3schools.com/graphics/svg_examples.asp

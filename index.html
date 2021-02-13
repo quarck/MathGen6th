@@ -199,13 +199,16 @@
                     let difficulty_r = 10
                     for (let cat of generators)
                     {
+                        console.log("CAT: ", cat.name)
                         for (let idx = 0; idx < cat.data.length; ++ idx)
                         {
+                            console.log("\tPROB: ", cat.data[idx].name)
+
                             generateEntry(cont.problems.left, bigidx, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty ' + difficulty_l + '</b>'
                             cat.data[idx].fun(generateEntry(cont.problems.left, bigidx, true), generateEntry(cont.answers.left, bigidx, false), difficulty_l)
                             bigidx ++
 
-                            generateEntry(cont.problems.right, bigidx+1, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty ' + difficulty_r + '</b>'
+                            generateEntry(cont.problems.right, bigidx, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty ' + difficulty_r + '</b>'
                             cat.data[idx].fun(generateEntry(cont.problems.right, bigidx, true), generateEntry(cont.answers.right, bigidx, false), difficulty_r)
                             bigidx ++
                         }

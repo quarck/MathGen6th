@@ -72,7 +72,7 @@ function randomName()
     return arguments[randInt(arguments.length)]
 }
 
-function randomSelection(collection, numItems)
+function randomUniqSelection(collection, numItems)
 {
     if (collection.length <= numItems) 
         return null    
@@ -81,9 +81,20 @@ function randomSelection(collection, numItems)
 
     for (let i = 0; i < numItems; ++ i)
     {
-        let item = collectionCopy[randInt(collectionCopy.length)]
-        collectionCopy = collectionCopy.filter(x => x != item)
+        let pos = randInt(collectionCopy.length)
+        let item = collectionCopy[pos]
+        collectionCopy.splice(pos, 1)        
         ret.push(item)
+    }
+    return ret
+}
+
+function randomNonUniqSelection(collection, numItems)
+{
+    let ret = []
+    for (let i = 0; i < numItems; ++ i)
+    {
+        ret.push(collection[randInt(collection.length)])
     }
     return ret
 }
@@ -113,6 +124,34 @@ function primesInRange(from, to)
     return ret
 }
 
+
+/* GCD, LCM helpers */
+function gcd(a, b)
+{
+    while (a != b)
+    {
+        if (a > b)
+            a -= b 
+        else 
+            b -= a
+    }
+    return a
+}
+
+function gcd3(a, b, c)
+{
+    return gcd(a, gcd(b, c))
+}
+
+function lcm(a, b)
+{
+    return a * b / gcd(a, b)
+}
+
+function lcm3(a, b, c)
+{
+    return lcm(a, lcm(b, c))
+}
 
 /*
  * formatting functions 
