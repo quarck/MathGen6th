@@ -598,57 +598,60 @@ var category_trianglesAndAngles =
         {
             for (;;)
             {
-                let a1 = randIntRange(40, 140)
-                let a2 = randIntRange(40, 140)
+                let a1 = randIntRange(40, 160)
+                let a2 = randIntRange(40, 160)
                 let a3 = 360 - a1 - a2
 
                 if (a3 > 160)
                     continue
                 
-                let p1 = polarToDecart(100, 100, 95, 0)
-                let p2 = polarToDecart(100, 100, 95, a1)
-                let p3 = polarToDecart(100, 100, 95, a1+a2)
+                let start_angle = randIntRange(0, 180)
 
+                let fa1 = start_angle + a1
+                let fa2 = fa1 + a2
+                let fa3 = fa2 + a3
 
-                let svg = '<svg width="' + 200 + '" height="' + 200 + '">' + 
-                    '<line x1="100" y1="100" x2="' + p1.x + '" y2="' + p1.y + '" style="stroke:black;stroke-width:1.5" />'  + 
-                    svgArcPath(100, 100, 25, 0, a1) + 
-                    '<line x1="100" y1="100" x2="' + p2.x + '" y2="' + p2.y + '" style="stroke:black;stroke-width:1.5" />'  + 
-                    svgArcPath(100, 100, 30, a1, a1+a2) + 
-                    '<line x1="100" y1="100" x2="' + p3.x + '" y2="' + p3.y + '" style="stroke:black;stroke-width:1.5" />'  + 
-                    svgArcPath(100, 100, 35, a1+a2, a1+a2+a3) + 
+                let p1 = polarToDecart(75, 75, 70, fa1)
+                let p2 = polarToDecart(75, 75, 70, fa2)
+                let p3 = polarToDecart(75, 75, 70, fa3)
+
+                let l1pos = polarToDecart(75, 75, 50, (fa1+start_angle)/2)
+                let l2pos = polarToDecart(75, 75, 50, (fa2+fa1)/2)
+                let l3pos = polarToDecart(75, 75, 50, (fa3+fa2)/2)
+
+                let svg = '<svg width="' + 150 + '" height="' + 150 + '">' + 
+                    '<line x1="75" y1="75" x2="' + p1.x + '" y2="' + p1.y + '" style="stroke:black;stroke-width:1.5" />'  + 
+                    svgArcPath(75, 75, 25, start_angle, fa1) + 
+                    '<g font-size="15" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="' + l1pos.x + '" y="' + l1pos.y + '">' + a1 + '&deg;</text></g>' + 
+
+                    '<line x1="75" y1="75" x2="' + p2.x + '" y2="' + p2.y + '" style="stroke:black;stroke-width:1.5" />'  + 
+                    svgArcPath(75, 75, 30, fa1, fa2) + 
+                    '<g font-size="15" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="' + l2pos.x + '" y="' + l2pos.y + '">' + a2 + '&deg;</text></g>' + 
+
+                    '<line x1="75" y1="75" x2="' + p3.x + '" y2="' + p3.y + '" style="stroke:black;stroke-width:1.5" />'  + 
+                    svgArcPath(75, 75, 15, fa2, fa3) + 
+                    '<g font-size="15" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="' + l3pos.x + '" y="' + l3pos.y + '">' + '?' + '</text></g>' + 
+
                 'Sorry, your browser does not support inline SVG.' + 
                 '</svg>'
 
-                root.innerHTML = svg
-                ansRoot.innerHTML = "Not ready yet"
+                let line = "<table><tr><td>Find the value of unknown angle:</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
+
+                root.innerHTML = 
+                    "<table>"+ 
+                        "<tr>" + 
+                            "<td valign='top'>" + 
+                                line+ 
+                            "</td>" + 
+                            "<td>" + 
+                                svg + 
+                            "</td>" + 
+                        "</tr>" + 
+                        "</table>"                                
+
+                ansRoot.innerHTML = "" + a3 + "&deg;"
                 break;
-            }
-
-
-            /*function svgArcPath(x, y, r, startAngle, endAngle)
-{  
-    var start = polarToDecart(x, y, r, endAngle)
-    var end = polarToDecart(x, y, r, startAngle)
-  
-    var arcSweep = endAngle - startAngle <= 180 ? "0" : "1"
-    var backSweep = arcSweep == '0' ? "1" : "0"
-    
-    var d = [
-        "M", start.x, start.y, 
-        "A", r, r, 0, arcSweep, 0, end.x, end.y, 
-    ].join(" ")
-
-    return '<path d="'+ d + '" fill="transparent" stroke="black" stroke-width="1.5"/>'
-}
-
-function svgArc(w, h, x, y, r, startAngle, endAngle)
-{  
-    return '<svg width="' + w + '" height="' + h + '">' + 
-            svgArcPath(x, y, r, startAngle, endAngle) + 
-            'Sorry, your browser does not support inline SVG.' + 
-            '</svg>'    
-} */
+            }           
         }
     }
 ]
