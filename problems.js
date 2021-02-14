@@ -486,6 +486,68 @@ var category_fractions =
             }
         },         
     },
+    {
+        name: "Natural fraction - addition / substraction", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let denom1 = randIntRange(2, 10 + 3*difficulty)
+                let nom1 = randIntRange(1, 3*denom1)
+
+                let denom2 = randIntRange(2, 10 + 3*difficulty)
+                let nom2 = randIntRange(1, 3*denom2)
+
+                if (nom1 % denom1 == 0)
+                    continue
+                if (nom2 % denom2 == 0)
+                    continue
+
+                let f1 = new Fraction(nom1, denom1)
+                let f2 = new Fraction(nom2, denom2)
+
+                let direction = randValue('+', '-')
+
+                if (direction == '-' && f1.asDecimal < f2.asDecimal)
+                {
+                    let tmp = f1 
+                    f1 = f2
+                    f2 = tmp
+                }
+
+                let ans = f1.addmul(f2, direction == '+' ? 1 : -1).simplify()
+
+                let f1Str = f1.asMixedNumberHtmlTable
+                let f2Str = f2.asMixedNumberHtmlTable
+                let ansStr1 = ans.asMixedNumberHtmlTable
+                let ansStr2 = ans.asPureFractionHtmlTable
+
+                console.log(f1Str)
+                console.log('---')
+                console.log(f2Str)
+                console.log('---')
+                console.log(ansStr1)
+                console.log('---')
+                console.log(ansStr2)
+
+                let problemHtml = '<table><tr><td>' + f1Str + '</td>' +
+                                '<td>&nbsp;&nbsp;' + direction + '&nbsp;&nbsp;</td><td>' + f2Str + '</td>' + 
+                                '<td>' + '&nbsp;=&nbsp;' + '</td>' + 
+                                '<td  class="op_b" bgcolor="#efefef">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>' 
+                
+                console.log(problemHtml)
+                
+                let answerHtml = '<table><tr><td>' + ansStr1 +
+                                 '</td><td>&nbsp; or  &nbsp;</td><td>' + ansStr2 + '</td></tr></table>' 
+
+                console.log(answerHtml)
+
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
 ]
 
 

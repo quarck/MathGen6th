@@ -33,50 +33,92 @@ class Fraction
         return this.nom / this.denom
     }
 
-    get asMixedNumberHtmlTable()
+    threeItemTable(a, n, d)
     {
-        let modulo = this.nom % this.denom 
-        let intPart = Math.round(this.nom - modulo)  / this.denom 
         return "<table>" + 
                     "<tr>" +
-                        "<td rowspan='2' align='center'>" + intPart + "</td>" + 
-                        "<td class='fraction_nom' align='center'>" + modulo + "</td>" + 
+                        "<td rowspan='2' align='center'>" + a + "</td>" + 
+                        "<td class='fraction_nom' align='center'>" + n + "</td>" + 
                     "</tr>" + 
                     "<tr>" + 
-                        "<td class='fraction_denom' align='center'>" + this.denom + "</td>" + 
+                        "<td class='fraction_denom' align='center'>" + d + "</td>" + 
+                    "</tr>" +
+                "</table>"
+    }
+
+
+    twoItemTable(n, d)
+    {
+        return "<table>" + 
+                    "<tr>" +                        
+                        "<td class='fraction_nom' align='center'>" + n + "</td>" + 
+                    "</tr>" + 
+                    "<tr>" + 
+                        "<td class='fraction_denom' align='center'>" + d + "</td>" + 
                     "</tr>" +
                 "</table>"
     }
 
     get asPureFractionHtmlTable() 
     {
-        return "<table>" + 
-                    "<tr>" +                        
-                        "<td class='fraction_nom' align='center'>" + this.nom + "</td>" + 
-                    "</tr>" + 
-                    "<tr>" + 
-                        "<td class='fraction_denom' align='center'>" + this.denom + "</td>" + 
-                    "</tr>" +
-                "</table>"
+        if (this.nom < 0)
+            return this.threeItemTable('-', -this.nom, this.denom)
+        else 
+            return this.twoItemTable(this.nom, this.denom)
     }
 
-    toString() 
+
+    get asMixedNumberHtmlTable()
     {
-        return this.nom + "/" + this.denom
+        
+        let n = Math.abs(this.nom)
+        let d = this.denom         
+        let s = this.nom < 0 ? '-' : ''        
+        let i =  Math.floor(n / d)
+        if (i == 0)
+            return this.asPureFractionHtmlTable
+        return this.threeItemTable(s + Math.floor(n / d), n % d, d)
     }
 
-    multiply(other) {
-        return new Fraction( this.nom * other.nom, this.denom * other.denom )
+    toString() { return this.nom + "/" + this.denom }
+
+    multiply(other)  { return new Fraction( this.nom * other.nom, this.denom * other.denom ) }
+
+    divide(other)  { return new Fraction( this.nom * other.denom, this.denom * other.nom ) }
+
+    // I already have one in 'utils.js', but I want 'fractions.js' to be more self-contained 
+    gcd(a, b)
+    {
+        if (a == 0 || b == 0)
+            return 1
+        while (a != b)
+        {
+            if (a > b)
+                a -= b 
+            else 
+                b -= a
+        }
+        return a
     }
 
-    divide(other) {
-        return new Fraction( this.nom * other.denom, this.denom * other.nom )
+    // ret = this + other*factor 
+    addmul(other, factor)
+    {
+        let ourGcd = this.gcd(this.denom, other.denom)
+        let commonDenom = this.denom * other.denom / ourGcd
+        let myScale = other.denom / ourGcd
+        let otherScale = this.denom / ourGcd
+        return new Fraction(this.nom * myScale + other.nom * otherScale * factor, commonDenom)
     }
 
-    
+    add(other) { return this.addmul(other, 1) }
+
+    sub(other) { return this.addmul(other, -1) }
+
+    simplify() 
+    {
+        let mygcd = this.gcd(this.nom, this.denom)
+        return new Fraction(this.nom / mygcd, this.denom / mygcd)
+    }
 }
 
-l = new Fraction(10, 3)
-console.log(l.asMixedNumberHtmlTable)
-console.log('----')
-console.log(l.asPureFractionHtmlTable)

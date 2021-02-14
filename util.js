@@ -128,6 +128,8 @@ function primesInRange(from, to)
 /* GCD, LCM helpers */
 function gcd(a, b)
 {
+    if (a == 0 || b == 0)
+        return 1
     while (a != b)
     {
         if (a > b)

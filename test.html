@@ -6,28 +6,36 @@
     <body>
         
 <div id="root"></div>
+
+<script language="JavaScript" src="cdf.js"></script>
+<script language="JavaScript" src="fractions.js"></script>
 <script language="JavaScript" src="util.js"></script>
 <script language="JavaScript" src="geometry.js"></script>
 <script language="JavaScript" src="data.js"></script>
+<script language="JavaScript" src="problems.js"></script>
 
 <script language="javascript">
     
     let svgs = ""
 
-    for (let i = 3; i < 20; ++ i)
+    for (let i = 3; i < 50; ++ i)
         svgs += svgNGone(100, 100, i)
 
     svgs += svgRightTriangleWithMark(200, 200, 160, 110)
 
     svgs += svgArc(200, 200, 100, 100, 90, 0, 90)
 
-    document.getElementById("root").innerHTML = svgs
+    document.getElementById("root").innerHTML += svgs
 
 </script>
 
-<table><tr><td rowspan='2'>3</td><td class='fraction_nom' align='center'>1</td></tr><tr><td class='fraction_denom' align='center'>3</td></tr></table>
-<table><tr><td class='fraction_nom' align='center'>10</td></tr><tr><td class='fraction_denom' align='center'>3</td></tr></table>
-
+<table>
+    <tr>
+        <td>
+            <table><tr><td rowspan='2' align='center'>1</td><td class='fraction_nom' align='center'>3</td></tr><tr><td class='fraction_denom' align='center'>6</td></tr></table>
+        </td>
+        <td>-</td><td>
+        <table><tr><td rowspan='2' align='center'>1</td><td class='fraction_nom' align='center'>0</td></tr><tr><td class='fraction_denom' align='center'>4</td></tr></table></td><td>=</td><td  class="op_b" bgcolor="#efefef">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
 <table>
     <tr>
         <td class="op_a">&nbsp;</td><td class="op_a" align='end'>1232.32</td> 
