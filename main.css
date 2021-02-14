@@ -38,6 +38,21 @@ td.sm_v {
     font-family: 'Courier New', Courier, monospace;
 }
 
+.fraction_denom {
+    padding: 5px; 
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-family: 'Courier New', Courier, monospace;
+}
+.fraction_nom {
+    padding: 5px; 
+    padding-top: 0px;
+    padding-bottom: 0px; 
+    border-bottom: 1px solid black;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
 .op_c {
     padding: 0px; 
     padding-bottom: 10px;
