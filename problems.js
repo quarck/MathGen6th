@@ -492,11 +492,11 @@ var category_fractions =
         {
             for (;;)
             {
-                let denom1 = randIntRange(2, 10 + 3*difficulty)
-                let nom1 = randIntRange(1, 3*denom1)
+                let denom1 = randIntRange(2, 10 + 2*difficulty)
+                let nom1 = randIntRange(1, 8*denom1)
 
-                let denom2 = randIntRange(2, 10 + 3*difficulty)
-                let nom2 = randIntRange(1, 3*denom2)
+                let denom2 = randIntRange(2, 10 + 2*difficulty)
+                let nom2 = randIntRange(1, 8*denom2)
 
                 if (nom1 % denom1 == 0)
                     continue
