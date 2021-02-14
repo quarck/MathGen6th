@@ -522,25 +522,13 @@ var category_fractions =
                 let ansStr1 = ans.asMixedNumberHtmlTable
                 let ansStr2 = ans.asPureFractionHtmlTable
 
-                console.log(f1Str)
-                console.log('---')
-                console.log(f2Str)
-                console.log('---')
-                console.log(ansStr1)
-                console.log('---')
-                console.log(ansStr2)
-
                 let problemHtml = '<table><tr><td>' + f1Str + '</td>' +
                                 '<td>&nbsp;&nbsp;' + direction + '&nbsp;&nbsp;</td><td>' + f2Str + '</td>' + 
                                 '<td>' + '&nbsp;=&nbsp;' + '</td>' + 
                                 '<td  class="op_b" bgcolor="#efefef">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>' 
                 
-                console.log(problemHtml)
-                
                 let answerHtml = '<table><tr><td>' + ansStr1 +
                                  '</td><td>&nbsp; or  &nbsp;</td><td>' + ansStr2 + '</td></tr></table>' 
-
-                console.log(answerHtml)
 
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
