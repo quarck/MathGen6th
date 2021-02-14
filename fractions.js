@@ -59,7 +59,7 @@ class Fraction
                 "</table>"
     }
 
-    get asPureFractionHtmlTable() 
+    get asImproperFractionHtmlTable() 
     {
         if (this.nom < 0)
             return this.threeItemTable('-', -this.nom, this.denom)
@@ -76,7 +76,7 @@ class Fraction
         let s = this.nom < 0 ? '-' : ''        
         let i =  Math.floor(n / d)
         if (i == 0)
-            return this.asPureFractionHtmlTable
+            return this.asImproperFractionHtmlTable
         return this.threeItemTable(s + Math.floor(n / d), n % d, d)
     }
 

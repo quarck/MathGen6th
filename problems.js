@@ -425,7 +425,7 @@ var category_divmul =
     },
 ]
 
-var category_fractions = 
+var category_proportions = 
 [
     {
         name: "Divide in proportions", 
@@ -486,6 +486,10 @@ var category_fractions =
             }
         },         
     },
+]
+
+var category_fractions = 
+[
     {
         name: "Natural fraction - addition / substraction", 
         fun: function (root, ansRoot, difficulty)
@@ -523,7 +527,7 @@ var category_fractions =
                 let f1Str = f1.asMixedNumberHtmlTable
                 let f2Str = f2.asMixedNumberHtmlTable
                 let ansStr1 = ans.asMixedNumberHtmlTable
-                let ansStr2 = ans.asPureFractionHtmlTable
+                let ansStr2 = ans.asImproperFractionHtmlTable
 
                 let problemHtml = '<table><tr><td>' + f1Str + '</td>' +
                                 '<td>&nbsp;&nbsp;' + direction + '&nbsp;&nbsp;</td><td>' + f2Str + '</td>' + 
@@ -532,6 +536,45 @@ var category_fractions =
                 
                 let answerHtml = '<table><tr><td>' + ansStr1 +
                                  '</td><td>&nbsp; or  &nbsp;</td><td>' + ansStr2 + '</td></tr></table>' 
+
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+
+    {
+        name: "Fraction - convertion between mixed and improper", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let denom = randIntRange(2, 10 + 2*difficulty)
+                let nom = randIntRange(2*denom, 9*denom)
+
+                if (nom % denom == 0)
+                    continue
+
+                let fraction = new Fraction(nom, denom)
+                let mixed = fraction.asMixedNumberHtmlTable
+                let improper = fraction.asImproperFractionHtmlTable
+
+                let problemHtml = ""
+                let answerHtml = ""
+
+                if (randValue(true, false))
+                {
+                    problemHtml = '<table><tr><td>Write&nbsp;</td><td>' + improper + '</td><td>&nbsp; as a mixed number: &nbsp;</td>' + 
+                                    '<td  class="op_b" bgcolor="#efefef">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>' 
+                    answerHtml = mixed
+                }
+                else
+                {
+                    problemHtml = '<table><tr><td>Write&nbsp;</td><td>' + mixed + '</td><td>&nbsp; as an improper fraction: &nbsp;</td>' + 
+                                    '<td  class="op_b" bgcolor="#efefef">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>' 
+                    answerHtml = improper 
+                }
 
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
