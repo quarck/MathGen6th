@@ -503,6 +503,9 @@ var category_fractions =
                 if (nom2 % denom2 == 0)
                     continue
 
+                if (denom1 == denom2)
+                    continue
+
                 let f1 = new Fraction(nom1, denom1)
                 let f2 = new Fraction(nom2, denom2)
 
