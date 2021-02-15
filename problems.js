@@ -518,6 +518,17 @@ var category_fractions =
                 if (f1.denom == f2.denom)
                     continue
 
+                if (difficulty < 5)
+                {
+                    if (lcm(f1.denom, f2.denom) >= 16)
+                        continue
+                }
+                else if (difficulty < 7)
+                {
+                    if (lcm(f1.denom, f2.denom) >= 40)
+                        continue
+                }
+
                 let direction = randValue('+', '-')
 
                 if (direction == '-' && f1.asDecimal < f2.asDecimal)
