@@ -927,7 +927,7 @@ var category_eqs =
             {
                 let name = randomName('x', 'y')
                 let a = randFixFloat(1, 10, 0)
-                let b = (randInt(50)) * a
+                let b = randIntRange(2, 50) * a
                 let c = randFixFloat(1, 30, 1)
                 if (Math.abs(a) < 0.1)
                     continue;
@@ -974,10 +974,14 @@ var category_primes =
         {
             for (;;)
             {
-                let from = randIntRange(1, 10) * 10 + randValue(0, 5)
-                let to = from + 10 + difficulty
+                let from = randIntRange(1, 90)
+                let to = from + 5 + difficulty
+                let primes = primesInRange(from, to)
+                if (primes.length == 0)
+                    continue
+
                 root.innerHTML = "Make a list of prime numbers between " + from + " and " + to
-                ansRoot.innerHTML = primesInRange(from, to).map(x => '' + x).reduce((a, x) => a + ' ' + x)
+                ansRoot.innerHTML = primes.map(x => '' + x).reduce((a, x) => a + ' ' + x)
                 break;
             }
         },         

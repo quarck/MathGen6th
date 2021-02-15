@@ -149,66 +149,80 @@
 
                 return td2
             }                    
+
+            function setContentDisplayMode(v)
+            {
+                let form = document.getElementById('inputForm')
+                let cont = document.getElementById('contentRoot')
+                if (v)
+                {
+                    form.setAttribute('style', 'display:none;')
+                    cont.setAttribute('style', 'display:block;')
+                }
+                else
+                {
+                    form.setAttribute('style', 'display:block;')
+                    cont.setAttribute('style', 'display:none;')
+                }
+            }
             
             function generate()
             {
                 let num_problems = parseInt(document.getElementById('num_problems').value)
                 let difficulty = parseInt(document.getElementById('difficulty').value)
-                let debug = document.getElementById('debug')
 
-                // hide the form
-                document.getElementById('inputForm').setAttribute('style', 'display:none;')
+                setContentDisplayMode(true)
 
-                // unhide the content
-                document.getElementById('contentRoot').setAttribute('style', 'display:block;')
+                let nextProbGenerator = createProbGenerator()
 
-                if (!debug)
+                for (let idx = 1; idx <= num_problems; ++ idx)
                 {
-                    let nextProbGenerator = createProbGenerator()
-
-                    for (let idx = 0; idx < num_problems; ++ idx)
-                    {
-                        let even = idx % 2 == 0
-                        nextProbGenerator().fun(
-                            generateEntry(idx + 1, true), 
-                            generateEntry(idx + 1, false), 
-                            difficulty 
-                            )
-                    }
-                }
-                else
-                {
-                    // in debug we iterate over all possible combinations 
-                    let generators = getGeneratorsRaw()
-                    let bigidx = 1
-                    let difficulty_l = 1
-                    let difficulty_r = 10
-                    for (let cat of generators)
-                    {
-                        console.log("CAT: ", cat.name)
-                        for (let idx = 0; idx < cat.data.length; ++ idx)
-                        {
-                            console.log("\tPROB: ", cat.data[idx].name)
-
-                            let probEntry1 = generateEntry(bigidx, true)
-                            let ansEntry1 = generateEntry(bigidx, false)
-                            cat.data[idx].fun(probEntry1, ansEntry1, difficulty_l)
-                            probEntry1.innerHTML += '<br><small style="color:#777">' + cat.data[idx].name + ' at difficulty ' + difficulty_l + ', ANS:</small><br>' + ansEntry1.innerHTML 
-                            bigidx ++
-
-                            let probEntry2 = generateEntry(bigidx, true)
-                            let ansEntry2 = generateEntry(bigidx, false)
-                            cat.data[idx].fun(probEntry2, ansEntry2, difficulty_r)
-                            probEntry2.innerHTML += '<br><small style="color:#777">' + cat.data[idx].name + ' at difficulty ' + difficulty_r + ', ANS:</small><br>' + ansEntry2.innerHTML
-                            bigidx ++
-                        }
-                    }
-
+                    nextProbGenerator().fun(
+                        generateEntry(idx, true), 
+                        generateEntry(idx, false), 
+                        difficulty 
+                        )
                 }
             }
 
+            function addDebugEntry(idx, gen, difficulty)
+            {
+                let probEntry = generateEntry(idx, true)
+                let ansEntry = generateEntry(idx, false)
+                gen.fun(probEntry, ansEntry, difficulty)
+
+
+
+                probEntry.innerHTML = '<b>' + gen.name + ' at difficulty ' + difficulty + '</b><br><br>' + probEntry.innerHTML + '<br><br>ANS:<br>' + ansEntry.innerHTML 
+            }
+
+            function generateDebug()
+            {
+                setContentDisplayMode(true)
+
+                // in debug we iterate over all possible combinations 
+                let generators = getGeneratorsRaw()
+                let bigidx = 1
+                let difficulty_l = 1
+                let difficulty_r = 10
+                for (let cat of generators)
+                {
+                    console.log("CAT: ", cat.name)
+                    for (let idx = 0; idx < cat.data.length; ++ idx)
+                    {
+                        console.log("\tPROB: ", cat.data[idx].name)
+
+                        addDebugEntry(bigidx, cat.data[idx], 1); bigidx++
+                        addDebugEntry(bigidx, cat.data[idx], 5); bigidx++
+                        addDebugEntry(bigidx, cat.data[idx], 7); bigidx++
+                        addDebugEntry(bigidx, cat.data[idx], 10); bigidx++                        
+                    }
+                }
+
+            }
+
             if (document.getElementById('debug'))
-                generate()
+                generateDebug()
         </script>
     </body>
 </html>
