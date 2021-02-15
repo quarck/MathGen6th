@@ -14,7 +14,8 @@ td.problem {
     padding-bottom: 18px; 
 }
 td.answer {
-     padding: 2px;                  
+    padding: 2px;                  
+    padding-left: 10px;
 }
 
 td.sm_v {
@@ -52,6 +53,18 @@ td.sm_v {
     font-family: 'Courier New', Courier, monospace;
 }
 
+div.element {
+    display: block;
+    float: left;
+    width: 50%;
+    break-inside: avoid-page;
+}
+
+div.title {
+    display: block;
+    float: left;
+    width: 100%;
+}
 
 .op_c {
     padding: 0px; 

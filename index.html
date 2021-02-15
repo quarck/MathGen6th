@@ -26,7 +26,17 @@
     </head>
     <body>
 
-        <div id="contentRoot"></div>
+        <div id="contentRoot" style='display:none;'>
+            <div id="problems"></div>
+            
+            <div style="break-after:page;width:100%;display:block;"></div>
+
+            <div class='title'>
+                <table><tr><td><h2>Answers:</h2></td></tr></table>
+            </div>
+
+            <div id="answers"></div>
+        </div>
 
         <div id="inputForm">
             <h3>Math problems generator for 6th class of Junior school</h3>
@@ -87,16 +97,7 @@
         <script language="JavaScript" src="data.js"></script>
         <script language="JavaScript" src="problems.js"></script>
 
-        <script language="JavaScript">                    
-            function hideForm()
-            {
-                let form = document.getElementById('inputForm')
-                while (form.hasChildNodes())
-                {
-                    form.removeChild(form.childNodes[0])
-                }
-            }
-
+        <script language="JavaScript">            
             function newChild(parent, type, attr)
             {
                 let newElement = document.createElement(type)
@@ -118,43 +119,12 @@
                 return newElement
             }
 
-            function generateMainLayout()
+            function generateEntry(n, isProblemEntry)
             {
-                let root = document.getElementById("contentRoot")
-
-                // main table with the problems 
-                let problems = newChild(root, "table", {width: "100%"})
-                let tr = newChild(problems, "tr", {valign: 'top'})
-                let leftTd = newChild(tr, "td", {width: "50%"})
-                let rightTd = newChild(tr, "td", {width: "50%"})
-                let leftSubTable = newChild(leftTd, "table")
-                let rightSubTable = newChild(rightTd, "table")
-
-                let pageBreak = newChild(root, "div", {style: "break-after:page"})
-
-                let answersLabel = newChild(root, 'div', {innerHTML: '<h2>Answers<h2>'})
-
-                let answers = newChild(root, "table",  {width: "100%"})
-                let ansTr = newChild(answers, "tr", {valign: 'top'})
-                let ansLeftTd = newChild(ansTr, "td", {width: "50%"})
-                let ansRightTd = newChild(ansTr, "td", {width: "50%"})
-                let ansLeftSubTable = newChild(ansLeftTd, "table")
-                let ansRightSubTable = newChild(ansRightTd, "table")
-
-                return {
-                    problems: {
-                        left: leftSubTable, 
-                        right: rightSubTable 
-                    }, 
-                    answers: {
-                        left: ansLeftSubTable, 
-                        right: ansRightSubTable 
-                    },
-                }
-            }
-
-            function generateEntry(table, n, isProblemEntry)
-            {
+                let root = isProblemEntry ? document.getElementById("problems") : document.getElementById("answers")
+                let div = newChild(root, 'div', {class: 'element'})
+                let table = newChild(div, 'table')
+                
                 let tr = newChild(table, "tr", {valign: 'top'})
                 table.appendChild(tr)
 
@@ -173,9 +143,11 @@
                 let difficulty = parseInt(document.getElementById('difficulty').value)
                 let debug = document.getElementById('debug')
 
-                hideForm()
+                // hide the form
+                document.getElementById('inputForm').setAttribute('style', 'display:none;')
 
-                let cont = generateMainLayout()            
+                // unhide the content
+                document.getElementById('contentRoot').setAttribute('style', 'display:block;')
 
                 if (!debug)
                 {
@@ -185,8 +157,8 @@
                     {
                         let even = idx % 2 == 0
                         nextProbGenerator().fun(
-                            generateEntry(even ? cont.problems.left : cont.problems.right, idx + 1, true), 
-                            generateEntry(even ? cont.answers.left : cont.answers.right, idx + 1, false), 
+                            generateEntry(idx + 1, true), 
+                            generateEntry(idx + 1, false), 
                             difficulty 
                             )
                     }
@@ -205,12 +177,16 @@
                         {
                             console.log("\tPROB: ", cat.data[idx].name)
 
-                            generateEntry(cont.problems.left, bigidx, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty ' + difficulty_l + '</b>'
-                            cat.data[idx].fun(generateEntry(cont.problems.left, bigidx, true), generateEntry(cont.answers.left, bigidx, false), difficulty_l)
+                            let probEntry1 = generateEntry(bigidx, true)
+                            let ansEntry1 = generateEntry(bigidx, false)
+                            cat.data[idx].fun(probEntry1, ansEntry1, difficulty_l)
+                            probEntry1.innerHTML += '<br><small style="color:#777">' + cat.data[idx].name + ' at difficulty ' + difficulty_l + ', ANS:</small><br>' + ansEntry1.innerHTML 
                             bigidx ++
 
-                            generateEntry(cont.problems.right, bigidx, false).innerHTML = '<b>' + cat.data[idx].name + ' at difficulty ' + difficulty_r + '</b>'
-                            cat.data[idx].fun(generateEntry(cont.problems.right, bigidx, true), generateEntry(cont.answers.right, bigidx, false), difficulty_r)
+                            let probEntry2 = generateEntry(bigidx, true)
+                            let ansEntry2 = generateEntry(bigidx, false)
+                            cat.data[idx].fun(probEntry2, ansEntry2, difficulty_r)
+                            probEntry2.innerHTML += '<br><small style="color:#777">' + cat.data[idx].name + ' at difficulty ' + difficulty_r + ', ANS:</small><br>' + ansEntry2.innerHTML
                             bigidx ++
                         }
                     }
