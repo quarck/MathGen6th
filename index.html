@@ -27,7 +27,13 @@
     <body>
 
         <div id="contentRoot" style='display:none;'>
-            <div id="problems"></div>
+            
+            <div class="row">
+                <div class="column" id="problems_left"></div>
+                <div class="column" id="problems_right"></div>
+            </div>
+
+            <div style="display:block;width:100%;"><h2>&nbsp;</h2></div>
             
             <div style="break-after:page;width:100%;display:block;"></div>
 
@@ -35,12 +41,15 @@
                 <table><tr><td><h2>Answers:</h2></td></tr></table>
             </div>
 
-            <div id="answers"></div>
+            <div class="row">
+                <div class="column" id="answers_left"></div>
+                <div class="column" id="answers_right"></div>
+            </div>
         </div>
 
         <div id="inputForm">
             <h3>Math problems generator for 6th class of Junior school</h3>
-            <input type="hidden" id="debug" checked="true"></input>
+            <input type="hidden" id="debugd" checked="true"></input>
             <table>
                 <tr>
                     <td class="form"><b>Number of problems:</b></td>
@@ -121,7 +130,11 @@
 
             function generateEntry(n, isProblemEntry)
             {
-                let root = isProblemEntry ? document.getElementById("problems") : document.getElementById("answers")
+                let suffix = (n % 2) == 1 ? "_left" : "_right"
+                let prefix = isProblemEntry ? "problems" : "answers"
+
+                let root = document.getElementById(prefix + suffix) 
+
                 let div = newChild(root, 'div', {class: 'element'})
                 let table = newChild(div, 'table')
                 
