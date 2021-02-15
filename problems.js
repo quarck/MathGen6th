@@ -86,7 +86,7 @@ function generateMultiplicationHtml(a, b)
     let delta_len = dg_a.length - dg_b.length
     
     let html = 
-        '<table border=1>' + 
+        '<table>' + 
             '<tr>' + 
                 '<td class="op_a">&nbsp;' + '</td>' + genMulTdRow(dg_a, 0) +
             '</tr>' + 
@@ -368,10 +368,15 @@ var category_divmul =
         name: "Multiplication", 
         fun: function (root, ansRoot, difficulty)
         {
+            let mutiplesOfTen = [10, 100, 1000]
+
             for (;;)
             {
                 let a = randIntRange(20 * difficulty, 100 * difficulty)
                 let b = randIntRange(3, 10 * difficulty)
+
+                if (mutiplesOfTen.includes(a) || mutiplesOfTen.includes(b)) // that is too simple 
+                    continue
 
                 let problemHtml = generateMultiplicationHtml("" + a, "" + b)
                 let answerHtml = a * b
