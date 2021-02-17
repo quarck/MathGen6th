@@ -212,53 +212,10 @@ var category_addsub =
     },
 ]
 
-
-var category_advEval = 
+var category_eval_powers = 
 [
     {
-        name: "Evaluate (a + b) / c", 
-        fun: function (root, ansRoot, difficulty)
-        {
-            for (;;)
-            {
-                let c = randIntRange(5, 30)
-                let aPlusB = c * randIntRange(5, 10)
-                let a = randIntRange(1, aPlusB)
-                let b = aPlusB - a                    
-        
-                let problemHtml = "(" + a + " + " + b + ") &#247; " + c + " = "
-                let answerHtml = Math.round((a + b ) / c)
-        
-                root.innerHTML = problemHtml
-                ansRoot.innerHTML = answerHtml
-                break;
-            }            
-        },         
-    },
-    {
-        name: "Evaluate a^2 - b^2", 
-        fun: function (root, ansRoot, difficulty)
-        {
-        
-            for (;;)
-            {
-                let a = randIntRange(4, 20)
-                let b = randIntRange(4, 20)
-                if (a <= b)
-                    continue
-        
-                let problemHtml = "" + a + "<sup>2</sup> - " + b + "<sup>2</sup>" + " = "
-                let answerHtml = Math.pow(a, 2) - Math.pow(b, 2)
-        
-                root.innerHTML = problemHtml
-                ansRoot.innerHTML = answerHtml
-                break;
-            }
-        
-        },         
-    },
-    {
-        name: "Evaluate a^b where b in [3,5]", 
+        name: "Evaluate a^b (capped), integers", 
         fun: function (root, ansRoot, difficulty)
         {
         
@@ -292,23 +249,181 @@ var category_advEval =
         },         
     },
     {
-        name: "Evaluate (a * b) - c",
+        name: "Evaluate a^2 - b^2, integers, non negative", 
+        fun: function (root, ansRoot, difficulty)
+        {
+        
+            for (;;)
+            {
+                let a = randIntRange(4, 20)
+                let b = randIntRange(4, 20)
+                if (a <= b)
+                    continue
+        
+                let problemHtml = "" + a + "<sup>2</sup> - " + b + "<sup>2</sup>" + " = "
+                let answerHtml = Math.pow(a, 2) - Math.pow(b, 2)
+        
+                root.innerHTML = problemHtml
+                ansRoot.innerHTML = answerHtml
+                break;
+            }
+        
+        },         
+    },
+]
+
+
+var category_evaluations = 
+[
+    {
+        name: "Evaluate (a +|- b) / c, integers", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
             {
-                let a = randIntRange(10, 30)
-                let b = randIntRange(2, 10)
-                let c = randIntRange(5, 30)
-                
-                if (a * b <= c)
+                let c = randIntRange(5, 20 + 2*difficulty)
+                let ab = c * randIntRange(5, 5 + difficulty)
+                let direction = randValue(1, -1)
+                let directionSym = (direction > 0) ? '+' : '-'
+
+                let b = randIntRange(1, ab)
+                let a = direction > 0 ? (ab - b) : (ab + b)
+
+                let answer = Math.round((a + direction * b ) / c)
+                if (answer < 0)
                     continue
+
+                root.innerHTML = "(" + a + " " + directionSym + " " + b + ") &#247; " + c + " = "
+                ansRoot.innerHTML = answer
+                break;
+            }            
+        },         
+    }, 
+    {
+        name: "Evaluate (a / b) +|- (c / d), integers", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let b = randIntRange(5, 10 + difficulty)
+                let a = b * randIntRange(6, 6 + difficulty)
+
+                let d = randIntRange(5, 10 + difficulty)
+                let c = d * randIntRange(5, 5 + difficulty)
+
+                let direction = randValue(1, -1)
+                let directionSym = (direction > 0) ? '+' : '-'
+
+                let answer = Math.round((a / b) + direction*(c / d))
+                if (answer <= difficulty)
+                    continue
+
+                root.innerHTML = "(" + a + " &#247; " + b + ")  " + directionSym + " (" + c + " &#247; " + d + ")  = "
+                ansRoot.innerHTML = answer
+                break;
+            }            
+        },         
+    },   
+    {
+        name: "Evaluate (a * b) +|- c, integers",
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let a = randIntRange(10, 10 + 2*difficulty)
+                let b = randIntRange(2, 5 + difficulty)
+                let c = randIntRange(5, 20 + 2*difficulty)
+                
+                let direction = randValue(1, -1)
+                let directionSym = (direction > 0) ? '+' : '-'
+
+                let ans = Math.round(a * b + direction * c)
+                if (ans < 0) 
+                {
+                    continue
+                }
         
-                let problemHtml = "(" + a + " &#215; " + b + ") - " + c + " = "
-                let answerHtml = Math.round(a * b - c)
-        
-                root.innerHTML = problemHtml
-                ansRoot.innerHTML = answerHtml
+                root.innerHTML =  "(" + a + " &#215; " + b + ") " + directionSym + " " + c + " = "
+                ansRoot.innerHTML = ans
+                break;
+            }            
+        },         
+    },
+    {
+        name: "Evaluate (a +|- b) +|- c, integers", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let ab = randIntRange(50, 40*difficulty)
+                let abDirection = randValue(1, -1)
+                let abDirectionSym = (abDirection > 0) ? '+' : '-'
+                let b = randIntRange(1, Math.round(ab/3))
+                let a = abDirection > 0 ? (ab - b) : (ab + b)
+
+                let c = randIntRange(10, 10+3*difficulty)
+
+                if (a < difficulty || b < difficulty || c < difficulty)
+                    continue
+
+                let abcDirection = randValue(1, -1)
+                let abcDirectionSym = (abcDirection > 0) ? '+' : '-'
+
+                let answer = Math.round( a + abDirection* b + abcDirection * c)
+                if (answer < 0)
+                    continue
+                if ( a + abDirection* b < 0)
+                    continue
+
+                root.innerHTML = "(" + a + " " + abDirectionSym + " " + b + ") " + abcDirectionSym + " " + c + " = "
+                ansRoot.innerHTML = answer
+                break;
+            }            
+        },         
+    },   
+    {
+        name: "Evaluate (a.a * b) / c",
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let a = randIntRange(5, 40 + 10*difficulty)
+                if (a % 10 == 0)
+                    continue
+                a = a / 10
+                let c = randIntRange(5, 5 + difficulty)
+                let b = c * randIntRange(2, 10)
+
+                let answer = formatFloat(a * b / c, 1)
+
+                root.innerHTML = "(" + formatFloat(a, 1) + " &#215; " + b + ") &#247; " + c + " = "
+                ansRoot.innerHTML = answer
+                break;
+            }            
+        },         
+    },
+    {
+        name: "Evaluate (a.a * 100|1000) +|- c",
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let a = randIntRange(5, 40 + 10*difficulty)
+                if (a % 10 == 0)
+                    continue
+                a = a / 10
+                let b = randValue(100, 1000)
+                let c = randIntRange(5, 5 + 3*difficulty)
+
+                let direction = randValue(1, -1)
+                let directionSym = (direction > 0) ? '+' : '-'
+
+                let answer = Math.round(a * b + direction * c)
+                if (answer < 0)
+                    continue
+
+                root.innerHTML = "(" + formatFloat(a, 1) + " &#215; " + b + ") " + directionSym + " " + c + " = "
+                ansRoot.innerHTML = answer
                 break;
             }            
         },         
