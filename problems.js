@@ -428,6 +428,40 @@ var category_evaluations =
             }            
         },         
     },
+    {
+        name: "Evaluate 0.a * 0.b",
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                if (difficulty <= 5)
+                {
+                    let a = randIntRange(2, 10) / 10
+                    let b = randIntRange(2, 10) / 10
+                    let answer = formatFloat(a * b, 2)    
+                    root.innerHTML = formatFloat(a, 1) + " &#215; " + formatFloat(b, 1) + " = "
+                    ansRoot.innerHTML = answer
+                }
+                else if (difficulty <= 7)
+                {
+                    let a = randIntRange(2, 100) / 100
+                    let b = randIntRange(2, 10) / 10
+                    let answer = formatFloat(a * b, 3)
+                    root.innerHTML = formatFloat(a, 2) + " &#215; " + formatFloat(b, 1) + " = "
+                    ansRoot.innerHTML = answer
+                }
+                else
+                {
+                    let a = randIntRange(2, 100) / 100
+                    let b = randIntRange(2, 100) / 100
+                    let answer = formatFloat(a * b, 4)
+                    root.innerHTML = formatFloat(a, 2) + " &#215; " + formatFloat(b, 2) + " = "
+                    ansRoot.innerHTML = answer
+                }
+                break;
+            }            
+        },         
+    },
 ]
 
 
