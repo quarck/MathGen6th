@@ -212,7 +212,7 @@ var category_addsub =
     },
 ]
 
-var category_eval_powers = 
+var category_evaluations = 
 [
     {
         name: "Evaluate a^b (capped), integers", 
@@ -270,11 +270,6 @@ var category_eval_powers =
         
         },         
     },
-]
-
-
-var category_evaluations = 
-[
     {
         name: "Evaluate (a +|- b) / c, integers", 
         fun: function (root, ansRoot, difficulty)
