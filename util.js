@@ -31,6 +31,16 @@ function min(a, b)
      return a > b ? b : a 
 }
 
+function cap(value, low, high) 
+{        
+    if (value < low)
+        return low 
+    if (value > high)
+        return high
+    return value 
+}
+
+
 /*
  * Various random helpers 
  */

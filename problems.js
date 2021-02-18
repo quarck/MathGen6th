@@ -875,21 +875,19 @@ var category_trianglesAndAngles =
                 let l2pos = polarToDecart(75, 75, 50, (fa2+fa1)/2)
                 let l3pos = polarToDecart(75, 75, 50, (fa3+fa2)/2)
 
-                let svg = '<svg width="' + 150 + '" height="' + 150 + '">' + 
-                    '<line x1="75" y1="75" x2="' + p1.x + '" y2="' + p1.y + '" style="stroke:black;stroke-width:1.5" />'  + 
-                    svgArcPath(75, 75, 25, start_angle, fa1) + 
-                    '<g font-size="15" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="' + l1pos.x + '" y="' + l1pos.y + '">' + a1 + '&deg;</text></g>' + 
+                let svg = new SVG(150, 150)
+                svg.stroke(0, 0, 0, 1.5)
+                svg.line(75, 75, p1.x, p1.y)
+                svg.line(75, 75, p2.x, p2.y)
+                svg.line(75, 75, p3.x, p3.y)
 
-                    '<line x1="75" y1="75" x2="' + p2.x + '" y2="' + p2.y + '" style="stroke:black;stroke-width:1.5" />'  + 
-                    svgArcPath(75, 75, 30, fa1, fa2) + 
-                    '<g font-size="15" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="' + l2pos.x + '" y="' + l2pos.y + '">' + a2 + '&deg;</text></g>' + 
+                svg.arc(75, 75, 25, start_angle, fa1)
+                svg.arc(75, 75, 30, fa1, fa2)
+                svg.arc(75, 75, 15, fa2, fa3)
 
-                    '<line x1="75" y1="75" x2="' + p3.x + '" y2="' + p3.y + '" style="stroke:black;stroke-width:1.5" />'  + 
-                    svgArcPath(75, 75, 15, fa2, fa3) + 
-                    '<g font-size="15" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle"><text x="' + l3pos.x + '" y="' + l3pos.y + '">' + '?' + '</text></g>' + 
-
-                'Sorry, your browser does not support inline SVG.' + 
-                '</svg>'
+                svg.text(l1pos.x, l1pos.y, a1)
+                svg.text(l2pos.x, l2pos.y, a2)
+                svg.text(l3pos.x, l3pos.y, '?')                
 
                 let line = "<table><tr><td>Find the value of unknown angle:</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
 
@@ -900,7 +898,7 @@ var category_trianglesAndAngles =
                                 line+ 
                             "</td>" + 
                             "<td>" + 
-                                svg + 
+                                svg.html + 
                             "</td>" + 
                         "</tr>" + 
                         "</table>"                                
