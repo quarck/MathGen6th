@@ -35,6 +35,7 @@ class SVG
         this._fillsStack = []
         this._fontSize = 15
         this._fontFace = 'sans-serif'
+        this._fontStack = []
         this.randFill()
     }
 
@@ -45,7 +46,11 @@ class SVG
     capColor(value)  { return this.cap(value | 0, 0, 255) }
     rgb(r, g, b) { return 'rgb(' + [ this.capColor(r), this.capColor(g), this.capColor(b) ].join(',') + ')' }
 
-    fill(r, g, b) { this._fill = this.rgb(r, g, b) }
+    fill(r, g, b) 
+    { 
+        this._fill = this.rgb(r, g, b) 
+        return this
+    }
 
     randFill()
     {
@@ -60,23 +65,64 @@ class SVG
             this.rgb(255,192,128),
             this.rgb(255,128,192)
         )
+        return this
     }
 
     stroke(r, g, b, width)
     {
         this._stroke = this.rgb(r, g, b)
-        this._strokeWidth = width ? width : this._strokeWidth        
+        this._strokeWidth = width ? width : this._strokeWidth 
+        return this
     }
 
-    pushStroke() { this._strokesStack.push({s: this._stroke, w: this._strokeWidth}) }
-    popStroke() { let item = this._strokesStack.pop() ;this._stroke = item.s; this._strokeWidth = item.w }
+    pushStroke() 
+    {
+         this._strokesStack.push({s: this._stroke, w: this._strokeWidth}) 
+         return this
+    }
+    popStroke() 
+    { 
+        let item = this._strokesStack.pop() 
+        this._stroke = item.s
+        this._strokeWidth = item.w
+        return this
+    }
 
-    pushFill() { this._fillsStack.push(this._fill) }
-    popFill() { this._fill = this._fillsStack.pop() }
+    pushFill() 
+    {
+        this._fillsStack.push(this._fill)
+        return this
+    }
+    popFill() 
+    {
+        this._fill = this._fillsStack.pop() 
+        return this
+    }
 
-    set fontSize(value) { this._fontSize = value }
+    set fontSize(value) 
+    { 
+        this._fontSize = value 
+        return this
+    }
 
-    set fontFace(value) { this._fontFace = value }
+    set fontFace(value) 
+    {
+        this._fontFace = value 
+        return this
+    }
+
+    pushFont() 
+    {
+        this._fontStack.push({s: this._fontSize, f: this._fontFace}) 
+        return this
+    }
+    popFont()
+    {
+        let item = this._fontStack.pop() 
+        this._fontSize = item.s
+        this._fontFace = item.f
+        return this
+    }
 
     style(extra) { return 'fill:' + this._fill + ';stroke-width:' + this._strokeWidth + ';stroke:' + this._stroke + ';' + (extra ? extra : '') }
 
@@ -113,6 +159,7 @@ class SVG
                     style: this.style()
                 })
         )
+        return this
     }
 
     nGone(x, y, width, height, n)
@@ -151,15 +198,16 @@ class SVG
                     style: this.style('fill-rule:nonzero;')
                 })
         )
+        return this
     }
 
-    triangle(x, y, w, h, a, b, c)
+    triangleImpl(x, y, w, h, a, b, c)
     {
         if (a <= 0 || b <= 0 || c <= 0 ||
             a + b < c || a + c < b || b + c < a)
         {
             console.error("Trying to draw invalid triangle: ", a, b, c)
-            return
+            return null
         }
 
         let x1 = 0
@@ -199,6 +247,12 @@ class SVG
         return {x1: x1, x2: x2, x3: x3, y1: y1, y2: y2, y3: y3}
     }
 
+    triangle(x, y, w, h, a, b, c)
+    {
+        this.triangleImpl(x, y, w, h, a, b, c)
+        return this
+    }
+
     line(x1, y1, x2, y2)
     {
         this._items.push(
@@ -212,6 +266,7 @@ class SVG
                     style: this.lineStyle()
                 })
         )
+        return this
     }
 
     text(x, y, text)
@@ -220,6 +275,7 @@ class SVG
             '<g font-size="' + this._fontSize + '" font-family="' + this._fontFace +
              '" fill="black" stroke="none" text-anchor="middle"><text x="' + x + '" y="' + y + '">' + text + '</text></g>'
         )
+        return this
     }
 
     markSegment(x1, y1, x2, y2, mark)
@@ -277,17 +333,19 @@ class SVG
             this.line(mn1[0], mn1[1], mn3[2], mn3[3])
             this.line(mn3[0], mn3[1], mn1[2], mn1[3])
         }
+        return this
     }
 
     triangleWithMarks(x, y, w, h, a, b, c, ma, mb, mc)
     {
-        let t = this.triangle(x, y, w, h, a, b, c)
+        let t = this.triangleImpl(x, y, w, h, a, b, c)
         this.markSegment(t.x1, t.y1, t.x2, t.y2, ma)
         this.markSegment(t.x1, t.y1, t.x3, t.y3, mb)  
         this.markSegment(t.x2, t.y2, t.x3, t.y3, mc) 
+        return this
     }
 
-    rightTriangleWithMark(x, y, w, h, a, b)
+    rightTriangleWithMarkImpl(x, y, w, h, a, b)    
     {
         let x1 = 0
         let y1 = 0
@@ -323,6 +381,12 @@ class SVG
         this.line((x1+w*0.1), y1, (x1+w*0.1), (y1-h*0.1))
 
         return {x1: x1, x2: x2, x3: x3, y1: y1, y2: y2, y3: y3}
+    }
+
+    rightTriangleWithMark(x, y, w, h, a, b)
+    {
+        this.rightTriangleWithMarkImpl(x, y, w, h, a, b)
+        return this
     }
 
     markAngle(x1, y1, x2, y2, x3, y3, label)
@@ -363,6 +427,7 @@ class SVG
         )
 
         this.text(textX, textY, label)
+        return this
     }
 
     triangleByAnglesWithAngleMarks(x, y, w, h, a, alpha, beta, malpha, mbeta, mgamma)
@@ -379,11 +444,13 @@ class SVG
         let b = a * Math.sin(beta) / Math.sin(alpha)
         let c = a * Math.sin(gamma) / Math.sin(alpha)
         
-        let t = this.triangle(x, y, w, h, a, b, c)
+        let t = this.triangleImpl(x, y, w, h, a, b, c)
 
         this.markAngle(t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, mgamma)
         this.markAngle(t.x2, t.y2, t.x1, t.y1, t.x3, t.y3, mbeta) 
         this.markAngle(t.x3, t.y3, t.x1, t.y1, t.x2, t.y2, malpha)
+
+        return this
     }
 
     polarToDecart(cx, cy, r, angleDeg) 
@@ -412,5 +479,7 @@ class SVG
                     fill: 'transparent'
                 })        
         )
+
+        return this
     }
 }

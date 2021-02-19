@@ -37,9 +37,7 @@ function randFillColor()
 
 function svgNGone(w, h, n)
 {
-    let svg = new SVG(w, h)
-    svg.nGone(0, 0, w, h, n)
-    return svg.html
+    return (new SVG(w, h)).nGone(0, 0, w, h, n).html
 }
 
 function svgTriangle(w, h, a, b, c)
@@ -51,9 +49,7 @@ function svgTriangle(w, h, a, b, c)
 
 function svgTriangleWithMarks(w, h, a, b, c, ma, mb, mc)
 {
-    let svg = new SVG(w, h)
-    svg.triangleWithMarks(0, 0, w, h, a, b, c, ma, mb, mc)
-    return svg.html
+    return (new SVG(w, h)).triangleWithMarks(0, 0, w, h, a, b, c, ma, mb, mc).html
 }
 
 function svgRightTriangleWithMark(w, h, a, b)
