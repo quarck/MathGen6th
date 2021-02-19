@@ -11,6 +11,7 @@
 <script language="JavaScript" src="fractions.js"></script>
 <script language="JavaScript" src="util.js"></script>
 <script language="JavaScript" src="svg.js"></script>
+<script language="JavaScript" src="clocks.js"></script>
 <script language="JavaScript" src="geometry.js"></script>
 <script language="JavaScript" src="data.js"></script>
 <script language="JavaScript" src="problems.js"></script>
@@ -26,18 +27,8 @@
 
     //svgs += svgArc(200, 200, 100, 100, 90, 0, 90)
 
-    let svg = new SVG(300, 600)
-    for (let i = 10; i < 200; i+=10)
-    {
-        svg.randFill()        
-        //svg.rect(i+30, i, 100, 100)        
-        //svg.nGone(i, i, 100, 100, (i%3) + 3)
-        //svg.triangleWithMarks(i, i, 100, 100, 90, 90, 90, 1, 2, 3)
-        //svg.rightTriangleWithMark(i, i, 100, 100, 90, 90)
-        //svg.triangleByAnglesWithAngleMarks(i, i, 100, 100, 90, 60, 90, 1, 2, 3)
-    }
-
-    document.getElementById("root").innerHTML += svg.html
+    let c = new Digital24hClock(50, 20, 23, 55)
+    document.getElementById("root").innerHTML = c.stroke(1).html
 
 </script>
 
