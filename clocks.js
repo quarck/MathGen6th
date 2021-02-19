@@ -117,7 +117,7 @@ class Digital24hClock
     
         }
 
-        let hr_min_offset = pos >= 2 ? Math.floor(this.seg_w/2) : 0
+        let hr_min_offset = pos >= 2 ? this.seg_w/2 : 0
         let x_offset = pos * (this.seg_w + this.seg_w_sp)
 
         x1 += this.seg_w_margin + x_offset + hr_min_offset
@@ -224,8 +224,8 @@ class Digital24hClock
 
         let rv =this.width / 128
 
-        svg.rect(this.width / 2 - rv, this.height / 2 - 2 - this.seg_h/3, 2*rv, 2*rv)
-        svg.rect(this.width / 2 - rv, this.height / 2 - 2 + this.seg_h/3, 2*rv, 2*rv)
+        svg.rect(this.width / 2 - rv, this.height / 2 - rv - this.seg_h/3, 2*rv, 2*rv)
+        svg.rect(this.width / 2 - rv, this.height / 2 - rv + this.seg_h/3, 2*rv, 2*rv)
 
         svg.popFill()
 
