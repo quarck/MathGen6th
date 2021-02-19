@@ -49,7 +49,7 @@
 
         <div id="inputForm">
             <h3>Math problems generator for 6th class of Junior school</h3>
-            <input type="hidden" id="debug" checked="true"></input>
+            <input type="hidden" id="debugd" checked="true"></input>
             <table>
                 <tr>
                     <td class="form"><b>Number of problems:</b></td>
@@ -59,10 +59,24 @@
                     <td class="form"><b>Difficulty level (1-10):</b></td>
                     <td class="form"><input type="number" id="difficulty" value="5"/><br>(Beta! This param is currently mostly ignored)</td>
                 </tr>
+
+                <tr>
+                    <td class="form"></td>
+                    <td class="form">
+                        <input type="checkbox" id="save_defaults">Save default values</input>
+                        <br>(By selecting this checkbox you are agreeing to use cookies to save these settings only)
+                    </td>
+                </tr>
+
                 <tr>
                     <td class="form"></td>
                     <td class="form"><input type="button" id="generate" onclick="generate()" value="Generate!"/></td>
                 </tr>
+
+                <tr>                    
+                </tr>
+
+
                 
                 <tr>
                     <td class="form"></td>
@@ -99,6 +113,7 @@
             </table>        
         </div>
 
+        <script language="JavaScript" src="biscuits.js"></script>
         <script language="JavaScript" src="cdf.js"></script>
         <script language="JavaScript" src="fractions.js"></script>
         <script language="JavaScript" src="util.js"></script>
@@ -108,7 +123,31 @@
         <script language="JavaScript" src="data.js"></script>
         <script language="JavaScript" src="problems.js"></script>
 
-        <script language="JavaScript">            
+        <script language="JavaScript">
+
+            function loadDefaults()
+            {
+                // load cookies if they exist
+                let default_num_problems = get_cookie('default_num_problems')
+                if (default_num_problems)
+                {
+                    document.getElementById('num_problems').value = n
+                }
+
+                let default_difficulty = get_cookie('default_difficulty')
+                if (default_difficulty) 
+                {
+                    document.getElementById('difficulty').value = d
+                }
+            }
+
+            function saveDefaults()
+            {
+                set_cookie('default_num_problems', document.getElementById('num_problems').value, 365)
+                set_cookie('default_difficulty', document.getElementById('difficulty').value, 365)
+            }
+
+
             function newChild(parent, type, attr)
             {
                 let newElement = document.createElement(type)
@@ -170,6 +209,12 @@
             
             function generate()
             {
+                if (document.getElementById('save_defaults').checked)
+                {
+                    console.log('Saving default values as user selected the checkbox (and allowed us to use cookies to save these two values)')
+                    saveDefaults()
+                }
+
                 let num_problems = parseInt(document.getElementById('num_problems').value)
                 let difficulty = parseInt(document.getElementById('difficulty').value)
 
@@ -222,6 +267,8 @@
                 }
 
             }
+
+            window.onload = loadDefaults()
 
             if (document.getElementById('debug'))
                 generateDebug()
