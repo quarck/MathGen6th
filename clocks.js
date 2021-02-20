@@ -24,14 +24,14 @@
 
 class Digital24hClock
 {
-    constructor(width, height, hr, min) 
+    constructor(height, hr, min) 
     {
-        this.width = width
         this.height = height 
+        this.width = height * 2.5
 
-        this.seg_w = width / 6.6
-        this.seg_w_sp = width / 15
-        this.seg_w_margin = width  / 15 
+        this.seg_w = this.width / 6.6
+        this.seg_w_sp = this.width / 15
+        this.seg_w_margin = this.width  / 15 
 
         this.seg_h = height / 2.5
         this.seg_h_margin = height / 10
@@ -41,20 +41,6 @@ class Digital24hClock
 
         this.hr = hr
         this.min = min 
-        this._stroke = null // means default 
-        this._rectStroke = null
-    }
-
-    stroke(w) 
-    {
-        this._stroke = w 
-        return this
-    }
-
-    rectStroke(w) 
-    {
-        this._rectStroke = w 
-        return this
     }
 
     segment(svg, pos, s)
@@ -207,17 +193,11 @@ class Digital24hClock
 
     render(svg) 
     {
-        if (this._rectStroke)
-        {
-            svg.stroke(0, 0, 0, this._rectStroke)
-        }
+        svg.stroke(0, 0, 0, this.height / 20)
 
         svg.rect(0, 0, this.width, this.height)
 
-        if (this._stroke)
-        {
-            svg.stroke(0, 0, 0, this._stroke)
-        }
+        svg.stroke(0, 0, 0, this.height / 12)
 
         svg.pushFill()
         svg.fill(0, 0, 0)

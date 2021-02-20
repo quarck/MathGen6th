@@ -22,13 +22,16 @@
 
 
 let personNames = [
-    "Elon", 
-    "Nikola", 
-    "Albert", 
-    "Richard", 
-    "Lucy",
-    "Mary", 
-    "Elza"
+    {name: "Jack", pronoun: "he", possessive: "his"}, 
+    {name: "Eoin", pronoun: "he", possessive: "his"}, 
+    {name: "Albert", pronoun: "he", possessive: "his"}, 
+    {name: "Richard", pronoun: "he", possessive: "his"}, 
+    {name: "David", pronoun: "he", possessive: "his"}, 
+    {name: "Lucy", pronoun: "she", possessive: "her"}, 
+    {name: "Mary", pronoun: "she", possessive: "her"}, 
+    {name: "Elza", pronoun: "she", possessive: "her"}, 
+    {name: "Jenny", pronoun: "she", possessive: "her"}, 
+    {name: "Michelle", pronoun: "she", possessive: "her"}, 
 ]
 
 let shapes = [

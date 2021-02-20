@@ -1276,6 +1276,55 @@ var category_percents =
     },
 ]
 
+var category_time = 
+[
+    {
+        name: "Weekly income", 
+        max_count: 1,
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let person = personNames.pickRandom()
+                let hrRate = [20, 30, 50].pickRandom()
+                let startHr = [7, 8, 9, 10].pickRandom()
+                let startMin = randIntRange(0, 12) * 5
+
+                let endHr = [16, 17, 18].pickRandom()
+                let endMin = randIntRange(0, 12) * 5
+
+                let lunchDurationMins = [30, 45, 60].pickRandom()
+                let daysAWeek = [4, 5].pickRandom()
+
+                let startTimeTotalMins = 60 * startHr + startMin 
+                let endTImeTotalMins = 60 * endHr + endMin
+                let workMinutesTotalADay = endTImeTotalMins - startTimeTotalMins - lunchDurationMins
+                
+                let workMinutesTotalAWeek = daysAWeek * workMinutesTotalADay
+
+                if ((workMinutesTotalAWeek * hrRate) % 60 != 0)
+                    continue
+
+                let workHoursAWeek = workMinutesTotalAWeek / 60
+                let weeklyIncome = workHoursAWeek * hrRate 
+                
+                root.innerHTML = person.name + " works " + daysAWeek + " days a week, " + 
+                                person.pronoun  + " starts working at " + 
+                                (new Digital24hClock(20, startHr, startMin)).html + 
+                                ", finishes at " +
+                                (new Digital24hClock(20, endHr, endMin)).html + 
+                                " while having  " + lunchDurationMins + " minutes break in between. " + 
+                                person.name + "'s hourly rate is &#8364;" + hrRate + ". What is " + person.possessive + " weekly income?"
+
+                ansRoot.innerHTML = '&#8364;' + weeklyIncome +
+                                 " (total working hours per day: " +  Math.floor(workMinutesTotalADay / 60) + " hours, " + (workMinutesTotalADay % 60).pad(2) + " minutes"+
+                                 "; per week: " + Math.floor(workMinutesTotalAWeek / 60) + " hours, " + (workMinutesTotalAWeek % 60).pad(2) + " minutes)"
+                break;
+            }
+        },
+    },
+]
+
 // returns hash map, where key is the category name 
 // and value is the list of problems in the category
 function getGeneratorsRaw()
