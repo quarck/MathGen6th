@@ -77,34 +77,39 @@ function randValue()
     return arguments[randInt(arguments.length)]
 }
 
+Array.prototype.pickRandom = function()
+{
+    return this[randInt(this.length)]
+}
+
 function randomName()
 {
     return arguments[randInt(arguments.length)]
 }
 
-function randomUniqSelection(collection, numItems)
+Array.prototype.randomUniqSelection = function(numItems)
 {
-    if (collection.length <= numItems) 
+    if (this.length <= numItems) 
         return null    
     let ret = []
-    let collectionCopy = [...collection]
+    let thisCopy = [...this]
 
     for (let i = 0; i < numItems; ++ i)
     {
-        let pos = randInt(collectionCopy.length)
-        let item = collectionCopy[pos]
-        collectionCopy.splice(pos, 1)        
+        let pos = randInt(thisCopy.length)
+        let item = thisCopy[pos]
+        thisCopy.splice(pos, 1)        
         ret.push(item)
     }
     return ret
 }
 
-function randomNonUniqSelection(collection, numItems)
+Array.prototype.randomNonUniqSelection = function(numItems)
 {
     let ret = []
     for (let i = 0; i < numItems; ++ i)
     {
-        ret.push(collection[randInt(collection.length)])
+        ret.push(this[randInt(this.length)])
     }
     return ret
 }
@@ -113,11 +118,11 @@ function randomNonUniqSelection(collection, numItems)
  * Primes
  */
 
-function isPrime(x)
+Number.prototype.isPrime = function()
 {
-    for (let i = 2; i < x; ++ i)
+    for (let i = 2; i < this; ++ i)
     {
-        if (x % i == 0)
+        if (this % i == 0)
             return false
     }
     return true
@@ -128,7 +133,7 @@ function primesInRange(from, to)
     let ret = []
     for (let i = max(2, from); i<= to; ++ i)
     {
-        if (isPrime(i))
+        if (i.isPrime())
             ret.push(i)
     }
     return ret
@@ -192,21 +197,22 @@ function formatDigits(s)
 }
 
 
-function formatInt(v)
+Number.prototype.formatInt = function()
 {   
-    if (v < 0)
-        return "-" + formatInt(-v)
-    let s = "" + v
+    if (this < 0)
+        return "-" + (-this).formatInt()
+    let s = "" + this
     if (s.includes('.')) 
         return s // failback, should be never used
     return formatDigits(s)
 }
 
-function formatFloat(v, numDigits)
+Number.prototype.formatFixed = function(numDigits) 
 {
-    if (v < 0)
-        return "-" + formatFloat(-v, numDigits)
-    let fs = v.toFixed(numDigits)
+    if (this < 0)
+        return "-" + (-this).formatFixed(numDigits)
+
+    let fs = this.toFixed(numDigits)    
     if (fs.includes('e'))
         return fs
     let s = fs.split('.')
@@ -215,18 +221,30 @@ function formatFloat(v, numDigits)
     return formatDigits(s[0]) + '.' + s[1]
 }
 
-function formatFloatUnlessInt(v, numDigits)
+Number.prototype.formatFlex = function (numDigits)
 {
-    if (v < 0)
-        return "-" + formatFloatUnlessInt(-v, numDigits)
+    if (this < 0)
+        return "-" + (-this).formatFlex(numDigits)
 
-    let fs = v.toFixed(numDigits)
+    let fs = this.toFixed(numDigits)    
+    
     if (fs.includes('e'))
         return fs
+
     let s = fs.split('.')
     if (s.length != 2)
         return formatDigits(fs)
-    if (parseInt(s[1]) == 0)
-        return formatDigits(s[0])
-    return formatDigits(s[0]) + '.' + s[1]
+
+    let integer = s[0]
+    let fract = s[1]
+    
+    while (fract.length > 0 && fract[fract.length-1] == '0') 
+    {
+        fract = fract.substr(0, fract.length-1)
+    }
+
+    if (fract == "")
+        return formatDigits(integer)
+
+    return formatDigits(integer) + '.' + fract
 }

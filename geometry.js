@@ -22,7 +22,7 @@
 
 function randFillColor()
 {
-    return randValue(
+    return [
         'rgb(127,255,255)', 
         'rgb(255,192,255)', 
         'rgb(255,255,64)',  
@@ -32,7 +32,7 @@ function randFillColor()
         'rgb(128,255,192)',
         'rgb(255,192,128)',
         'rgb(255,128,192)'
-    )
+    ].pickRandom()
 }
 
 function svgNGone(w, h, n)

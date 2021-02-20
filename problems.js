@@ -115,14 +115,14 @@ var category_rounding =
         {
             for (;;)
             {
-                let nd = randValue(10, 100, 1000)
+                let nd = [10, 100, 1000].pickRandom()
                 let number = nd * (randInt(200) + 1) + randInt(nd)
         
                 if (number % nd == 0)
                     continue
         
-                let problemHtml = "Round " + formatInt(number) + " to the nearest " + formatInt(nd)
-                let answerHtml = formatInt(Math.round(number / nd) * nd)
+                let problemHtml = "Round " + number.formatInt() + " to the nearest " + nd.formatInt()
+                let answerHtml = (Math.round(number / nd) * nd).formatInt()
         
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
@@ -154,10 +154,10 @@ var category_addsub =
                 let op1 = randValue('+', '-')
                 let op2 = randValue('+', '-')
 
-                let inner1 = generateTableOperationHTML(formatInt(ab1[0]), formatInt(ab1[1]), op1) 
-                let inner2 = generateTableOperationHTML(formatInt(ab2[0]), formatInt(ab2[1]), op2) 
-                let ans1 = formatInt(op1 == '+' ? ab1[0] + ab1[1] : ab1[0] - ab1[1])
-                let ans2 = formatInt(op2 == '+' ? ab2[0] + ab2[1] : ab2[0] - ab2[1])
+                let inner1 = generateTableOperationHTML(ab1[0].formatInt(), ab1[1].formatInt(), op1) 
+                let inner2 = generateTableOperationHTML(ab2[0].formatInt(), ab2[1].formatInt(), op2) 
+                let ans1 = (op1 == '+' ? ab1[0] + ab1[1] : ab1[0] - ab1[1]).formatInt()
+                let ans2 = (op2 == '+' ? ab2[0] + ab2[1] : ab2[0] - ab2[1]).formatInt()
 
                 let problemHtml = "<table><tr> <td valign='top'><i>a.</i></td><td class='sm_v'>" + inner1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + inner2 + "</td> </tr></table>"
                 let answerHtml = "<table><tr> <td valign='top'><i>a.</i></td> <td class='sm_v'>" + ans1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + ans2 + "</td> </tr></table>"
@@ -196,10 +196,10 @@ var category_addsub =
                 let op1 = randValue('+', '-')
                 let op2 = randValue('+', '-')
         
-                let inner1 = generateTableOperationHTML(formatFloat(ab1[0], 1), formatFloat(ab1[1], 1), op1) 
-                let inner2 = generateTableOperationHTML(formatFloat(ab2[0], 1), formatFloat(ab2[1], 1), op2) 
-                let ans1 = formatFloat(op1 == '+' ? ab1[0] + ab1[1] : ab1[0] - ab1[1], 1)
-                let ans2 = formatFloat(op2 == '+' ? ab2[0] + ab2[1] : ab2[0] - ab2[1], 1)
+                let inner1 = generateTableOperationHTML(ab1[0].formatFixed(1), ab1[1].formatFixed(1), op1) 
+                let inner2 = generateTableOperationHTML(ab2[0].formatFixed(1), ab2[1].formatFixed(1), op2) 
+                let ans1 = (op1 == '+' ? ab1[0] + ab1[1] : ab1[0] - ab1[1]).formatFixed(1)
+                let ans2 = (op2 == '+' ? ab2[0] + ab2[1] : ab2[0] - ab2[1]).formatFixed(1)
         
                 let problemHtml = "<table><tr> <td valign='top'><i>a.</i></td><td class='sm_v'>" + inner1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + inner2 + "</td> </tr></table>"
                 let answerHtml = "<table><tr> <td valign='top'><i>a.</i></td> <td class='sm_v'>" + ans1 + "</td> <td valign='top'><i>b.</i></td> <td class='sm_v'>" + ans2 + "</td> </tr></table>"
@@ -389,9 +389,9 @@ var category_evaluations =
                 let c = randIntRange(5, 5 + difficulty)
                 let b = c * randIntRange(2, 10)
 
-                let answer = formatFloat(a * b / c, 1)
+                let answer = (a * b / c).formatFixed(1)
 
-                root.innerHTML = "(" + formatFloat(a, 1) + " &#215; " + b + ") &#247; " + c + " = "
+                root.innerHTML = "(" + a.formatFixed(1) + " &#215; " + b + ") &#247; " + c + " = "
                 ansRoot.innerHTML = answer
                 break;
             }            
@@ -417,7 +417,7 @@ var category_evaluations =
                 if (answer < 0)
                     continue
 
-                root.innerHTML = "(" + formatFloat(a, 1) + " &#215; " + b + ") " + directionSym + " " + c + " = "
+                root.innerHTML = "(" + a.formatFixed(1) + " &#215; " + b + ") " + directionSym + " " + c + " = "
                 ansRoot.innerHTML = answer
                 break;
             }            
@@ -433,24 +433,24 @@ var category_evaluations =
                 {
                     let a = randIntRange(2, 10) / 10
                     let b = randIntRange(2, 10) / 10
-                    let answer = formatFloat(a * b, 2)    
-                    root.innerHTML = formatFloat(a, 1) + " &#215; " + formatFloat(b, 1) + " = "
+                    let answer = (a * b).formatFixed(2)    
+                    root.innerHTML = a.formatFixed(1) + " &#215; " + b.formatFixed(1) + " = "
                     ansRoot.innerHTML = answer
                 }
                 else if (difficulty <= 7)
                 {
                     let a = randIntRange(2, 100) / 100
                     let b = randIntRange(2, 10) / 10
-                    let answer = formatFloat(a * b, 3)
-                    root.innerHTML = formatFloat(a, 2) + " &#215; " + formatFloat(b, 1) + " = "
+                    let answer = (a * b).formatFixed(3)
+                    root.innerHTML = a.formatFixed(2) + " &#215; " + b.formatFixed(1) + " = "
                     ansRoot.innerHTML = answer
                 }
                 else
                 {
                     let a = randIntRange(2, 100) / 100
                     let b = randIntRange(2, 100) / 100
-                    let answer = formatFloat(a * b, 4)
-                    root.innerHTML = formatFloat(a, 2) + " &#215; " + formatFloat(b, 2) + " = "
+                    let answer = (a * b).formatFixed(4)
+                    root.innerHTML = a.formatFixed(2) + " &#215; " + b.formatFixed(2) + " = "
                     ansRoot.innerHTML = answer
                 }
                 break;
@@ -472,12 +472,12 @@ var category_divmul =
                 let a = randIntRange(3, 4*difficulty)
                 let b = randIntRange(10*difficulty, 35*difficulty)
                 let c = a * b                
-                let problemHtml = '<table><tr><td class="div_left">' + formatInt(a) + '</td><td class="div_right">' + formatInt(c) + '</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>'
+                let problemHtml = '<table><tr><td class="div_left">' + a.formatInt() + '</td><td class="div_right">' + c.formatInt() + '</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>'
 
                 for (let i = 0; i < ('' + b).length; ++ i)
                     problemHtml += '<br>'
 
-                let answerHtml = formatInt(b)
+                let answerHtml = b.formatInt()
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
                 break;
@@ -500,8 +500,8 @@ var category_divmul =
                     continue
         
                 let c = a * b
-                let problemHtml = formatInt(b) + " &#247; " + formatInt(a) + " = "
-                let answerHtml = formatFloat(b / a, numDgts)
+                let problemHtml = b.formatInt() + " &#247; " + a.formatInt() + " = "
+                let answerHtml = (b / a).formatFixed(numDgts)
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
                 break;
@@ -544,7 +544,7 @@ var category_divmul =
                 a /= 10.0
         
                 let problemHtml = generateMultiplicationHtml("" + a, "" + b)
-                let answerHtml = formatFloat(a * b, 1)
+                let answerHtml = (a * b).formatFixed(1)
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
                 break;
@@ -565,7 +565,7 @@ var category_divmul =
                 b /= 10.0
         
                 let problemHtml = generateMultiplicationHtml("" + a, "" + b)
-                let answerHtml = formatFloat(a * b, 1)
+                let answerHtml = (a * b).formatFixed(1)
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
                 break;
@@ -1039,11 +1039,11 @@ var category_eqs =
                     continue
         
                 if (randValue(true, false))
-                    root.innerHTML = formatFloatUnlessInt(a, 2) + " + " + name + " = " + formatFloatUnlessInt(b, 2) + ". &nbsp;&nbsp; What is " + name + "?"
+                    root.innerHTML = a.formatFlex(2) + " + " + name + " = " + b.formatFlex(2) + ". &nbsp;&nbsp; What is " + name + "?"
                 else
-                    root.innerHTML = name + " + " + formatFloatUnlessInt(a, 2) + " = " + formatFloatUnlessInt(b, 2) + ". &nbsp;&nbsp; What is " + name + "?"
+                    root.innerHTML = name + " + " + a.formatFlex(2) + " = " + b.formatFlex(2) + ". &nbsp;&nbsp; What is " + name + "?"
         
-                ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b - a, 2)
+                ansRoot.innerHTML = name + " = " + (b - a).formatFlex(2)
                 break;
             }
         }
@@ -1066,8 +1066,11 @@ var category_eqs =
                     continue;
                 if (Math.abs(a) == 1)
                     continue;
-                root.innerHTML = formatFloatUnlessInt(a, 1) + name + " = " + formatFloatUnlessInt(b, 1) + " + " +  formatFloatUnlessInt(c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
-                ansRoot.innerHTML = name + " = " + formatFloatUnlessInt((b + c) / a, 0)
+                if (b == 0 || c == 0)
+                    continue
+
+                root.innerHTML = a.formatFlex(1) + name + " = " + b.formatFlex(1) + " + " +  c.formatFlex(1) + ". &nbsp;&nbsp; What is " + name + "?"
+                ansRoot.innerHTML = name + " = " + ((b + c) / a).formatFlex(0)
                 break;
             }
         },         
@@ -1086,8 +1089,8 @@ var category_eqs =
                     continue;
                 if (Math.abs(a) == 1)
                     continue;
-                root.innerHTML = formatFloatUnlessInt(a, 1) + name + " + " + c + " = " + formatFloatUnlessInt(b + c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
-                ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
+                root.innerHTML = a.formatFlex(1) + name + " + " + c + " = " + (b+c).formatFlex(1) + ". &nbsp;&nbsp; What is " + name + "?"
+                ansRoot.innerHTML = name + " = " + (b / a).formatFlex(0)
                 break;
             }
         },         
@@ -1108,8 +1111,8 @@ var category_eqs =
                     continue;
                 if (b - c < 1)
                     continue
-                root.innerHTML = formatFloatUnlessInt(a, 1) + name + " - " + c + " = " + formatFloatUnlessInt(b - c, 1) + ". &nbsp;&nbsp; What is " + name + "?"
-                ansRoot.innerHTML = name + " = " + formatFloatUnlessInt(b / a, 0)
+                root.innerHTML = a.formatFlex(1) + name + " - " + c + " = " + (b - c).formatFlex(1) + ". &nbsp;&nbsp; What is " + name + "?"
+                ansRoot.innerHTML = name + " = " + (b / a).formatFlex(0)
                 break;
             }
         }
@@ -1151,7 +1154,7 @@ var category_lcmgcd =
             for (;;)
             {
                 let numPrimes = difficulty >= 7 ? 5 : 4
-                let commonPrimes = randomNonUniqSelection(primesInRange(1, difficulty >= 7 ? 20 : 10), numPrimes)
+                let commonPrimes = primesInRange(1, difficulty >= 7 ? 20 : 10).randomNonUniqSelection(numPrimes)
 
                 let numNumbers = randValue(2, 3)
                 let numbers = []
@@ -1160,7 +1163,7 @@ var category_lcmgcd =
 
                 for (let iter = 0; numbers.length < numNumbers && iter < 10; ++ iter)
                 {
-                    let iterPrimes = randomUniqSelection(commonPrimes, randIntRange(1, numPrimes-1))
+                    let iterPrimes = commonPrimes.randomUniqSelection(randIntRange(1, numPrimes-1))
                     let num = iterPrimes.reduce((a, b) => a * b, 1)
                     if (!numbers.includes(num))
                     {
@@ -1203,7 +1206,7 @@ var category_lcmgcd =
             for (;;)
             {
                 let numPrimes = difficulty >= 7 ? 5 : 4
-                let commonPrimes = randomNonUniqSelection(primesInRange(1, difficulty >= 7 ? 20 : 15), numPrimes)
+                let commonPrimes = primesInRange(1, difficulty >= 7 ? 20 : 15).randomNonUniqSelection(numPrimes)
 
                 let numNumbers = randValue(2, 3)
                 let numbers = []
@@ -1212,7 +1215,7 @@ var category_lcmgcd =
 
                 for (let iter = 0; numbers.length < numNumbers && iter < 10; ++ iter)
                 {
-                    let iterPrimes = randomUniqSelection(commonPrimes, numPrimes-2)
+                    let iterPrimes = commonPrimes.randomUniqSelection(numPrimes-2)
                     let num = iterPrimes.reduce((a, b) => a * b, 1)
                     if (!numbers.includes(num))
                     {

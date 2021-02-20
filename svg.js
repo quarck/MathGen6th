@@ -54,17 +54,18 @@ class SVG
 
     randFill()
     {
-        this._fill = randValue(
-            this.rgb(127,255,255), 
-            this.rgb(255,192,255), 
-            this.rgb(255,255,64),  
-            this.rgb(232,168,255), 
-            this.rgb(158,232,255), 
-            this.rgb(192,255,128), 
-            this.rgb(128,255,192),
-            this.rgb(255,192,128),
-            this.rgb(255,128,192)
-        )
+        this._fill = [
+            () => this.rgb(127,255,255), 
+            () => this.rgb(255,192,255), 
+            () => this.rgb(255,255,64),  
+            () => this.rgb(232,168,255), 
+            () => this.rgb(158,232,255), 
+            () => this.rgb(192,255,128), 
+            () => this.rgb(128,255,192),
+            () => this.rgb(255,192,128),
+            () => this.rgb(255,128,192)
+        ].pickRandom()()
+
         return this
     }
 
