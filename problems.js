@@ -694,8 +694,9 @@ var category_fractions =
                                 '<td>' + '&nbsp;=&nbsp;' + '</td>' + 
                                 '<td  class="op_b" bgcolor="#efefef">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>' 
                 
-                let answerHtml = '<table><tr><td>' + ansStr1 +
-                                 '</td><td>&nbsp; or  &nbsp;</td><td>' + ansStr2 + '</td></tr></table>' 
+                let answerHtml = '<table><tr><td>' + ansStr1 + '</td>' + 
+                                 ((ansStr1 != ansStr2) ? '<td>&nbsp; or  &nbsp;</td><td>' + ansStr2 + '</td>' : '') +
+                                  '</tr></table>' 
 
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
