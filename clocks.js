@@ -29,12 +29,12 @@ class Digital24hClock
         this.height = height 
         this.width = height * 2.5
 
-        this.seg_w = this.width / 6.6
-        this.seg_w_sp = this.width / 15
-        this.seg_w_margin = this.width  / 15 
+        this.seg_w = this.width / 7.6
+        this.seg_w_sp = this.width / 14
+        this.seg_w_margin = this.width  / 10
 
-        this.seg_h = height / 2.5
-        this.seg_h_margin = height / 10
+        this.seg_h = height / 3
+        this.seg_h_margin = height / 5
 
         this.seg_sm_w = this.seg_w / 17
         this.seg_sm_h = this.seg_h / 17
@@ -202,7 +202,7 @@ class Digital24hClock
         svg.pushFill()
         svg.fill(0, 0, 0)
 
-        let rv =this.width / 128
+        let rv =this.width / 192
 
         svg.rect(this.width / 2 - rv, this.height / 2 - rv - this.seg_h/3, 2*rv, 2*rv)
         svg.rect(this.width / 2 - rv, this.height / 2 - rv + this.seg_h/3, 2*rv, 2*rv)
