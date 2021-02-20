@@ -193,7 +193,7 @@ class Digital24hClock
 
     render(svg) 
     {
-        svg.stroke(0, 0, 0, this.height / 20)
+        svg.stroke(0, 0, 0, this.height / 30)
 
         svg.rect(0, 0, this.width, this.height)
 
