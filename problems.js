@@ -886,8 +886,8 @@ var category_trianglesAndAngles =
                 svg.arc(75, 75, 30, fa1, fa2)
                 svg.arc(75, 75, 15, fa2, fa3)
 
-                svg.text(l1pos.x, l1pos.y, a1)
-                svg.text(l2pos.x, l2pos.y, a2)
+                svg.text(l1pos.x, l1pos.y, a1 + "&deg;")
+                svg.text(l2pos.x, l2pos.y, a2+ "&deg;")
                 svg.text(l3pos.x, l3pos.y, '?')                
 
                 let line = "<table><tr><td>Find the value of unknown angle:</td><td class='op_b' bgcolor='#efefef'>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>"
@@ -1136,6 +1136,11 @@ var category_primes =
                 let primes = primesInRange(from, to)
                 if (primes.length == 0)
                     continue
+                if (primes.length == 2 && primes[0] == from && primes[1] == to) 
+                {
+                    from -= 1
+                    to += 1
+                }
 
                 root.innerHTML = "Make a list of prime numbers between " + from + " and " + to
                 ansRoot.innerHTML = primes.map(x => '' + x).reduce((a, x) => a + ' ' + x)
@@ -1287,7 +1292,7 @@ var category_time =
             for (;;)
             {
                 let person = personNames.pickRandom()
-                let hrRate = [20, 30, 50].pickRandom()
+                let hrRate = [20, 25, 30, 35, 40].pickRandom()
                 let startHr = [7, 8, 9, 10].pickRandom()
                 let startMin = randIntRange(0, 12) * 5
 
@@ -1300,10 +1305,11 @@ var category_time =
                 let startTimeTotalMins = 60 * startHr + startMin 
                 let endTImeTotalMins = 60 * endHr + endMin
                 let workMinutesTotalADay = endTImeTotalMins - startTimeTotalMins - lunchDurationMins
-                
+
+
                 let workMinutesTotalAWeek = daysAWeek * workMinutesTotalADay
 
-                if ((workMinutesTotalAWeek * hrRate) % 60 != 0)
+                if ((workMinutesTotalAWeek * hrRate) % 60 != 0) 
                     continue
 
                 let workHoursAWeek = workMinutesTotalAWeek / 60
