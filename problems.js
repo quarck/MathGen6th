@@ -861,6 +861,34 @@ var category_fractions =
             }
         },         
     },
+
+    {
+        name: "Fraction - simplify", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let denom1 = randIntRange(2, 10 + 2*difficulty)
+                let nom1 = randIntRange(1, denom1)
+                let num = randIntRange(2, 10)
+
+                if (nom1 % denom1  == 0)
+                    continue
+
+                let fraction1 = new Fraction(nom1 * num, denom1 * num)
+
+
+                root.innerHTML = '<table><tr>' +
+                        '<td>Simplify: &nbsp;&nbsp;</td>' + 
+                        '<td>' + fraction1.asImproperFractionHtmlTable + '</td>' + 
+                        '<td>&nbsp;= </td>'
+                        '</tr></table>' 
+
+                ansRoot.innerHTML =  fraction1.simplify().asImproperFractionHtmlTable
+                break;
+            }
+        },         
+    },
 ]
 
 
