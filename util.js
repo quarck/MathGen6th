@@ -258,3 +258,8 @@ Number.prototype.pad = function(size)
     }
     return s;
 }
+
+Number.prototype.toInt = function() 
+{
+    return this | 0
+}

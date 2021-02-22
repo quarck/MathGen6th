@@ -210,6 +210,7 @@ var category_addsub =
             }
         },         
     },
+
 ]
 
 var category_evaluations = 
@@ -662,6 +663,12 @@ var category_fractions =
                 if (f1.denom == f2.denom)
                     continue
 
+                if (f1.denom == 1)
+                    continue
+                if (f2.denom == 1)
+                    continue
+
+
                 if (difficulty < 5)
                 {
                     if (lcm(f1.denom, f2.denom) >= 16)
@@ -717,9 +724,12 @@ var category_fractions =
                 if (nom % denom == 0)
                     continue
 
-                let fraction = new Fraction(nom, denom)
+                let fraction = new Fraction(nom, denom).simplify()
                 let mixed = fraction.asMixedNumberHtmlTable
                 let improper = fraction.asImproperFractionHtmlTable
+
+                if (fraction.denom == 1)
+                    continue
 
                 let problemHtml = ""
                 let answerHtml = ""
@@ -739,6 +749,114 @@ var category_fractions =
 
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+
+    {
+        name: "Fraction - compare", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let denom1 = randIntRange(2, 10 + 2*difficulty)
+                let nom1 = randIntRange(1, denom1)
+
+                let denom2 = randIntRange(2, 10 + 2*difficulty)
+                let nom2 = randIntRange(1, denom2)
+                
+                let fraction1 = new Fraction(nom1, denom1).simplify()
+                let fraction2 = new Fraction(nom2, denom2).simplify()
+                if (fraction1.denom == 1)
+                    continue
+                if (fraction2.denom == 1)
+                    continue
+
+                if (fraction1.nom == fraction2.nom)
+                    continue
+                if (fraction1.denom == fraction2.denom)
+                    continue
+                    
+                let direction = randValue('>', '<')
+
+                root.innerHTML = '<table><tr>' +
+                        '<td>' + fraction1.asImproperFractionHtmlTable + '</td>' + 
+                        '<td>&nbsp;' + direction + '&nbsp;</td>' + 
+                        '<td>' + fraction2.asImproperFractionHtmlTable + '</td>' + 
+                        '<td>&nbsp;&nbsp;&nbsp; true or false ? (circle)</td>'
+                        '</tr></table>' 
+                ansRoot.innerHTML = (direction == '>' ? (fraction1.asDecimal > fraction2.asDecimal ) : (fraction1.asDecimal < fraction2.asDecimal ) ) ? 'true' : 'false'
+                break;
+            }
+        },         
+    },
+
+    {
+        name: "Fraction - multiply", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let denom1 = randIntRange(2, 10 + 2*difficulty)
+                let nom1 = randIntRange(1, 3*denom1)
+
+                let denom2 = randIntRange(2, 10 + 2*difficulty)
+                let nom2 = randIntRange(1, 3*denom2)
+                
+                let fraction1 = new Fraction(nom1, denom1).simplify()
+                let fraction2 = new Fraction(nom2, denom2).simplify()
+
+                if (fraction1.denom == 1)
+                    continue
+                if (fraction2.denom == 1)
+                    continue
+
+
+                root.innerHTML = '<table><tr>' +
+                        '<td>' + fraction1.asImproperFractionHtmlTable + '</td>' + 
+                        '<td>&nbsp;&times;&nbsp;</td>' + 
+                        '<td>' + fraction2.asImproperFractionHtmlTable + '</td>' + 
+                        '<td>&nbsp;= </td>'
+                        '</tr></table>' 
+                let ansValue = fraction1.multiply(fraction2)
+
+                ansRoot.innerHTML =  ansValue.simplify().asImproperFractionHtmlTable
+                break;
+            }
+        },         
+    },
+
+    {
+        name: "Fraction - divide", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let denom1 = randIntRange(2, 10 + 2*difficulty)
+                let nom1 = randIntRange(1, 3*denom1)
+
+                let denom2 = randIntRange(2, 10 + 2*difficulty)
+                let nom2 = randIntRange(1, 3*denom2)
+                
+                let fraction1 = new Fraction(nom1, denom1).simplify()
+                let fraction2 = new Fraction(nom2, denom2).simplify()
+
+                if (fraction1.denom == 1)
+                    continue
+                if (fraction2.denom == 1)
+                    continue
+
+
+                root.innerHTML = '<table><tr>' +
+                        '<td>' + fraction1.asImproperFractionHtmlTable + '</td>' + 
+                        '<td>&nbsp;&#247;&nbsp;</td>' + 
+                        '<td>' + fraction2.asImproperFractionHtmlTable + '</td>' + 
+                        '<td>&nbsp;= </td>'
+                        '</tr></table>' 
+                let ansValue = fraction1.divide(fraction2)
+
+                ansRoot.innerHTML =  ansValue.simplify().asImproperFractionHtmlTable
                 break;
             }
         },         
@@ -831,7 +949,7 @@ var category_trianglesAndAngles =
                     break;
                 default:
                     probSvg = svgRightTriangleWithMark(200, 200, 160, 110)
-                    answer = 'right triangle'
+                    answer = 'right angle triangle'
                     break;
                 }
                 
