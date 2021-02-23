@@ -99,3 +99,9 @@ td.div_right {
     padding: 5px; 
     font-family: 'Courier New', Courier, monospace;
 }
+
+@media print {
+    .print_button {        
+        display: none;
+    }
+}
