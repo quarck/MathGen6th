@@ -812,6 +812,12 @@ var category_fractions =
                 if (fraction2.denom == 1)
                     continue
 
+                if (gcd(fraction1.denom, fraction2.nom) == 1 && gcd(fraction1.nom, fraction2.denom) == 1) // at least something has to be common
+                    continue
+
+                if (fraction1.denom == fraction2.nom || fraction2.denom == fraction1.nom) // too simple 
+                    continue
+
 
                 root.innerHTML = '<table><tr>' +
                         '<td>' + fraction1.asImproperFractionHtmlTable + '</td>' + 
@@ -845,6 +851,12 @@ var category_fractions =
                 if (fraction1.denom == 1)
                     continue
                 if (fraction2.denom == 1)
+                    continue
+
+                if (gcd(fraction1.denom, fraction2.denom) == 1 && gcd(fraction1.nom, fraction2.nom) == 1) // at least something has to be common
+                    continue
+
+                if (fraction1.denom == fraction2.denom || fraction2.nom == fraction1.nom) // too simple 
                     continue
 
 
