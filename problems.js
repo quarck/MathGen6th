@@ -1546,6 +1546,7 @@ var category_probability =
 [
     {
         name: "Bag picking prob", 
+        max_count: 1,
         fun: function (root, ansRoot, difficulty)
         {
             let items = 
