@@ -1629,7 +1629,7 @@ var category_time =
                                 " while having  " + lunchDurationMins + " minutes break in between. " + 
                                 person.name + "'s hourly rate is &#8364;" + hrRate + ". What is " + person.possessive + " weekly income?"
 
-                ansRoot.innerHTML = '&#8364;' + weeklyIncome +
+                ansRoot.innerHTML = '&#8364;' + weeklyIncome.formatFlex(4) +
                                  " (total working hours per day: " +  Math.floor(workMinutesTotalADay / 60) + " hours, " + (workMinutesTotalADay % 60).pad(2) + " minutes"+
                                  "; per week: " + Math.floor(workMinutesTotalAWeek / 60) + " hours, " + (workMinutesTotalAWeek % 60).pad(2) + " minutes)"
                 break;
