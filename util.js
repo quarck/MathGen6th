@@ -293,3 +293,10 @@ String.prototype.indefiniteArticle = function()
         return 'an'
     return 'a'
 }
+
+Number.prototype.pluralSuffix = function()
+{
+    if (this == 1)
+        return ''
+    return 's'
+}

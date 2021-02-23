@@ -1553,17 +1553,21 @@ var category_probability =
             [
                 ['orange', 'apple', 'pear'],
                 ['red ball', 'green ball', 'blue ball'],
-                ['physics book', 'english book', 'scifi book'],
+                ['science book', 'english book', 'scifi book'],
+                ['yellow sweet', 'green sweet', 'orange sweet'],
+                ['blue card', 'green card', 'black card'],
             ]
 
             for (;;)
             {
                 let kind = items.pickRandom()
-                let n = [randIntRange(2, 7), randIntRange(2, 7), randIntRange(2, 7)]
+                let n = [randIntRange(1, 1 + 5 * difficulty), randIntRange(1, 1 + 5 * difficulty), randIntRange(1, 1 + 5 * difficulty)]
                 let i = randIntRange(0, 3)
                 
 
-                root.innerHTML = "In the bag of " + n[0] + " " + kind[0] + "s, " + n[1] + " " + kind[1] + "s and " + n[2] + " " + kind[2] + "s, " + 
+                root.innerHTML = "In the bag of " + n[0] + " " + kind[0] + n[0].pluralSuffix() + ", " +
+                                                    n[1] + " " + kind[1] + n[1].pluralSuffix() + " and " + 
+                                                    n[2] + " " + kind[2] + n[2].pluralSuffix() + ", " + 
                                 "what is the chance of picking " + kind[i].indefiniteArticle() + " " + kind[i] + "?<br><br>_______ in _______"
                 let nom = n[i]
                 let denom = n[0] + n[1] + n[2]
