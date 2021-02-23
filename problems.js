@@ -818,16 +818,29 @@ var category_fractions =
                 if (fraction1.denom == fraction2.nom || fraction2.denom == fraction1.nom) // too simple 
                     continue
 
-
                 root.innerHTML = '<table><tr>' +
                         '<td>' + fraction1.asImproperFractionHtmlTable + '</td>' + 
                         '<td>&nbsp;&times;&nbsp;</td>' + 
                         '<td>' + fraction2.asImproperFractionHtmlTable + '</td>' + 
                         '<td>&nbsp;= </td>'
                         '</tr></table>' 
-                let ansValue = fraction1.multiply(fraction2)
+                let ansValue = fraction1.multiply(fraction2).simplify()
 
-                ansRoot.innerHTML =  ansValue.simplify().asImproperFractionHtmlTable
+                if (ansValue.denom == 1)
+                    continue
+
+                if (ansValue.nom > ansValue.denom)
+                {
+                    ansRoot.innerHTML = '<table><tr>' +
+                            '<td>' + ansValue.asImproperFractionHtmlTable + '</td>' + 
+                            '<td>&nbsp; or &nbsp;</td>' + 
+                            '<td>' + ansValue.asMixedNumberHtmlTable + '</td>' + 
+                            '</tr></table>' 
+                }
+                else 
+                {
+                    ansRoot.innerHTML =  ansValue.asImproperFractionHtmlTable
+                }
                 break;
             }
         },         
@@ -866,9 +879,22 @@ var category_fractions =
                         '<td>' + fraction2.asImproperFractionHtmlTable + '</td>' + 
                         '<td>&nbsp;= </td>'
                         '</tr></table>' 
-                let ansValue = fraction1.divide(fraction2)
+                let ansValue = fraction1.divide(fraction2).simplify()
+                if (ansValue.denom == 1)
+                    continue
 
-                ansRoot.innerHTML =  ansValue.simplify().asImproperFractionHtmlTable
+                if (ansValue.nom > ansValue.denom)
+                {
+                    ansRoot.innerHTML = '<table><tr>' +
+                        '<td>' + ansValue.asImproperFractionHtmlTable + '</td>' + 
+                        '<td>&nbsp; or &nbsp;</td>' + 
+                        '<td>' + ansValue.asMixedNumberHtmlTable + '</td>' + 
+                        '</tr></table>' 
+                }
+                else 
+                {
+                    ansRoot.innerHTML =  ansValue.asImproperFractionHtmlTable
+                }
                 break;
             }
         },         
