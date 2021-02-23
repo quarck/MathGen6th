@@ -1306,7 +1306,7 @@ var category_eqs =
 
 ]
 
-var category_primes = 
+var category_number_properties = 
 [
     {
         name: "Primes in range",         
@@ -1315,26 +1315,75 @@ var category_primes =
         {
             for (;;)
             {
-                let from = randIntRange(1, 90)
+                let from = randIntRange(2, 90)
                 let to = from + 5 + difficulty
-                let primes = primesInRange(from, to)
+                let primes = range(from, to+1).filter(x => x.isPrime())
                 if (primes.length == 0)
                     continue
-                if (primes.length == 2 && primes[0] == from && primes[1] == to) 
-                {
-                    from -= 1
-                    to += 1
-                }
 
-                root.innerHTML = "Make a list of prime numbers between " + from + " and " + to
+                if (primes[0] == from)
+                    from -= 1
+                if (primes[primes.length-1] == to)
+                    to += 1
+
+                root.innerHTML = "Make a list of prime numbers between " + from + " and " + to 
                 ansRoot.innerHTML = primes.map(x => '' + x).reduce((a, x) => a + ' ' + x)
+                break;
+            }
+        },         
+    },
+    {
+        name: "Squares in range",         
+        max_count: 1,
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let from = randIntRange(1, 65)
+                let to = from + 5 + difficulty*Math.sqrt(from).toInt()
+                let squares = range(from, to+1).filter(x => x.isSquare())
+                if (squares.length == 0)
+                    continue
+                if (squares[0] == from)
+                    from -= 1
+                if (squares[squares.length-1] == to)
+                    to += 1
+
+                root.innerHTML = "What are the square numbers between " + from + " and " + to
+                ansRoot.innerHTML = squares.map(x => '' + x).reduce((a, x) => a + ' ' + x)
+                break;
+            }
+        },         
+    },
+    {
+        name: "Composites in range",         
+        max_count: 1,
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let numPrimes = (difficulty >= 9) ? 4 : (difficulty > 5 ? 3 : 2)
+                let manyPrimes = range(10, 100).filter(x => x.isPrime())
+                let aMix = manyPrimes.randomUniqSelection(numPrimes)
+                let someLikelyNotPrimes = (aMix.map(x => x + 2)).concat(aMix.map(x => x - 2))
+                aMix = aMix.concat(someLikelyNotPrimes)
+
+                let composites = aMix.filter(x => !x.isPrime())
+
+                if (composites.length == 0)
+                    continue
+                if (composites.length == aMix.length) // all primes?? 
+                    continue 
+
+                root.innerHTML = "Circle the composite numbers in the list: <br>" + aMix.sort().join(' ') 
+                ansRoot.innerHTML = composites.sort().join(' ')
                 break;
             }
         },         
     },
 ]
 
-var category_lcmgcd = 
+var category_factors = 
 [
     {
         name: "LCM",         
@@ -1430,6 +1479,33 @@ var category_lcmgcd =
             }
         },         
     },
+    {
+        name: "List factors of N",         
+        max_count: 1,
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let n = randIntRange(10, 20*difficulty)
+                
+                let factors = []
+                for (let i = 2; i < n; ++ i)
+                {
+                    if (n % i == 0)
+                        factors.push(i)
+                }
+
+                if (factors.length < 3) 
+                    continue
+                if (factors.length > 8)
+                    continue
+
+                root.innerHTML = "List the factors of " + n + "&nbsp;:<br>"
+                ansRoot.innerHTML = factors.join(' ')
+                break;
+            }
+        }, 
+    },
 ]
 
 var category_percents = 
@@ -1465,6 +1541,47 @@ var category_percents =
         },         
     },
 ]
+
+var category_probability = 
+[
+    {
+        name: "Bag picking prob", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            let items = 
+            [
+                ['orange', 'apple', 'pear'],
+                ['red ball', 'green ball', 'blue ball'],
+                ['physics book', 'english book', 'scifi book'],
+            ]
+
+            for (;;)
+            {
+                let kind = items.pickRandom()
+                let n = [randIntRange(2, 7), randIntRange(2, 7), randIntRange(2, 7)]
+                let i = randIntRange(0, 3)
+                
+
+                root.innerHTML = "In the bag of " + n[0] + " " + kind[0] + "s, " + n[1] + " " + kind[1] + "s and " + n[2] + " " + kind[2] + "s, " + 
+                                "what is the chance of picking " + kind[i].indefiniteArticle() + " " + kind[i] + "?<br><br>_______ in _______"
+                let nom = n[i]
+                let denom = n[0] + n[1] + n[2]
+                let g = gcd(nom, denom)
+                if (g == 1)
+                {
+                    ansRoot.innerHTML = nom + " in " + denom
+                }
+                else 
+                {
+                    ansRoot.innerHTML = nom + " in " + denom + " &nbsp; or &nbsp; " + (nom / g).toInt() + " in " + (denom / g).toInt()
+                }
+                break;
+            }
+        },
+    },
+]
+
+
 
 var category_time = 
 [

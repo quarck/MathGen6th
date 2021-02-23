@@ -120,12 +120,33 @@ Array.prototype.randomNonUniqSelection = function(numItems)
 
 Number.prototype.isPrime = function()
 {
+    if (this <= 1)
+        return false
     for (let i = 2; i < this; ++ i)
     {
         if (this % i == 0)
             return false
     }
     return true
+}
+
+Number.prototype.isSquare = function()
+{
+    let sqrt = Math.sqrt(this).toInt()
+    return sqrt * sqrt == this
+}
+
+
+function range(from, to, step)
+{
+    let ret = []
+    if (!step)
+        step = 1
+    for (let i = from; i< to; i += step)
+    {
+        ret.push(i)
+    }
+    return ret
 }
 
 function primesInRange(from, to)
@@ -262,4 +283,13 @@ Number.prototype.pad = function(size)
 Number.prototype.toInt = function() 
 {
     return this | 0
+}
+
+String.prototype.indefiniteArticle = function()
+{
+    if (this.length == 0)
+        return ''
+    if (this[0] == 'a' || this[0] == 'e' || this[0] == 'i' || this[0] == 'o' || this[0] == 'a')
+        return 'an'
+    return 'a'
 }
