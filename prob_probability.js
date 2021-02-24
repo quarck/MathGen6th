@@ -46,7 +46,7 @@ var category_probability =
                 root.innerHTML = "In the bag of " + n[0] + " " + kind[0] + n[0].pluralSuffix() + ", " +
                                                     n[1] + " " + kind[1] + n[1].pluralSuffix() + " and " + 
                                                     n[2] + " " + kind[2] + n[2].pluralSuffix() + ", " + 
-                                "what is the chance of picking " + kind[i].indefiniteArticle() + " " + kind[i] + "?<br><br>_______ in _______"
+                                "what is the chance of picking " + kind[i].indefiniteArticle() + " " + kind[i] + "?<br><br><br>_______ in _______"
                 let nom = n[i]
                 let denom = n[0] + n[1] + n[2]
                 let g = gcd(nom, denom)
