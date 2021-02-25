@@ -78,21 +78,21 @@ var category_number_properties =
         {
             for (;;)
             {
-                let numPrimes = (difficulty >= 9) ? 4 : (difficulty > 5 ? 3 : 2)
+                let numPrimes = (difficulty > 5 ? 3 : 2)
                 let manyPrimes = range(10, 100).filter(x => x.isPrime())
                 let aMix = manyPrimes.randomUniqSelection(numPrimes)
-                let someLikelyNotPrimes = (aMix.map(x => x + 2)).concat(aMix.map(x => x - 2))
-                aMix = aMix.concat(someLikelyNotPrimes)
+                let someLikelyNotPrimes = (aMix.map(x => x + 2*randIntRange(1,5))).concat(aMix.map(x => x + 2*randIntRange(5,10)))
+                aMix = aMix.concat(someLikelyNotPrimes).sorted().uniq()
 
                 let composites = aMix.filter(x => !x.isPrime())
 
-                if (composites.length == 0)
+                if (composites.length <= 1)
                     continue
-                if (composites.length == aMix.length) // all primes?? 
+                if (composites.length == aMix.length)
                     continue 
 
-                root.innerHTML = "Circle the composite numbers in the list: <br>" + aMix.sort().join(' ') 
-                ansRoot.innerHTML = composites.sort().join(' ')
+                root.innerHTML = "Circle the composite numbers in the list: <br>" + aMix.sort().join(',&nbsp; ') 
+                ansRoot.innerHTML = composites.sort().join(',&nbsp; ')
                 break;
             }
         },         

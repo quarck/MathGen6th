@@ -300,3 +300,25 @@ Number.prototype.pluralSuffix = function()
         return ''
     return 's'
 }
+
+Array.prototype.sorted = function(compare)
+{
+    let copy = [...this]
+    copy.sort(compare)
+    return copy
+}
+
+Array.prototype.uniq = function()
+{
+    let ret = []
+
+    for (let item of this)
+    {
+        if (ret.length === 0 || item !== ret[ret.length-1])
+        {
+            ret.push(item)
+        }
+    }
+
+    return ret
+}
