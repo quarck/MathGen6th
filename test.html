@@ -40,11 +40,17 @@
 
     //svgs += svgArc(200, 200, 100, 100, 90, 0, 90)
 
-    for (let w = 20; w < 1000; w *= 1.2)
-    {
-        let c = new Digital24hClock(w, 23, 55)
-        document.getElementById("root").innerHTML += c.html 
-    }
+    let svg = new SVG(200, 200)
+
+    svg.polygon(
+        [
+            { x: 30, y: 30, label: '10cm', ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
+            { x: 120, y: 30, label: '3cm', lx: 10, anchor: 'start', tx: 2}, 
+            { x: 120, y: 120}, 
+            { x: 30, y: 120, label: '?', lx: -10, anchor: 'end', tx: -2}, 
+        ])
+
+    document.getElementById("root").innerHTML += svg.html 
 
 </script>
 

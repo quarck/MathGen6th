@@ -36,6 +36,7 @@ class SVG
         this._fontSize = 15
         this._fontFace = 'sans-serif'
         this._fontStack = []
+        this._markers = {}
         this.randFill()
     }
 
@@ -130,9 +131,19 @@ class SVG
     // without 'fill' attribute
     lineStyle(extra) { return 'stroke-width:' + this._strokeWidth + ';stroke:' + this._stroke  + ';' + (extra ? extra : '') }
 
+    _defs_html()
+    {
+        let keys = Object.keys(this._markers)
+        if (keys.length == 0)
+            return ''
+
+        return '<defs>' +  Object.values(this._markers).join('') + '</defs>'
+    }
+
     get html()
     {
         return '<svg width="' + this._width + '" height="' + this._height + '">' + 
+            this._defs_html() + 
             this._items.join('') + 
             'Sorry, your browser does not support inline SVG. ' + 
         '</svg>'    
@@ -146,6 +157,34 @@ class SVG
                 .join(' ')
         return '<' + tag + ' ' + attrsHtml + ' />'
     }
+
+    mk_arrow(id, w, h) 
+    {
+        if (w == null)
+            w = 10
+        if (h == null)
+            h = 10
+        
+        this._markers[id] =
+        '<marker id="' + id + '" viewBox="0 0 ' + w + ' ' + h + '" refX="' + (w/2) +'" refY="' + (h/2) + '"' + 
+                'markerWidth="' + (w/2*1.1) + '" markerHeight="' + (h/2*1.1) + '"' + 
+                'orient="auto-start-reverse">' + 
+            '<path d="M 0 0 L ' + w + ' ' + (h/2) + ' L 0 ' + h + ' z" />' + 
+        '</marker>'
+    }
+
+    mk_dot(id, color, r)
+    {
+        if (r == null)
+            r = 5
+        this._markers[id] = 
+            '<marker id="' + id + '" viewBox="0 0 ' + (2*r) + ' ' + (2*r) + '" refX="' + r + '" refY="' + r + '"' + 
+                    'markerWidth="' + r + '" markerHeight="' + r + '">' + 
+                '<circle cx="' + r + '" cy="' + r + '" r="' + r + '" fill="'  + color + '" />' + 
+            '</marker>'
+    }
+
+
 
     rect(x, y, width, height)
     {
@@ -202,6 +241,52 @@ class SVG
         return this
     }
 
+    // items: an array of objects, each containing: 
+    // .x, .y - point, start of the segment, it spans until the next point, or until #0 for the last point
+    // .label - text measurement label for the segment 
+    // .lx, .ly: offset of measurement line 
+    // .anchor - text anchor, start, middle, end
+    // .tx, .ty - text offset relation to the centre of measurement lin e
+    polygon(items)
+    {
+        this.mk_arrow('arrow4px', 8, 8)
+
+        let points = items.map(item => '' + item.x + ',' + item.y).join(' ')
+
+        this._items.push(
+            this.tagWithAttrs(
+                'polygon',
+                {
+                    points: points, 
+                    style: this.style('fill-rule:nonzero;')
+                })
+        )
+
+        this.pushStroke()
+        this.stroke(0, 0, 0, 1)
+
+        for (let idx = 0; idx < items.length; ++ idx)
+        {
+            let item = items[idx]
+            let next = items[(idx + 1) % items.length]
+            if (item.label)
+            {
+                let lx = item['lx'] ? item.lx : 0
+                let ly = item['ly'] ? item.ly : 0
+                let tx = item['tx'] ? item.tx : 0
+                let ty = item['ty'] ? item.ty : 0
+                                
+                this.line(item.x + lx, item.y + ly, next.x + lx, next.y + ly, "url(#arrow4px)", "url(#arrow4px)")                
+
+                this.text((item.x + next.x)/2 + lx + tx, (item.y + next.y)/2 + ly  + ty, item.label, item['anchor'])
+            }
+        }
+
+        this.popStroke()
+
+        return this
+    }
+
     triangleImpl(x, y, w, h, a, b, c)
     {
         if (a <= 0 || b <= 0 || c <= 0 ||
@@ -254,27 +339,53 @@ class SVG
         return this
     }
 
-    line(x1, y1, x2, y2)
+    line(x1, y1, x2, y2, marker_start, marker_end)
     {
-        this._items.push(
-            this.tagWithAttrs(
-                'line',
-                {
-                    x1: x1, 
-                    y1: y1, 
-                    x2: x2, 
-                    y2: y2, 
-                    style: this.lineStyle()
-                })
-        )
+        let attrs = {
+            x1: x1, 
+            y1: y1, 
+            x2: x2, 
+            y2: y2, 
+            style: this.lineStyle()
+        }
+
+        if (marker_start) 
+            attrs['marker-start'] = marker_start
+
+        if (marker_end) 
+            attrs['marker-end'] = marker_end
+
+        this._items.push(this.tagWithAttrs( 'line', attrs))
         return this
     }
 
-    text(x, y, text)
+    // points - array of {x: , y: } objects
+    polyline(points, marker_start, marker_end)
+    {        
+        let attrs = {
+            points: points.map(p => '' + p.x + ',' + p.y).join(' '),
+            fill: "none",
+            style: this.lineStyle()
+        }
+
+        if (marker_start) 
+            attrs['marker-start'] = marker_start
+
+        if (marker_end) 
+            attrs['marker-end'] = marker_end
+
+        this._items.push( this.tagWithAttrs( 'polyline', attrs))
+        return this
+    }
+
+    text(x, y, text, anchor)
     {
+        if (!anchor)
+            anchor = 'middle'
+
         this._items.push(
             '<g font-size="' + this._fontSize + '" font-family="' + this._fontFace +
-             '" fill="black" stroke="none" text-anchor="middle"><text x="' + x + '" y="' + y + '">' + text + '</text></g>'
+             '" fill="black" stroke="none" text-anchor="' + anchor + '"><text x="' + x + '" y="' + y + '">' + text + '</text></g>'
         )
         return this
     }
