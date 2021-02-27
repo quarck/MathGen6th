@@ -93,7 +93,7 @@ var category_units_conv =
                             if (useWords)
                                 root.innerHTML = "<table><tr><td>Write </td><td>" + src_val.asMixedNumberHtmlTable + "</td><td>&nbsp;" + from.code + " as " + to.name + ". ___________" + to.code + "</td></tr></table>"
                             else
-                                root.innerHTML = "<table><tr><td>Write </td><td>" + src_val.asMixedNumberHtmlTable + "</td><td>&nbsp;" + from.code + "&nbsp; = &nbsp;___________&nbsp;" + to.code + "</td></tr></table>"
+                                root.innerHTML = "<table><tr><td>" + src_val.asMixedNumberHtmlTable + "</td><td>&nbsp;" + from.code + "&nbsp; = &nbsp;___________&nbsp;" + to.code + "</td></tr></table>"
                             break;
                         }
                     }
