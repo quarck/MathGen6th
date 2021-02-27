@@ -100,11 +100,12 @@ let unit_conv_pairs = [
     {f: units.non_metric_area.hectare, t: units.non_metric_area.are }, 
     {f: units.non_metric_area.are, t: units.non_metric_area.hectare }, 
 
-    {f: units.non_metric_area.are, t: units.area.m2, min_difficulty: 10 }, 
+    {f: units.non_metric_area.are, t: units.area.m2}, 
+    {t: units.non_metric_area.are, f: units.area.m2}, 
+
     {f: units.non_metric_area.are, t: units.area.km2, min_difficulty: 10 }, 
     {f: units.non_metric_area.hectare, t: units.area.m2, min_difficulty: 10 }, 
     {f: units.non_metric_area.hectare, t: units.area.km2, min_difficulty: 10 }, 
-    {t: units.non_metric_area.are, f: units.area.m2, min_difficulty: 10 }, 
     {t: units.non_metric_area.are, f: units.area.km2, min_difficulty: 10 }, 
     {t: units.non_metric_area.hectare, f: units.area.m2, min_difficulty: 10 }, 
     {t: units.non_metric_area.hectare, f: units.area.km2, min_difficulty: 10 }, 
