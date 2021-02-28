@@ -43,17 +43,45 @@
 
     //svgs += svgArc(200, 200, 100, 100, 90, 0, 90)
 
-    let svg = new SVG(200, 200)
 
-    svg.polygon(
-        [
-            { x: 30, y: 30, label: '10cm', ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
-            { x: 120, y: 30, label: '3cm', lx: 10, anchor: 'start', tx: 2}, 
-            { x: 120, y: 120}, 
-            { x: 30, y: 120, label: '?', lx: -10, anchor: 'end', tx: -2}, 
-        ])
+    {
+        let svg = new SVG(200, 200)
+        svg.squareWithLabels(30, 30, 90, 40, 'x', 'y')
 
-    document.getElementById("root").innerHTML += svg.html 
+        document.getElementById("root").innerHTML += svg.html 
+    }
+
+    document.getElementById("root").innerHTML += '<br>'
+    {
+        let svg = new SVG(200, 200)
+        svg.squareWithLeftCutAndLabels(30, 30, 130, 100, 20, 30, 'w', 'h', 'cw', 'ch')
+
+        document.getElementById("root").innerHTML += svg.html 
+    }
+
+    document.getElementById("root").innerHTML += '<br>'
+    {
+        let svg = new SVG(200, 200)
+        svg.squareWithRightCutAndLabels(30, 30, 130, 100, 20, 30, 'w', 'h', 'cw', 'ch')
+
+        document.getElementById("root").innerHTML += svg.html 
+    }
+
+    document.getElementById("root").innerHTML += '<br>'
+    {
+        let svg = new SVG(200, 200)
+        svg.squareWithLeftAndRightCutsAndLabels(30, 30, 130, 100,  20, 30, 30, 20, 'w', 'h', 'cwl', 'chl', 'cwr', 'chr')
+
+        document.getElementById("root").innerHTML += svg.html 
+    }
+
+    document.getElementById("root").innerHTML += '<br>'
+    {
+        let svg = new SVG(200, 200)
+        svg.squareWithLeftAndRightTopCutsAndLabels(30, 30, 130, 100,  20, 30, 30, 20, 'w', 'h', 'cwl', 'chl', 'cwr', 'chr')
+
+        document.getElementById("root").innerHTML += svg.html 
+    }
 
 </script>
 

@@ -594,4 +594,91 @@ class SVG
 
         return this
     }
+
+    squareWithLabels(x, y, w, h, xlabel, ylabel)
+    {
+        let spec = [
+            { x: x, y: y, label: xlabel, ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
+            { x: x+w, y: y, label: ylabel, lx: 10, anchor: 'start', tx: 2}, 
+            { x: x+w, y: y+h }, 
+            { x: x, y: y+h }, 
+        ]
+
+        this.polygon(spec)
+    }
+
+    squareWithLeftCutAndLabels(x, y, w, h, wcut, hcut, xlabel, ylabel, wcutLabel, hExCutLabel)
+    {
+        let spec = [
+            { x: x, y: y, label: xlabel, ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
+            { x: x+w, y: y, label: ylabel, lx: 10, anchor: 'start', tx: 2}, 
+            { x: x+w, y: y+h }, 
+            { x: x+wcut, y: y+h}, 
+            { x: x+wcut, y: y+h-hcut, label: wcutLabel, ly: hcut + 10, anchor: 'middle', ty: 12}, 
+            { x: x, y: y+h-hcut, label: hExCutLabel, lx: -10, anchor: 'end', tx: -2}, 
+        ]
+
+        this.polygon(spec)
+    }
+
+    squareWithRightCutAndLabels(x, y, w, h, wcut, hcut, xlabel, ylabel, wcutLabel, hExCutLabel)
+    {
+        let spec = [
+            { x: x, y: y, label: xlabel, ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
+            { x: x+w, y: y, label: hExCutLabel, lx: 10, anchor: 'start', tx: 2}, 
+            { x: x+w, y: y+h-hcut, label: wcutLabel, ly: hcut + 10, anchor: 'middle', ty: 12 }, 
+            { x: x+w-wcut, y: y+h-hcut}, 
+            { x: x+w-wcut, y: y+h}, 
+            { x: x, y: y+h, label: ylabel, lx: -10, anchor: 'end', tx: -2}, 
+        ]
+
+        this.polygon(spec)
+    }
+
+    squareWithLeftAndRightCutsAndLabels(x, y, w, h,
+         wcutLeft, hcutLeft, wcutRight, hcutRight, 
+         xlabel, ylabelExRCut, 
+         wcutWExLeftRightLabel, hCutLeftLabel,
+         wcutRightLabel, hExCutRightLabel,  )
+    {
+        let spec = [
+            { x: x, y: y, label: xlabel, ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
+            { x: x+w, y: y, label: hExCutRightLabel, lx: 10, anchor: 'start', tx: 2}, 
+            { x: x+w, y: y+h-hcutRight, label: wcutRightLabel, ly: hcutRight + 10, anchor: 'middle', ty: 12 }, 
+            { x: x+w-wcutRight, y: y+h-hcutRight}, 
+            { x: x+w-wcutRight, y: y+h, label: wcutWExLeftRightLabel, ly: 10, anchor: 'middle', ty: 12 }, 
+
+            { x: x+wcutLeft, y: y+h, label: hCutLeftLabel, lx: -10 - wcutLeft, anchor: 'end', tx: -2}, 
+            { x: x+wcutLeft, y: y+h-hcutLeft}, 
+            { x: x, y: y+h-hcutLeft, label: ylabelExRCut, lx: -10, anchor: 'end', tx: -2}, 
+
+        ]
+
+        this.polygon(spec)
+    }
+
+    squareWithLeftAndRightTopCutsAndLabels(x, y, w, h,
+        wcutLeft, hcutLeft, wcutTopRight, hcutTopRight, 
+        xlabel, ylabelExLHCut, 
+        withMinusRCut, hCutLeftLabel,
+        wCutLeftLabel, hCutRightLabel,  )
+   {
+       let spec = [
+           { x: x, y: y, label: xlabel, ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
+           { x: x+w-wcutTopRight, y: y, label: hCutRightLabel, lx: 10 + wcutTopRight, anchor: 'start', tx: 2}, 
+           { x: x+w-wcutTopRight, y: y+hcutTopRight, label: withMinusRCut, ly: -10-hcutTopRight, anchor: 'middle', ty: -2}, 
+           { x: x+w, y: y+hcutTopRight}, 
+
+           { x: x+w, y: y+h}, 
+
+           { x: x+wcutLeft, y: y+h, label: hCutLeftLabel, lx: -10 - wcutLeft, anchor: 'end', tx: -2}, 
+           { x: x+wcutLeft, y: y+h-hcutLeft, label: wCutLeftLabel, ly: 10+hcutLeft, anchor: 'middle', ty: 12 }, 
+           { x: x, y: y+h-hcutLeft, label: ylabelExLHCut, lx: -10, anchor: 'end', tx: -2}, 
+
+       ]
+
+       this.polygon(spec)
+   }
+
+
 }
