@@ -604,7 +604,7 @@ class SVG
             { x: x, y: y+h }, 
         ]
 
-        this.polygon(spec)
+        return this.polygon(spec)
     }
 
     squareWithLeftCutAndLabels(x, y, w, h, wcut, hcut, xlabel, ylabel, wcutLabel, hExCutLabel)
@@ -618,7 +618,7 @@ class SVG
             { x: x, y: y+h-hcut, label: hExCutLabel, lx: -10, anchor: 'end', tx: -2}, 
         ]
 
-        this.polygon(spec)
+        return this.polygon(spec)
     }
 
     squareWithRightCutAndLabels(x, y, w, h, wcut, hcut, xlabel, ylabel, wcutLabel, hExCutLabel)
@@ -632,14 +632,14 @@ class SVG
             { x: x, y: y+h, label: ylabel, lx: -10, anchor: 'end', tx: -2}, 
         ]
 
-        this.polygon(spec)
+        return this.polygon(spec)
     }
 
     squareWithLeftAndRightCutsAndLabels(x, y, w, h,
          wcutLeft, hcutLeft, wcutRight, hcutRight, 
          xlabel, ylabelExRCut, 
          wcutWExLeftRightLabel, hCutLeftLabel,
-         wcutRightLabel, hExCutRightLabel,  )
+         wcutRightLabel, hExCutRightLabel)
     {
         let spec = [
             { x: x, y: y, label: xlabel, ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
@@ -654,14 +654,14 @@ class SVG
 
         ]
 
-        this.polygon(spec)
+        return this.polygon(spec)
     }
 
     squareWithLeftAndRightTopCutsAndLabels(x, y, w, h,
         wcutLeft, hcutLeft, wcutTopRight, hcutTopRight, 
         xlabel, ylabelExLHCut, 
         withMinusRCut, hCutLeftLabel,
-        wCutLeftLabel, hCutRightLabel,  )
+        wCutLeftLabel, hCutRightLabel )
    {
        let spec = [
            { x: x, y: y, label: xlabel, ly: -10, anchor: 'middle', ty: -2}, // marking segment from this to the next one
@@ -677,7 +677,7 @@ class SVG
 
        ]
 
-       this.polygon(spec)
+       return this.polygon(spec)
    }
 
 

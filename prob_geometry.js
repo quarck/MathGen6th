@@ -241,3 +241,174 @@ var category_shapes =
     },
 ]
 
+
+var category_areaAndPremimeter = 
+[
+    {
+        name: "Find an area of a rectangle with possible rectangular cuts", 
+        max_count: 2,
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let shape = null
+                let answer = null 
+                let width = randIntRange(4, 30)
+                let height = randIntRange(4, 30)
+                let unit = ['cm', 'm', 'mm'].pickRandom()
+
+                if (width / height > 2 || height / width > 2)
+                {
+                    continue
+                }
+
+                let scale = (width > height) ? (100 / width ) : (100 / height )
+
+                switch ([0, 1, 2, 3].pickRandom())
+                {
+                case 0: // primitive, no cuts 
+                {
+                    let svg = new SVG(190, 150)
+                    shape = svg.squareWithLabels(1, 30, width*scale, height*scale, width + unit, height + unit).html
+                    answer = '' + (width * height) + ' ' + unit + '<sup>2</sup>'
+                    break;
+                }
+                case 1: // one btm cut
+                {
+                    let svg = new SVG(230, 200)
+                                        
+                    for (;;)
+                    {
+                        let cw = randIntRange(1, width-1)
+                        let ch = randIntRange(1, height-1)
+                        if (cw / ch > 2 || ch / cw > 2)
+                            continue
+
+                        if (width / cw > 5 || height / ch > 5)
+                            continue
+
+                        if (width - cw < width / 4 || height -ch < height / 4)
+                            continue
+
+                        if (randValue(true, false))
+                        {
+                            shape = svg.squareWithLeftCutAndLabels(60, 30, width*scale, height*scale,
+                                cw*scale, ch* scale, width + unit, height + unit, cw + unit, (height - ch) + unit).html
+                        }
+                        else 
+                        {
+                            shape = svg.squareWithRightCutAndLabels(60, 30, width*scale, height*scale,
+                                cw*scale, ch* scale, width + unit, height + unit, cw + unit, (height - ch) + unit).html
+                        }
+
+                        answer = '' + (width * height - cw * ch) + ' ' + unit + '<sup>2</sup>'
+                        break
+                    }
+                    break;
+                }
+                case 2: // two btm cuts
+                {
+                    let svg = new SVG(230, 200)
+                    unit = '' // with units it is going to be a mess 
+                                        
+                    for (;;)
+                    {
+                        let cw1 = randIntRange(1, width-1)
+                        let ch1 = randIntRange(1, height-1)
+                        let cw2 = randIntRange(1, width-1)
+                        let ch2 = randIntRange(1, height-1)
+                        if (cw1 / ch1 > 2 || ch1 / cw1 > 2 ||  cw2 / ch2 > 2 || ch2 / cw2 > 2)
+                            continue
+
+                        if (width - cw1 - cw2 < width /3)
+                            continue
+
+                        if (width / cw1 > 5 || height / ch1 > 5)
+                            continue
+                        if (width / cw2 > 5 || height / ch2 > 5)
+                            continue
+
+                        shape = svg.squareWithLeftAndRightCutsAndLabels(60, 30, width*scale, height*scale,                            
+                                cw1*scale, ch1*scale,
+                                cw2*scale, ch2*scale,
+                                width + unit,       // xlabel 
+                                (height-ch1) + unit,    // ylabelExRCut
+                                (width - cw1 - cw2) + unit, // wcutWExLeftRightLabel, 
+                                ch1 + unit, // hCutLeftLabel,
+                                cw2 + unit,// wcutRightLabel, 
+                                (height - ch2) + unit // hExCutRightLabel                                
+                                ).html
+
+                        answer = '' + (width * height - cw1 * ch1 - cw2 * ch2)
+                        break
+                    }
+                    break;
+                }
+                default: // one top, one btm cuts
+                {
+                    let svg = new SVG(230, 200)
+                    unit = '' // with units it is going to be a mess 
+                                        
+                    for (;;)
+                    {
+                        let cw1 = randIntRange(1, width-1)
+                        let ch1 = randIntRange(1, height-1)
+                        let cw2 = randIntRange(1, width-1)
+                        let ch2 = randIntRange(1, height-1)
+                        if (cw1 / ch1 > 2 || ch1 / cw1 > 2 ||  cw2 / ch2 > 2 || ch2 / cw2 > 2)
+                            continue
+
+                        if (width - cw1 - cw2 < width /3)
+                            continue
+                        if (height - ch1 - ch2 < height /3)
+                            continue
+
+                        if (width / cw1 > 5 || height / ch1 > 5)
+                            continue
+                        if (width / cw2 > 5 || height / ch2 > 5)
+                            continue
+
+                        shape = svg.squareWithLeftAndRightTopCutsAndLabels(60, 30, width*scale, height*scale,                            
+                                cw1*scale, ch1*scale,
+                                cw2*scale, ch2*scale,
+                                (width - cw2) + unit,       // xlabel 
+
+                                (height - ch1) + unit, // ylabelExLHCut, 
+                                cw2 + unit, // withMinusRCut,
+                                ch1 + unit,// hCutLeftLabel,
+                                cw1 + unit,// wCutLeftLabel,
+                                ch2 + unit// hCutRightLabel
+                                ).html
+
+                        answer = '' + (width * height - cw1 * ch1 - cw2 * ch2)
+                        break
+                    }
+                    break;
+                }
+                }
+
+                if (!shape || !answer)
+                {
+                    continue
+                }
+        
+                root.innerHTML = 
+                    "<table>"+ 
+                        "<tr>" + 
+                            "<td valign='top'>" + 
+                                'What is the area of this shape?' + 
+                            "</td>" + 
+                        '</tr><tr>' + 
+                            "<td>" + 
+                                shape + 
+                            "</td>" + 
+                        "</tr>" + 
+                        "</table>"
+        
+                ansRoot.innerHTML = answer
+                break;
+            }
+            // svgNGone
+        },         
+    },
+]
