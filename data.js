@@ -39,13 +39,13 @@ let shapes = [
 ]
 
 let ngoneshapes = [
-    { name: 'square', svg: (w, h)=> svgNGone(w, h, 4), symmetry_axes: 4, guess_name: false},
-    { name: 'pentagon', svg: (w, h)=> svgNGone(w, h, 5), symmetry_axes: 5, guess_name: true},
-    { name: 'hexagon', svg: (w, h)=> svgNGone(w, h, 6), symmetry_axes: 6, guess_name: true},
-    { name: 'heptagon (or septagon)', svg: (w, h)=> svgNGone(w, h, 7), symmetry_axes: 7, guess_name: true},
-    { name: 'octagon', svg: (w, h)=> svgNGone(w, h, 8), symmetry_axes: 8, guess_name: true},
-    { name: 'nonagon (or enneagon)', svg: (w, h)=> svgNGone(w, h, 9), symmetry_axes: 9, guess_name: true},
-    { name: 'decagon', svg: (w, h)=> svgNGone(w, h, 10), symmetry_axes: 10, guess_name: true},
+    { name: 'square', sides: 4, svg: (w, h)=> svgNGone(w, h, 4), symmetry_axes: 4, guess_name: false},
+    { name: 'pentagon', sides: 5, svg: (w, h)=> svgNGone(w, h, 5), symmetry_axes: 5, guess_name: true},
+    { name: 'hexagon', sides: 6, svg: (w, h)=> svgNGone(w, h, 6), symmetry_axes: 6, guess_name: true},
+    { name: 'heptagon', sides: 7, svg: (w, h)=> svgNGone(w, h, 7), symmetry_axes: 7, guess_name: true},
+    { name: 'octagon', sides: 8, svg: (w, h)=> svgNGone(w, h, 8), symmetry_axes: 8, guess_name: true},
+    { name: 'nonagon', sides: 9, svg: (w, h)=> svgNGone(w, h, 9), symmetry_axes: 9, guess_name: true},
+    { name: 'decagon', sides: 10, svg: (w, h)=> svgNGone(w, h, 10), symmetry_axes: 10, guess_name: true},
     //{ name: 'hendecagon (or undecagon, or endecagon)', svg: (w, h)=> svgNGone(w, h, 11), symmetry_axes: 11, guess_name: false },
     //{ name: 'dodecagon', svg: (w, h)=> svgNGone(w, h, 12), symmetry_axes: 12, guess_name: false },
     //{ name: 'tridecagon (or triskaidecagon)', svg: (w, h)=> svgNGone(w, h, 13), symmetry_axes: 13, guess_name: false },

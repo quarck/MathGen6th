@@ -270,7 +270,7 @@ var category_areaAndPremimeter =
                 {
                     let svg = new SVG(190, 150)
                     shape = svg.squareWithLabels(1, 30, width*scale, height*scale, width + unit, height + unit).html
-                    answer = '' + (width * height) + ' ' + unit + '<sup>2</sup>'
+                    answer = '' + (width * height) + unit + '<sup>2</sup>'
                     break;
                 }
                 case 1: // one btm cut
@@ -301,7 +301,7 @@ var category_areaAndPremimeter =
                                 cw*scale, ch* scale, width + unit, height + unit, cw + unit, (height - ch) + unit).html
                         }
 
-                        answer = '' + (width * height - cw * ch) + ' ' + unit + '<sup>2</sup>'
+                        answer = '' + (width * height - cw * ch) + unit + '<sup>2</sup>'
                         break
                     }
                     break;
@@ -438,7 +438,7 @@ var category_areaAndPremimeter =
                 {
                     let svg = new SVG(190, 150)
                     shape = svg.squareWithLabels(1, 30, width*scale, height*scale, width + unit, height + unit).html
-                    answer = '' + (2*width + 2*height) + ' ' + unit 
+                    answer = '' + (2*width + 2*height) + unit 
                     break;
                 }
                 case 1: // one btm cut
@@ -469,7 +469,7 @@ var category_areaAndPremimeter =
                                 cw*scale, ch* scale, width + unit, height + unit, cw + unit, (height - ch) + unit).html
                         }
 
-                        answer = '' + (2*width + 2*height) + ' ' + unit 
+                        answer = '' + (2*width + 2*height) + unit 
                         break
                     }
                     break;
@@ -507,7 +507,7 @@ var category_areaAndPremimeter =
                                 (height - ch2) + unit // hExCutRightLabel                                
                                 ).html
 
-                                answer = '' + (2*width + 2*height) + ' ' + unit 
+                                answer = '' + (2*width + 2*height) + unit 
                         break
                     }
                     break;
@@ -548,7 +548,7 @@ var category_areaAndPremimeter =
                                 ch2 + unit// hCutRightLabel
                                 ).html
 
-                                answer = '' + (2*width + 2*height) + ' ' + unit 
+                                answer = '' + (2*width + 2*height) + unit 
                         break
                     }
                     break;
@@ -579,5 +579,95 @@ var category_areaAndPremimeter =
             // svgNGone
         },         
     },
+
+
+    {
+        name: "Area from perimiter and vice versa", 
+        max_count: 2,
+        fun: function (root, ansRoot, difficulty)
+        {
+            let unit = randValue('cm', 'mm', 'm')
+
+            for (;;)
+            {
+
+                switch (randValue(1, 2, 3, 4, 5, 6))
+                {
+                case 1: 
+                {
+                    let w = randIntRange(3, 10 + 2 * difficulty)
+                    let h = randIntRange(3, 10 + 2 * difficulty)
+                    let area = w * h 
+                    let perim = (2*w + 2*h)
+                    let side = randValue('width', 'length')
+
+                    root.innerHTML = "The perimeter of a rectangle is " + perim + unit + ". If its " + side + " is " + w + unit + ", find its area."
+                    ansRoot.innerHTML = area + unit + "<sup>2</sup>"
+
+                    break;
+                }
+                case 2: 
+                {
+                    let w = randIntRange(3, 10 + 2 * difficulty)
+                    let h = randIntRange(3, 10 + 2 * difficulty)
+                    let area = w * h 
+                    let perim = (2*w + 2*h)
+                    let side = randValue('width', 'length')
+
+                    root.innerHTML = "The area of a rectangle is " + area + unit + "<sup>2</sup>. If its " + side + " is " + w + unit + ", find its perimeter."
+                    ansRoot.innerHTML = perim + unit
+                    break;
+                }
+                case 3: 
+                {
+                    let w = randIntRange(3, 10 + 2 * difficulty)
+                    let area = w * w
+                    let perim = (4*w)
+
+                    root.innerHTML = "The perimiter of a square is " + perim +unit + ", find its area."
+                    ansRoot.innerHTML = area + unit + "<sup>2</sup>"
+                    break;
+                }
+                case 4: 
+                {
+                    let w = randIntRange(3, 5 + difficulty)
+                    let area = w * w
+                    let perim = (4*w)
+
+                    root.innerHTML = "The area of a square is " + area  + unit + "<sup>2</sup>, find its perimeter."
+                    ansRoot.innerHTML = perim + unit 
+                    break;
+                }
+                case 5: 
+                {
+                    let w = randIntRange(3, 5 + difficulty)
+                    let shape = ngoneshapes.pickRandom()
+                    let perim = w * shape.sides 
+
+                    root.innerHTML = "The perimiter of a " + shape.name +  " is " + perim + unit + ", what is the length of one side?"
+                    ansRoot.innerHTML = w + unit 
+
+                    break;
+                }
+                default: 
+                {
+                    let w = randIntRange(3, 5 + difficulty)
+                    let shape = ngoneshapes.pickRandom()
+                    let perim = w * shape.sides 
+
+                    root.innerHTML = "The side of a " + shape.name +  " is " + w + unit + ", what is the perimeter?"
+                    ansRoot.innerHTML = perim + unit 
+
+                    break;
+                }
+                }
+
+                
+                break;
+            }
+            // svgNGone
+        },         
+    },
+
 
 ]
