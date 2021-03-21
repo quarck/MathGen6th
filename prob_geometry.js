@@ -438,7 +438,7 @@ var category_areaAndPremimeter =
                 {
                     let svg = new SVG(190, 150)
                     shape = svg.squareWithLabels(1, 30, width*scale, height*scale, width + unit, height + unit).html
-                    answer = '' + (width + height) + ' ' + unit 
+                    answer = '' + (2*width + 2*height) + ' ' + unit 
                     break;
                 }
                 case 1: // one btm cut
@@ -469,7 +469,7 @@ var category_areaAndPremimeter =
                                 cw*scale, ch* scale, width + unit, height + unit, cw + unit, (height - ch) + unit).html
                         }
 
-                        answer = '' + (width + height) + ' ' + unit 
+                        answer = '' + (2*width + 2*height) + ' ' + unit 
                         break
                     }
                     break;
@@ -507,7 +507,7 @@ var category_areaAndPremimeter =
                                 (height - ch2) + unit // hExCutRightLabel                                
                                 ).html
 
-                        answer = '' + (width + height) + ' ' + unit 
+                                answer = '' + (2*width + 2*height) + ' ' + unit 
                         break
                     }
                     break;
@@ -548,7 +548,7 @@ var category_areaAndPremimeter =
                                 ch2 + unit// hCutRightLabel
                                 ).html
 
-                        answer = '' + (width + height) + ' ' + unit 
+                                answer = '' + (2*width + 2*height) + ' ' + unit 
                         break
                     }
                     break;
