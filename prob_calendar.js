@@ -74,4 +74,24 @@ var category_calendar =
     },
 
 
+    {
+        name: "Someone was born in...", 
+        max_count: 1, 
+        fun: function (root, ansRoot, difficulty) 
+        {
+            for (;;)
+            {
+                let born = randIntRange(1950, 1995)
+                let upto = randIntRange(2000, 2020)
+                let person = personNames.pickRandom().name
+
+                root.innerHTML = person + " was born in " + born + ". How many years before the year " + upto + " was that? ______"
+                ansRoot.innerHTML = upto - born
+                break;
+            }
+        },         
+    },
+
+
+
 ]
