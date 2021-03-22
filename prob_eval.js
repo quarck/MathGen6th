@@ -267,19 +267,19 @@ var category_evaluations =
                 let ans = Math.pow(a, b)
                 if (difficulty < 5)
                 {
-                    if (ans > 150)
+                    if (ans > 250)
                         continue
                 }
                 else if (difficulty < 7)
                 {
-                    if (ans > 500)
+                    if (ans > 1000)
                         continue
                 }
                 else 
                 {
-                    if (ans < 150)
+                    if (ans < 350)
                         continue
-                    if (ans > 900)
+                    if (ans > 1500)
                         continue
                 }
                 root.innerHTML = "" + a + "<sup>" + b + "</sup>" + " = "
@@ -317,19 +317,19 @@ var category_evaluations =
 
                 if (difficulty < 5)
                 {
-                    if (ans > 150)
+                    if (ans > 250)
                         continue
                 }
                 else if (difficulty < 7)
                 {
-                    if (ans > 500)
+                    if (ans > 1000)
                         continue
                 }
                 else 
                 {
-                    if (ans < 150)
+                    if (ans < 350)
                         continue
-                    if (ans > 900)
+                    if (ans > 1500)
                         continue
                 }
 
