@@ -580,7 +580,6 @@ var category_areaAndPremimeter =
         },         
     },
 
-
     {
         name: "Area from perimiter and vice versa", 
         max_count: 2,
@@ -666,6 +665,30 @@ var category_areaAndPremimeter =
                 break;
             }
             // svgNGone
+        },         
+    },
+
+    {
+        name: "Square with fraction side - area ", 
+        max_count: 1,
+        fun: function (root, ansRoot, difficulty)
+        {
+            let unit = randValue('cm', 'mm', 'm')
+
+            for (;;)
+            {
+                let intPart = randIntRange(1, 5)
+                let denom = randIntRange(2, 2 + difficulty)
+
+                let f = new Fraction(1 + intPart * denom, denom)
+
+                let area = f.multiply(f)
+
+                root.innerHTML = "<table><tr><td>Find the area of a square with a side of</td><td>" + f.asMixedNumberHtmlTable + "</td><td>" + unit + "</td></tr></table>"                
+                ansRoot.innerHTML = "<table><tr><td>" + area.asMixedNumberHtmlTable + "</td><td>" + unit + "<sup>2</sup></td></tr></table>"
+            
+                break;
+            }
         },         
     },
 
