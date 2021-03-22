@@ -110,7 +110,7 @@ function generateMultiplicationHtml(a, b)
 var category_rounding = 
 [
     {
-        name: "Rounding", 
+        name: "Rounding ints", 
         fun: function (root, ansRoot, difficulty)
         {
             for (;;)
@@ -126,6 +126,46 @@ var category_rounding =
         
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
+                break;
+            }
+        },         
+    },
+
+    {
+        name: "Rounding decimal fractions", 
+        fun: function (root, ansRoot, difficulty)
+        {
+            for (;;)
+            {
+                let numDecimalPlaces = randValue(1, 2, 3)
+                let totalDecimals = numDecimalPlaces + 2
+                let pow10 = Math.pow(10, totalDecimals)
+                let prevPow10 = Math.pow(10, totalDecimals-1)
+                let nom = randIntRange(prevPow10+1, pow10)
+                if (nom % 10 == 0)
+                    continue
+                let finalNum = randIntRange(10, 99) + nom / pow10
+
+                
+                let pow10r = Math.pow(10, numDecimalPlaces)
+
+                if (randValue(true, false))
+                {
+                    root.innerHTML = "Round " + finalNum.formatFixed(totalDecimals) + " to " + numDecimalPlaces + " decimal place" + (numDecimalPlaces > 1 ? 's' : '') + '. ___________'
+                }
+                else 
+                {
+                    let name = ''
+                    switch (numDecimalPlaces)
+                    {
+                        case 1: name = 'tenth'; break
+                        case 2: name = 'hundredth'; break
+                        case 3: name = 'thousandth'; break
+                    }
+                    root.innerHTML = "Round " + finalNum.formatFixed(totalDecimals) + " to the nearest " + name + '. ___________'
+                }
+                ansRoot.innerHTML = (Math.round(finalNum * pow10r) / pow10r).formatFixed(numDecimalPlaces)
+        
                 break;
             }
         },         
