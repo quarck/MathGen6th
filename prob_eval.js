@@ -272,7 +272,7 @@ var category_evaluations =
                 }
                 else if (difficulty < 7)
                 {
-                    if (ans > 400)
+                    if (ans > 500)
                         continue
                 }
                 else 
@@ -290,7 +290,7 @@ var category_evaluations =
         },         
     },
     {
-        name: "Evaluate a^2 - b^2, integers, non negative", 
+        name: "Evaluate a^(2|3) +/ b^(2|3), integers, non negative", 
         fun: function (root, ansRoot, difficulty)
         {
         
@@ -298,11 +298,44 @@ var category_evaluations =
             {
                 let a = randIntRange(4, 20)
                 let b = randIntRange(4, 20)
-                if (a <= b)
-                    continue
-        
-                let problemHtml = "" + a + "<sup>2</sup> - " + b + "<sup>2</sup>" + " = "
-                let answerHtml = Math.pow(a, 2) - Math.pow(b, 2)
+                let pa = randValue(2, 3)
+                let pb = randValue(2, 3)
+
+                let dir = randValue(1, -1)
+
+                let powA = Math.pow(a, pa)
+                let powB = Math.pow(b, pb)
+
+                if (dir < 0 && powB > powA)
+                {
+                    let t = a; a = b; b = t
+                    t = pa; pa = pb; pb = t
+                    t = powA; powA = powB; powB = t                    
+                }
+
+                let ans = powA + dir * powB
+
+                if (difficulty < 5)
+                {
+                    if (ans > 150)
+                        continue
+                }
+                else if (difficulty < 7)
+                {
+                    if (ans > 500)
+                        continue
+                }
+                else 
+                {
+                    if (ans < 150)
+                        continue
+                    if (ans > 900)
+                        continue
+                }
+
+
+                let problemHtml = "" + a + "<sup>" + pa + "</sup> " + (dir > 0 ? '+ ':'- ') + b + "<sup>" + pb + "</sup>" + " = "
+                let answerHtml = powA + dir * powB
         
                 root.innerHTML = problemHtml
                 ansRoot.innerHTML = answerHtml
